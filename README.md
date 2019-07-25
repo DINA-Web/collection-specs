@@ -17,3 +17,6 @@ View Catalogued Object [Issues](https://github.com/DINA-Web/collection-specs/iss
 
 ## Material Sample
 Represent what was collected in a collecting event. Could be one or a group of specimen.
+
+## Preparation
+Process used to move from Material Sample to Catalogued Object.
