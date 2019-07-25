@@ -4,7 +4,7 @@ Specifications for the Collection Module.
 Specifications are recorded as [Issues](https://github.com/DINA-Web/collection-specs/issues).
 
 ## Suggested Data Model
-Rendered as an imagge [here](https://github.com/DINA-Web/collection-specs/blob/master/documentation/collectionDataModel.png)
+Rendered as an image [here](https://github.com/DINA-Web/collection-specs/blob/master/documentation/collectionDataModel.png)
 
 ## Collecting Event
 Data associated with the collecting of the specimen(s) at a given time and place.
