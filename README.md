@@ -27,4 +27,4 @@ Represent what was collected in a collecting event. Could be one or a group of s
 ## Preparation
 Process used to move from Material Sample to Catalogued Object.
 
-View Catalogued Object [Issues](https://github.com/DINA-Web/collection-specs/issues?q=is%3Aissue+is%3Aopen+label%3A%22Preparation%22)
+View Preparation [Issues](https://github.com/DINA-Web/collection-specs/issues?q=is%3Aissue+is%3Aopen+label%3A%22Preparation%22)
