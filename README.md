@@ -5,26 +5,11 @@ This repository aim to collect and document the different requirements (what the
 
 Requirements/Specifications are recorded as [Issues](https://github.com/DINA-Web/collection-specs/issues).
 
+## Glossary
+A [glossary](https://github.com/DINA-Web/collection-specs/blob/master/documentation/glossary.md) is maintained with the definition of terms used in the context of the DINA collection management system.
+
 ## Suggested Data Model
 Rendered as an image [here](https://github.com/DINA-Web/collection-specs/blob/master/documentation/collectionDataModel.png)
 
 ## JSON Schemas
 This repository will store the [JSON Schema](https://json-schema.org/) for the collection module from which an API response could be tested to determine if it is compliant.
-
-## Collecting Event
-Data associated with the collecting of the specimen(s) at a given time and place.
-
-View Collecting Event [Issues](https://github.com/DINA-Web/collection-specs/issues?q=is%3Aissue+is%3Aopen+label%3A%22Collecting+Event%22)
-
-## Catalogued Object
-The catalogued object contains data and identifiers related to the accessioning of a single specimen. Includes identification/determination support.
-
-View Catalogued Object [Issues](https://github.com/DINA-Web/collection-specs/issues?q=is%3Aissue+is%3Aopen+label%3A%22Catalogued+Object%22)
-
-## Material Sample
-Represent what was collected in a collecting event. Could be one or a group of specimen.
-
-## Preparation
-Process used to move from Material Sample to Catalogued Object.
-
-View Preparation [Issues](https://github.com/DINA-Web/collection-specs/issues?q=is%3Aissue+is%3Aopen+label%3A%22Preparation%22)
