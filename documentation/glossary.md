@@ -22,7 +22,7 @@ Represent what was collected in a [Collecting Event](#collecting-event). Could b
 
 ## occurrenceID 
 
-Identifier representing the [Catalogued Object](#catalogued-object) that is almost always machine-generated (eg b3405026-3e96-53bb-a713-59bc48a90e3e as a UUID v5 w/ a namespace) or auto-incremented number from the internal database. ocurrenceID is a [DarwinCore Term](https://dwc.tdwg.org/terms/#dwc:occurrenceID).
+Identifier representing the [Catalogued Object](#catalogued-object) that is almost always machine-generated (eg b3405026-3e96-53bb-a713-59bc48a90e3e as a UUID v5 with a namespace) or auto-incremented number from the internal database. ocurrenceID is a [DarwinCore Term](https://dwc.tdwg.org/terms/#dwc:occurrenceID).
 
 ## Preparation
 
