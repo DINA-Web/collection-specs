@@ -13,7 +13,9 @@ class "Collecting Event" as ce {
 }
 
 class "Material Sample" as ms {
--sourceMaterialSample
+}
+
+class "Observation" as obs {
 }
 
 skinparam linetype spline
@@ -34,13 +36,14 @@ class "Preparation" as preparation{
 }
 
 ce "1 " -- "0..*" ms
+ce "1 " -- "0..*" obs
 ms "1 " -- "0..*" co
 skinparam linetype ortho
 co "1 " - "0..*" identification
 co "1..*" - "0..*" preparation
 co -up-> NU
-ms  -[#red,dashed]-> ms
 preparation -[#red,dashed]-> preparation
+obs "1 " -- "0..*" identification
 
 legend right
 Notable model constraints:
