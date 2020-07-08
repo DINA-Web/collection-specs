@@ -176,13 +176,17 @@ components:
         attributes:
           type: object
           required:
-            - collectingLocation
+            - decimalLatitude
+            - decimalLongitude
             - collectingAgent
             - collectingDate
           properties:
-            collectingLocation:
-              type: string
-              description: geographic location where the collecting happens
+            decimalLatitude:
+              type: number
+              description: geographic location's latitude in its darwin core term
+            decimalLongitude:
+              type: number
+              description: geographic location's longitude in its darwin core term
             collectingAgent:
               description: agent who does the collecting
               type: string
@@ -190,10 +194,6 @@ components:
             collectingDate:
               description: date the collecting event occurs
               type: string 
-            materialSample:
-              description: material sample the collecting event has collected
-              type: string
-              format: uuid                   
             documentation:
               description: attachement associated with the collecting event
               type: string
