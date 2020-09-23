@@ -175,18 +175,31 @@ components:
           description: The type of data being returned.
         attributes:
           type: object
-          required:
-            - decimalLatitude
-            - decimalLongitude
-            - collectingAgent
-            - collectingDate
           properties:
             decimalLatitude:
               type: number
-              description: geographic location's latitude in its darwin core term
+              description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
             decimalLongitude:
               type: number
-              description: geographic location's longitude in its darwin core term
+              description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
+            verbatimCoordinates:
+              type: string
+              description: verbatim original spatial coordinates of the Location, https://dwc.tdwg.org/terms/#dwc:verbatimCoordinates              
+            coordinateUncertaintyInMeters:
+              type: number
+              description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+            countryCode:
+              type: string
+              description: standard code for the country in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:countryCode              
+            stateProvince:
+              type: string
+              description: name of the next smaller administrative region than country (state, province, canton, department, region, etc.) in which the Location occurs,  https://dwc.tdwg.org/terms/#dwc:stateProvince                         
+            municipality:
+              type: string
+              description: full, unabbreviated name of the next smaller administrative region than county (city, municipality, etc.) in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:municipality                                       
+            verbatimLocality:
+              type: string
+              description: original textual description of the place, https://dwc.tdwg.org/terms/#dwc:verbatimLocality              
             collectingAgent:
               description: agent who does the collecting
               type: string
