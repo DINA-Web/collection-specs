@@ -203,10 +203,10 @@ components:
               description: original textual description of the place, https://dwc.tdwg.org/terms/#dwc:verbatimLocality              
             eventDateTime:
               type: string               
-              description: date and time the collecting event occurs, which follows ISO 8601 partial date and time format, https://www.iso.org/iso-8601-date-and-time-format.html
+              description: date and time the collecting event occurred, in ISO 8601 format including partial date/time and ranges , https://www.iso.org/iso-8601-date-and-time-format.html
             verbatimEventDateTime:  
               type: string 
-              description: original textual description of date and time the collecting event occurs              
+              description: original textual description of date and time the collecting event occurred             
             fieldObservation:
               type: string               
               description: field observation on collecting site, examples can be bird chirping digital recordings etc.
