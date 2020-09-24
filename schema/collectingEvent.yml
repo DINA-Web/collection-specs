@@ -1,0 +1,212 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Collecting event schema
+  version: "1.0.0"
+  title: Collecting event schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/collecting-event:
+    get:
+      summary: Get collecting event
+      operationId: getCollectingEvents
+      description: By passing in query string, user can get available collecting events authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the collecting events
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: collecting events satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/CollectingEvent'                
+        '404':
+          description: collecting event not found
+    post:
+      summary: Add collecting event
+      operationId: addCollectingEvent
+      description: Adds a collecting event
+      responses:
+        '201':
+          description: collecting event created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewCollectingEvent'
+        description: CollectingEvent to add
+  /v1/collecting-event/{Id}:
+    get:
+      summary: Find collecting event by ID
+      description: Returns a single collecting event
+      operationId: getCollectingEventById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of collecting event to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEvent'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: CollectingEvent not found          
+    patch:
+      summary: Update collecting event
+      operationId: updateCollectingEvent
+      description: update a collecting event
+      parameters:
+        - name: Id
+          in: path
+          description: collecting event id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: collecting event updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CollectingEvent'
+        description: collecting event to add
+    delete:
+      summary: Delete collecting event
+      operationId: deleteCollectingEvent
+      description: delete a collecting event
+      parameters:
+        - name: Id
+          in: path
+          description: collecting event id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: collecting event marked as deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: collecting event not found       
+components:
+  schemas:
+    CollectingEvent:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonCollectingEvent'
+
+    NewCollectingEvent:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonCollectingEvent'
+
+    CommonCollectingEvent:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [collectingEvent]      
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            decimalLatitude:
+              type: number
+              description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
+            decimalLongitude:
+              type: number
+              description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
+            verbatimCoordinates:
+              type: string
+              description: verbatim original spatial coordinates of the Location, https://dwc.tdwg.org/terms/#dwc:verbatimCoordinates              
+            coordinateUncertaintyInMeters:
+              type: number
+              description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+            countryCode:
+              type: string
+              description: standard code for the country in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:countryCode              
+              maxLength: 2
+            stateProvince:
+              type: string
+              description: name of the next smaller administrative region than country (state, province, canton, department, region, etc.) in which the Location occurs,  https://dwc.tdwg.org/terms/#dwc:stateProvince                         
+            municipality:
+              type: string
+              description: full, unabbreviated name of the next smaller administrative region than county (city, municipality, etc.) in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:municipality                                       
+            verbatimLocality:
+              type: string
+              description: original textual description of the place, https://dwc.tdwg.org/terms/#dwc:verbatimLocality              
+            eventDateTime:
+              type: string               
+              description: date and time the collecting event occurs, which follows ISO 8601 partial date and time format, https://www.iso.org/iso-8601-date-and-time-format.html
+            verbatimEventDateTime:  
+              type: string 
+              description: original textual description of date and time the collecting event occurs              
+            fieldObservation:
+              type: string               
+              description: field observation on collecting site, examples can be bird chirping digital recordings etc.
