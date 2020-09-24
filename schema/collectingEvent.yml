@@ -171,7 +171,7 @@ components:
         - attributes       
       properties:            
         type:
-          enum: [collectingEvent]      
+          enum: [collecting-event]      
           description: The type of data being returned.
         attributes:
           type: object
