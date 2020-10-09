@@ -3,8 +3,8 @@ servers:
   - description: DINA - AAFC
     url: https://virtserver.dina-aafc.com/AAFC/1.0.0
 info:
-  description: Collection API Schema
-  version: "1.0.0"
+  description: Collection API Schema - DRAFT
+  version: "0.1.0"
   title: Collection Schema
   contact:
     email: dina-aafc@canada.ca
@@ -16,7 +16,4 @@ paths:
   /v1/collecting-event:
     $ref: 'collectingEvent.yml#/paths/~1v1~1collecting-event'
   /v1/collecting-event/{Id}:
-    $ref: 'collectingEvent.yml#/paths/~1v1~1collecting-event~1{Id}'  
-
-
-
+    $ref: 'collectingEvent.yml#/paths/~1v1~1collecting-event~1{Id}'
