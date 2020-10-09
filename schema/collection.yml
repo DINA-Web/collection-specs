@@ -3,9 +3,9 @@ servers:
   - description: DINA - AAFC
     url: https://virtserver.dina-aafc.com/AAFC/1.0.0
 info:
-  description: Collection API Schema - DRAFT
+  description: Collection API Schema
   version: "0.1.0"
-  title: Collection Schema
+  title: Collection Schema - DRAFT
   contact:
     email: dina-aafc@canada.ca
   license:
