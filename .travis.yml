@@ -2,7 +2,7 @@ language: node_js
 node_js:
 - '10'
 
-script: npx redoc-cli bundle schema/collectingEvent.yml -o redoc/index.html
+script: npx redoc-cli bundle schema/collection.yml -o redoc/index.html
 
 deploy:
  provider: pages
@@ -12,4 +12,3 @@ deploy:
  keep_history: true
  on:
   branch: master
-  
