@@ -12,7 +12,8 @@ class "Collecting Event" as ce {
 -collectors
 }
 
-class "Material Sample" as ms {
+class "Physical Entity" as pe {
+-stateHistory
 }
 
 class "Observation" as obs {
@@ -20,12 +21,12 @@ class "Observation" as obs {
 
 skinparam linetype spline
 
-note "CatalogNumber\nnot unique" as NU
-
 class "Catalogued Object" as co {
 -catalogueNumber
 -organismId
 }
+
+note "CatalogNumber\nnot unique" as NU
 
 class "Identification" as identification{
 -count
@@ -35,20 +36,20 @@ class "Preparation" as preparation{
 -parentPreparation
 }
 
-ce "1 " -- "0..*" ms
+ce "1..* " -- "0..*" pe
 ce "1 " -- "0..*" obs
-ms "1 " -- "0..*" co
+preparation "1 " -- "0..*" co
 skinparam linetype ortho
 co "1 " - "0..*" identification
-co "1..*" - "0..*" preparation
+pe "1..*" - "0..*" preparation
 co -up-> NU
 preparation -[#red,dashed]-> preparation
 obs "1 " -- "0..*" identification
 
 legend right
 Notable model constraints:
- - Material Sample is always created even if the user has no data for it
- - Preparation is used to move from Material Sample to Catalogued Object
+ - Physical Entity Sample is always created even if the user has no data for it
+ - Preparation is used to move from Physical Entity to Catalogued Object
  - CataloguedObject + Identification = occurrenceId
 
 endlegend
