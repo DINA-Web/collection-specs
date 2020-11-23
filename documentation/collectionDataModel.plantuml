@@ -6,14 +6,16 @@ skinparam classAttributeIconSize 0
 hide circle
 hide methods
 
-class "Collecting Event" as ce {
+class "CollectingEvent" as ce {
 -lat/long
 -date
 -collectors
 }
 
-class "Physical Entity" as pe {
--stateHistory
+class "PhysicalEntity" as pe {
+-state
+-catalogueNumber[not unique]
+-organismId
 }
 
 class "Observation" as obs {
@@ -21,36 +23,20 @@ class "Observation" as obs {
 
 skinparam linetype spline
 
-class "Catalogued Object" as co {
--catalogueNumber
--organismId
-}
-
-note "CatalogNumber\nnot unique" as NU
-
 class "Identification" as identification{
 -count
 }
 
-class "Preparation" as preparation{
--parentPreparation
+class "PreparationProcess" as preparation{
+-preparationType
 }
 
-ce "1..* " -- "0..*" pe
+ce "1..* " --- "0..*" pe
 ce "1 " -- "0..*" obs
-preparation "1 " -- "0..*" co
 skinparam linetype ortho
-co "1 " - "0..*" identification
-pe "1..*" - "0..*" preparation
-co -up-> NU
-preparation -[#red,dashed]-> preparation
+pe "1 " --- "0..*" identification
+pe "1..*" --- "0..*" preparation
+pe -[#red,dashed]-> pe
 obs "1 " -- "0..*" identification
 
-legend right
-Notable model constraints:
- - Physical Entity Sample is always created even if the user has no data for it
- - Preparation is used to move from Physical Entity to Catalogued Object
- - CataloguedObject + Identification = occurrenceId
-
-endlegend
 @enduml
