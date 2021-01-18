@@ -188,25 +188,18 @@ components:
             coordinateUncertaintyInMeters:
               type: number
               description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
-            countryCode:
-              type: string
-              description: standard code for the country in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:countryCode              
-              maxLength: 2
-            stateProvince:
-              type: string
-              description: name of the next smaller administrative region than country (state, province, canton, department, region, etc.) in which the Location occurs,  https://dwc.tdwg.org/terms/#dwc:stateProvince                         
-            municipality:
-              type: string
-              description: full, unabbreviated name of the next smaller administrative region than county (city, municipality, etc.) in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:municipality                                       
-            verbatimLocality:
-              type: string
-              description: original textual description of the place, https://dwc.tdwg.org/terms/#dwc:verbatimLocality              
-            eventDateTime:
-              type: string               
-              description: date and time the collecting event occurred, in ISO 8601 format including partial date/time and ranges , https://www.iso.org/iso-8601-date-and-time-format.html
             verbatimEventDateTime:  
               type: string 
               description: original textual description of date and time the collecting event occurred             
-            fieldObservation:
-              type: string               
-              description: field observation on collecting site, examples can be bird chirping digital recordings etc.
+            collectorGroupUuid:
+              type: string
+              description: collector group which participated in the collecting event.
+            startEventDateTime:
+              type: string
+              description: collector group which participated in the collecting event.
+            endEventDateTime:
+              type: string
+              description: collector group which participated in the collecting event.
+            verbatimCollectors:
+              type: string
+              description: collector group which participated in the collecting event.
