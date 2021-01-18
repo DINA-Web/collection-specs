@@ -203,3 +203,44 @@ components:
             verbatimCollectors:
               type: string
               description: Verbatim name given to the collector group which participated in the collecting event.
+        relationships:
+          type: object
+          properties:
+            collectors:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: person
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier of the collector
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            attachment:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: metadata
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier metadata for the resource
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
