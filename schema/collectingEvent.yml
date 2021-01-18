@@ -193,13 +193,13 @@ components:
               description: original textual description of date and time the collecting event occurred             
             collectorGroupUuid:
               type: string
-              description: collector group which participated in the collecting event.
+              description: Unique identifier of the collector group which participated in the collecting event
             startEventDateTime:
               type: string
-              description: collector group which participated in the collecting event.
+              description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
             endEventDateTime:
               type: string
-              description: collector group which participated in the collecting event.
+              description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
             verbatimCollectors:
               type: string
-              description: collector group which participated in the collecting event.
+              description: Verbatim name given to the collector group which participated in the collecting event.
