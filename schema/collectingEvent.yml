@@ -203,4 +203,3 @@ components:
             verbatimCollectors:
               type: string
               description: Verbatim name given to the collector group which participated in the collecting event.
-              
