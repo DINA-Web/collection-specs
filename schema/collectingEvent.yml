@@ -188,25 +188,56 @@ components:
             coordinateUncertaintyInMeters:
               type: number
               description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
-            countryCode:
-              type: string
-              description: standard code for the country in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:countryCode              
-              maxLength: 2
-            stateProvince:
-              type: string
-              description: name of the next smaller administrative region than country (state, province, canton, department, region, etc.) in which the Location occurs,  https://dwc.tdwg.org/terms/#dwc:stateProvince                         
-            municipality:
-              type: string
-              description: full, unabbreviated name of the next smaller administrative region than county (city, municipality, etc.) in which the Location occurs, https://dwc.tdwg.org/terms/#dwc:municipality                                       
-            verbatimLocality:
-              type: string
-              description: original textual description of the place, https://dwc.tdwg.org/terms/#dwc:verbatimLocality              
-            eventDateTime:
-              type: string               
-              description: date and time the collecting event occurred, in ISO 8601 format including partial date/time and ranges , https://www.iso.org/iso-8601-date-and-time-format.html
             verbatimEventDateTime:  
               type: string 
               description: original textual description of date and time the collecting event occurred             
-            fieldObservation:
-              type: string               
-              description: field observation on collecting site, examples can be bird chirping digital recordings etc.
+            startEventDateTime:
+              type: string
+              description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
+            endEventDateTime:
+              type: string
+              description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
+            verbatimCollectors:
+              type: string
+              description: Verbatim name given to the collector group which participated in the collecting event.
+        relationships:
+          type: object
+          properties:
+            collectors:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: person
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier of the collector
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            attachment:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: metadata
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier metadata for the resource
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
