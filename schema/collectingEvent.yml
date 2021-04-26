@@ -182,21 +182,50 @@ components:
             decimalLongitude:
               type: number
               description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
-            verbatimCoordinates:
+            verbatimCoordinateSystem:
               type: string
-              description: verbatim original spatial coordinates of the Location, https://dwc.tdwg.org/terms/#dwc:verbatimCoordinates              
-            coordinateUncertaintyInMeters:
+              description: The spatial coordinate system for the verbatimLatitude and verbatimLongitude or the verbatimCoordinates of the Location. https://dwc.tdwg.org/list/#dwc_verbatimCoordinateSystem
+            verbatimSRS:
+              type: string
+              description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
+            verbatimElevation:
               type: number
-              description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+              description: 
+            verbatimDepth:
+              type: number
+              description:
+            otherRecordNumbers:
+              type: array
+              items:
+                type: number
+                description:
+            recordNumber:
+              type: number
+              description:
+            country:
+              type: string 
+              description: name of the country
+            countryCode:
+              type: string
+              description: Alphabetic geographical codes to represent the country
+            stateProvince:
+              type: string
+              description: location's state or province
+            geographicPlaceName:
+              type: string
+              description: location's geographic place name
+            habitat:
+              type: string
+              description: location's habitat name
             verbatimEventDateTime:  
               type: string 
               description: original textual description of date and time the collecting event occurred             
             startEventDateTime:
               type: string
-              description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
+              description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
             endEventDateTime:
               type: string
-              description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
+              description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Ending date and time must be after startEventDateTime and before current date
             verbatimCollectors:
               type: string
               description: Verbatim name given to the collector group which participated in the collecting event.
