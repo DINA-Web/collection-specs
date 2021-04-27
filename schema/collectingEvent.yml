@@ -190,18 +190,18 @@ components:
               description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
             verbatimElevation:
               type: number
-              description: 
+              description: The original description of the elevation (altitude, usually above sea level) of the Location.
             verbatimDepth:
               type: number
-              description:
+              description: The original description of the depth below the local surface.
             otherRecordNumbers:
               type: array
               items:
                 type: number
-                description:
+                description: Other identifiers given to the collecting-event at the time it was recorded
             recordNumber:
               type: number
-              description:
+              description: An identifier given to the collecting-event at the time it was recorded.
             country:
               type: string 
               description: name of the country
@@ -210,13 +210,13 @@ components:
               description: Alphabetic geographical codes to represent the country
             stateProvince:
               type: string
-              description: location's state or province
+              description: state or province name
             geographicPlaceName:
               type: string
-              description: location's geographic place name
+              description: geographic place name
             habitat:
               type: string
-              description: location's habitat name
+              description: habitat name
             verbatimEventDateTime:  
               type: string 
               description: original textual description of date and time the collecting event occurred             
