@@ -229,6 +229,22 @@ components:
             verbatimCollectors:
               type: string
               description: Verbatim name given to the collector group which participated in the collecting event.
+            verbatimLocality:
+              type: string
+              description: The original textual description of the place.
+            geographicPlaceNameSourceDetail:
+              type: object
+              properties:
+                sourceID:
+                  type: string
+                  description: identifier of the source
+                sourceIdType:
+                  type: string
+                  description: OSM identifiers have type (Eg. Node, way ...)
+                sourceURL:
+                  type: string
+                  format: url
+                  description: the source's url
         relationships:
           type: object
           properties:
