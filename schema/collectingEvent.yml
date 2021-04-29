@@ -235,7 +235,11 @@ components:
             verbatimCollectors:
               type: string
               description: Verbatim name given to the collector group which participated in the collecting event.
+<<<<<<< HEAD
             dwcVerbatimLocality:
+=======
+            verbatimLocality:
+>>>>>>> add geographicPlaceNameSourceDetail and verbatimLocality
               type: string
               description: The original textual description of the place.
             geographicPlaceNameSourceDetail:
@@ -251,6 +255,7 @@ components:
                   type: string
                   format: url
                   description: the source's url
+<<<<<<< HEAD
             geoReferenceAssertions:
               type: array
               items:
@@ -295,6 +300,8 @@ components:
                   dwcGeoreferenceVerificationStatus:
                     type: string
                     enum: [GEOREFERENCING_NOT_POSSIBLE]
+=======
+>>>>>>> add geographicPlaceNameSourceDetail and verbatimLocality
         relationships:
           type: object
           properties:
