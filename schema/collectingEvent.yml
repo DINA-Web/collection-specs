@@ -176,30 +176,118 @@ components:
         attributes:
           type: object
           properties:
-            decimalLatitude:
-              type: number
-              description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
-            decimalLongitude:
-              type: number
-              description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
-            verbatimCoordinates:
+            verbatimLatitude:
               type: string
-              description: verbatim original spatial coordinates of the Location, https://dwc.tdwg.org/terms/#dwc:verbatimCoordinates              
-            coordinateUncertaintyInMeters:
+              description: The verbatim original longitude of the Latitude.
+            verbatimLongitude:
+              type: string
+              description: The verbatim original longitude of the Location.
+            verbatimCoordinateSystem:
+              type: string
+              description: The spatial coordinate system for the verbatimLatitude and verbatimLongitude or the verbatimCoordinates of the Location. https://dwc.tdwg.org/list/#dwc_verbatimCoordinateSystem
+            verbatimSRS:
+              type: string
+              description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
+            verbatimElevation:
+              type: string
+              description: The original description of the elevation (altitude, usually above sea level) of the Location.
+            verbatimDepth:
+              type: string
+              description: The original description of the depth below the local surface.
+            otherRecordNumbers:
+              type: array
+              items:
+                type: number
+                description: Other identifiers given to the collecting-event at the time it was recorded
+            recordNumber:
               type: number
-              description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+              description: An identifier given to the collecting-event at the time it was recorded.
+            country:
+              type: string 
+              description: name of the country
+            countryCode:
+              type: string
+              description: Alphabetic geographical codes to represent the country
+            stateProvince:
+              type: string
+              description: state or province name
+            geographicPlaceName:
+              type: string
+              description: geographic place name
+            habitat:
+              type: string
+              description: habitat name
             verbatimEventDateTime:  
               type: string 
               description: original textual description of date and time the collecting event occurred             
             startEventDateTime:
               type: string
-              description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
+              description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
             endEventDateTime:
               type: string
-              description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html
+              description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Ending date and time must be after startEventDateTime and before current date
             verbatimCollectors:
               type: string
               description: Verbatim name given to the collector group which participated in the collecting event.
+            verbatimLocality:
+              type: string
+              description: The original textual description of the place.
+            geographicPlaceNameSourceDetail:
+              type: object
+              properties:
+                sourceID:
+                  type: string
+                  description: identifier of the source
+                sourceIdType:
+                  type: string
+                  description: OSM identifiers have type (Eg. Node, way ...)
+                sourceURL:
+                  type: string
+                  format: url
+                  description: the source's url
+            geoReferenceAssertions:
+              type: array
+              items:
+                type: object
+                properties:
+                  decimalLatitude:
+                    type: number
+                    description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
+                  decimalLongitude:
+                    type: number
+                    description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
+                  coordinateUncertaintyInMeters:
+                    type: number
+                    description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+                  georeferencedDate:
+                    type: string
+                    description: The date on which the Location was georeferenced.
+                  georeferencedBy:
+                    type: array
+                    description: A list of uuid who determined the georeference for the location.
+                    items:
+                      type: uuid
+                  literalGeoreferencedBy:
+                    type: string
+                    description: A name of a person, group or organization who determined the georeference for the location.
+                  georeferenceProtocol:
+                    type: string
+                    description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
+                  georeferenceSources:
+                    type: string
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  georeferenceRemarks:
+                    type: string
+                    description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
+                  geodeticDatum:
+                    type: string
+                    description: 	The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
+                  isPrimary:
+                    type: boolean
+                    description: specify whether or not the georeference assertion is the primary of the colecting-event
+                  georeferenceVerificationStatus:
+                    type: string
+                    enum: [GEOREFERENCING_NOT_POSSIBLE]
         relationships:
           type: object
           properties:
