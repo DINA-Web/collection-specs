@@ -176,39 +176,45 @@ components:
         attributes:
           type: object
           properties:
-            verbatimLatitude:
+            dwcVerbatimCoordinates:
+              type: string
+              description:
+            dwcRecordedBy:
+              type: string
+              description:
+            dwcVerbatimLatitude:
               type: string
               description: The verbatim original longitude of the Latitude.
-            verbatimLongitude:
+            dwcVerbatimLongitude:
               type: string
               description: The verbatim original longitude of the Location.
-            verbatimCoordinateSystem:
+            dwcVerbatimCoordinateSystem:
               type: string
               description: The spatial coordinate system for the verbatimLatitude and verbatimLongitude or the verbatimCoordinates of the Location. https://dwc.tdwg.org/list/#dwc_verbatimCoordinateSystem
-            verbatimSRS:
+            dwcVerbatimSRS:
               type: string
               description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
-            verbatimElevation:
+            dwcVerbatimElevation:
               type: string
               description: The original description of the elevation (altitude, usually above sea level) of the Location.
-            verbatimDepth:
+            dwcVerbatimDepth:
               type: string
               description: The original description of the depth below the local surface.
-            otherRecordNumbers:
+            dwcOtherRecordNumbers:
               type: array
               items:
                 type: number
                 description: Other identifiers given to the collecting-event at the time it was recorded
-            recordNumber:
+            dwcRecordNumber:
               type: number
               description: An identifier given to the collecting-event at the time it was recorded.
-            country:
+            dwcCountry:
               type: string 
               description: name of the country
-            countryCode:
+            dwcCountryCode:
               type: string
               description: Alphabetic geographical codes to represent the country
-            stateProvince:
+            dwcStateProvince:
               type: string
               description: state or province name
             geographicPlaceName:
@@ -229,7 +235,7 @@ components:
             verbatimCollectors:
               type: string
               description: Verbatim name given to the collector group which participated in the collecting event.
-            verbatimLocality:
+            dwcVerbatimLocality:
               type: string
               description: The original textual description of the place.
             geographicPlaceNameSourceDetail:
@@ -250,16 +256,16 @@ components:
               items:
                 type: object
                 properties:
-                  decimalLatitude:
+                  dwcDecimalLatitude:
                     type: number
                     description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
-                  decimalLongitude:
+                  dwcDecimalLongitude:
                     type: number
                     description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
-                  coordinateUncertaintyInMeters:
+                  dwcCoordinateUncertaintyInMeters:
                     type: number
                     description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
-                  georeferencedDate:
+                  dwcGeoreferencedDate:
                     type: string
                     description: The date on which the Location was georeferenced.
                   georeferencedBy:
@@ -270,22 +276,22 @@ components:
                   literalGeoreferencedBy:
                     type: string
                     description: A name of a person, group or organization who determined the georeference for the location.
-                  georeferenceProtocol:
+                  dwcGeoreferenceProtocol:
                     type: string
                     description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
-                  georeferenceSources:
+                  dwcGeoreferenceSources:
                     type: string
                     description: A map, gazetteer, or other resource used to georeference the Location.
-                  georeferenceRemarks:
+                  dwcGeoreferenceRemarks:
                     type: string
                     description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
-                  geodeticDatum:
+                  dwcGeodeticDatum:
                     type: string
                     description: 	The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
                   isPrimary:
                     type: boolean
                     description: specify whether or not the georeference assertion is the primary of the colecting-event
-                  georeferenceVerificationStatus:
+                  dwcGeoreferenceVerificationStatus:
                     type: string
                     enum: [GEOREFERENCING_NOT_POSSIBLE]
         relationships:
