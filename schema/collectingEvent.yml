@@ -176,11 +176,11 @@ components:
         attributes:
           type: object
           properties:
-            decimalLatitude:
-              type: number
+            verbatimLatitude:
+              type: string
               description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
-            decimalLongitude:
-              type: number
+            verbatimLongitude:
+              type: string
               description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
             verbatimCoordinateSystem:
               type: string
@@ -189,10 +189,10 @@ components:
               type: string
               description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
             verbatimElevation:
-              type: number
+              type: string
               description: The original description of the elevation (altitude, usually above sea level) of the Location.
             verbatimDepth:
-              type: number
+              type: string
               description: The original description of the depth below the local surface.
             otherRecordNumbers:
               type: array
@@ -245,6 +245,49 @@ components:
                   type: string
                   format: url
                   description: the source's url
+            geoReferenceAssertions:
+              type: array
+              items:
+                type: object
+                properties:
+                  decimalLatitude:
+                    type: number
+                    description:
+                  decimalLongitude:
+                    type: number
+                    description:
+                  coordinateUncertaintyInMeters:
+                    type: number
+                    description:
+                  georeferencedDate:
+                    type: string
+                    description:
+                  georeferencedBy:
+                    type: array
+                    items:
+                      type: uuid
+                      description:
+                  literalGeoreferencedBy:
+                    type: string
+                    description:
+                  georeferenceProtocol:
+                    type: string
+                    description:
+                  georeferenceSources:
+                    type: string
+                    description:
+                  georeferenceRemarks:
+                    type: string
+                    description:
+                  geodeticDatum:
+                    type: string
+                    description:
+                  isPrimary:
+                    type: boolean
+                    description:
+                  georeferenceVerificationStatus:
+                    type: string
+                    enum: [GEOREFERENCING_NOT_POSSIBLE]
         relationships:
           type: object
           properties:
