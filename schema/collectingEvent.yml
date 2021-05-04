@@ -272,7 +272,8 @@ components:
                     type: array
                     description: A list of uuid who determined the georeference for the location.
                     items:
-                      type: uuid
+                      type: string
+                      format: uuid
                   literalGeoreferencedBy:
                     type: string
                     description: A name of a person, group or organization who determined the georeference for the location.
