@@ -203,10 +203,10 @@ components:
             dwcOtherRecordNumbers:
               type: array
               items:
-                type: number
+                type: string
                 description: Other identifiers given to the collecting-event at the time it was recorded
             dwcRecordNumber:
-              type: number
+              type: string
               description: An identifier given to the collecting-event at the time it was recorded.
             dwcCountry:
               type: string 
