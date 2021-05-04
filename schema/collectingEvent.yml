@@ -178,68 +178,89 @@ components:
           properties:
             dwcVerbatimCoordinates:
               type: string
+              nullable: true
               description: The verbatim original spatial coordinates of the Location. The coordinate ellipsoid, geodeticDatum, or full Spatial Reference System (SRS) for these coordinates should be stored in verbatimSRS and the coordinate system should be stored in verbatimCoordinateSystem.
             dwcRecordedBy: 
               type: string
+              nullable: true
               description: Name of person, group or organization responsible for recording the original Occurrence.
             dwcVerbatimLatitude:
               type: string
+              nullable: true
               description: The verbatim original longitude of the Latitude.
             dwcVerbatimLongitude:
               type: string
+              nullable: true
               description: The verbatim original longitude of the Location.
             dwcVerbatimCoordinateSystem:
               type: string
+              nullable: true
               description: The spatial coordinate system for the verbatimLatitude and verbatimLongitude or the verbatimCoordinates of the Location. https://dwc.tdwg.org/list/#dwc_verbatimCoordinateSystem
             dwcVerbatimSRS:
               type: string
+              nullable: true
               description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
             dwcVerbatimElevation:
               type: string
+              nullable: true
               description: The original description of the elevation (altitude, usually above sea level) of the Location.
             dwcVerbatimDepth:
               type: string
+              nullable: true
               description: The original description of the depth below the local surface.
             dwcOtherRecordNumbers:
               type: array
+              nullable: true
               items:
                 type: string
                 description: Other identifiers given to the collecting-event at the time it was recorded
             dwcRecordNumber:
               type: string
+              nullable: true
               description: An identifier given to the collecting-event at the time it was recorded.
             dwcCountry:
               type: string 
+              nullable: true
               description: name of the country
             dwcCountryCode:
               type: string
+              nullable: true
               description: Alphabetic geographical codes to represent the country
             dwcStateProvince:
               type: string
+              nullable: true
               description: state or province name
             geographicPlaceName:
               type: string
+              nullable: true
               description: geographic place name
             habitat:
               type: string
+              nullable: true
               description: habitat name
             verbatimEventDateTime:  
               type: string 
+              nullable: true
               description: original textual description of date and time the collecting event occurred             
             startEventDateTime:
               type: string
+              nullable: true
               description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
             endEventDateTime:
               type: string
+              nullable: true
               description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Ending date and time must be after startEventDateTime and before current date
             verbatimCollectors:
               type: string
+              nullable: true
               description: Verbatim name given to the collector group which participated in the collecting event.
             dwcVerbatimLocality:
               type: string
+              nullable: true
               description: The original textual description of the place.
             geographicPlaceNameSourceDetail:
               type: object
+              nullable: true
               properties:
                 sourceID:
                   type: string
@@ -253,50 +274,63 @@ components:
                   description: the source's url
             geoReferenceAssertions:
               type: array
+              nullable: true
               items:
                 type: object
                 properties:
                   dwcDecimalLatitude:
                     type: number
+                    nullable: true
                     description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
                   dwcDecimalLongitude:
                     type: number
+                    nullable: true
                     description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
                   dwcCoordinateUncertaintyInMeters:
                     type: number
+                    nullable: true
                     description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
                   dwcGeoreferencedDate:
                     type: string
+                    nullable: true
                     description: The date on which the Location was georeferenced.
                   georeferencedBy:
                     type: array
+                    nullable: true
                     description: A list of uuid who determined the georeference for the location.
                     items:
                       type: string
                       format: uuid
                   literalGeoreferencedBy:
                     type: string
+                    nullable: true
                     description: A name of a person, group or organization who determined the georeference for the location.
                   dwcGeoreferenceProtocol:
                     type: string
+                    nullable: true
                     description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
                   dwcGeoreferenceSources:
                     type: string
+                    nullable: true
                     description: A map, gazetteer, or other resource used to georeference the Location.
                   dwcGeoreferenceRemarks:
                     type: string
+                    nullable: true
                     description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
                   dwcGeodeticDatum:
                     type: string
+                    nullable: true
                     description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
                   isPrimary:
                     type: boolean
                     description: specify whether or not the georeference assertion is the primary of the colecting-event
                   dwcGeoreferenceVerificationStatus:
                     type: string
+                    nullable: true
                     enum: [GEOREFERENCING_NOT_POSSIBLE]
         relationships:
           type: object
+          nullable: true
           properties:
             collectors:
               type: object
@@ -319,6 +353,7 @@ components:
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
             attachment:
               type: object
+              nullable: true
               properties:
                 data:
                   type: array
