@@ -179,9 +179,9 @@ components:
             dwcVerbatimCoordinates:
               type: string
               description: The verbatim original spatial coordinates of the Location. The coordinate ellipsoid, geodeticDatum, or full Spatial Reference System (SRS) for these coordinates should be stored in verbatimSRS and the coordinate system should be stored in verbatimCoordinateSystem.
-            dwcRecordedBy: Name of person, group or organization responsible for recording the original Occurrence.
+            dwcRecordedBy: 
               type: string
-              description:
+              description: Name of person, group or organization responsible for recording the original Occurrence.
             dwcVerbatimLatitude:
               type: string
               description: The verbatim original longitude of the Latitude.
