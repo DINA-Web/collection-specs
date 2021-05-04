@@ -287,7 +287,7 @@ components:
                     description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
                   dwcGeodeticDatum:
                     type: string
-                    description: 	The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
+                    description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
                   isPrimary:
                     type: boolean
                     description: specify whether or not the georeference assertion is the primary of the colecting-event
