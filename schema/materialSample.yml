@@ -187,17 +187,17 @@ components:
             createdBy:
               type: string      
               readOnly: true
-              description: authenticated user who create the preparation type
+              description: authenticated user who create the material sample
             createdOn:              
               type: string
               format: date-time                            
               readOnly: true
-              description: date and time when the preparation type was created in ISO format
+              description: date and time when the material sample was created in ISO format
               example: 1985-04-12T23:20:50.52Z
             group:
               type: string
               nullable: true
-              description: The group in which the preparation type belongs to
+              description: The group in which the material sample belongs to
         relationships:
           type: object
           nullable: true
