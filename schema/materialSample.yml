@@ -200,7 +200,7 @@ components:
                     - id
                   properties:
                     type:
-                      enum: [collectingEvent]
+                      enum: [collecting-event]
                     id:
                       type: string
                       format: uuid
@@ -218,7 +218,7 @@ components:
                     - id
                   properties:
                     type:
-                      enum: [preparationType]
+                      enum: [preparation-type]
                     id:
                       type: string
                       format: uuid
@@ -236,7 +236,7 @@ components:
                     - id
                   properties:
                     type:
-                      enum: [materialSample]
+                      enum: [material-sample]
                     id:
                       type: string
                       format: uuid
@@ -256,7 +256,7 @@ components:
                       - id
                     properties:
                       type:
-                        enum: [materialSample]
+                        enum: [material-sample]
                       id:
                         type: string
                         format: uuid
