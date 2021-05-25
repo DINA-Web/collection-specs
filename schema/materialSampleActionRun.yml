@@ -1,0 +1,238 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Material Sample Action Run schema
+  version: "1.0.0"
+  title: Material Sample Action Run schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/material-sample-action-run:
+    get:
+      summary: Get material sample action run
+      operationId: getMaterialSampleActionRuns
+      description: By passing in query string, user can get available material sample action runs authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the material sample action runs
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: material sample action runs satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/MaterialSampleActionRun'                
+        '404':
+          description: material sample action run not found
+    post:
+      summary: Add material sample action run
+      operationId: addMaterialSampleActionRun
+      description: Adds a material sample action run
+      responses:
+        '201':
+          description: material sample action run created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewMaterialSampleActionRun'
+        description: MaterialSampleActionRun to add
+  /v1/material-sample-action-run/{Id}:
+    get:
+      summary: Find material sample action run by ID
+      description: Returns a single material sample action run
+      operationId: getMaterialSampleActionRunById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of material sample action run to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleActionRun'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: MaterialSampleActionRun not found          
+    patch:
+      summary: Update material sample action run
+      operationId: updateMaterialSampleActionRun
+      description: update a material sample action run
+      parameters:
+        - name: Id
+          in: path
+          description: material sample action run id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: material sample action run updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/MaterialSampleActionRun'
+        description: material sample action run to add
+    delete:
+      summary: Delete material sample action run
+      operationId: deleteMaterialSampleActionRun
+      description: delete a material sample action run
+      parameters:
+        - name: Id
+          in: path
+          description: material sample action run id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: material sample action run marked as deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: material sample action run not found       
+components:
+  schemas:
+    MaterialSampleActionRun:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSampleActionRun'
+
+    NewMaterialSampleActionRun:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSampleActionRun'
+
+    CommonMaterialSampleActionRun:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [material-sample-action-run]      
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              nullable: true
+              description: The name of the material sample action run
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the material sample action run
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the material sample action run was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the material sample action run belongs to
+        relationships:
+          type: object
+          nullable: true
+          properties:
+            materialSampleActionDefinition:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [material-sample-action-definition]
+                    id:
+                      type: string
+                      format: uuid
+                      description: materialSampleActionRun's definition id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            sourceMaterialSample:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [material-sample]
+                    id:
+                      type: string
+                      format: uuid
+                      description: materialSampleActionRun's source material sample id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
