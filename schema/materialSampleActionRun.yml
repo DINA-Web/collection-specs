@@ -176,6 +176,11 @@ components:
         attributes:
           type: object
           properties:
+            agentId:
+              type: string
+              format: uuid
+              nullable: true
+              description: the agent id 
             name:
               type: string
               nullable: true
