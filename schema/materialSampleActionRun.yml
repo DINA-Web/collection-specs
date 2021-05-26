@@ -191,6 +191,16 @@ components:
               readOnly: true
               description: date and time when the material sample action run was created in ISO format
               example: 1985-04-12T23:20:50.52Z
+            startDateTime:
+              type: string
+              format: date-time
+              nullable: true
+              description: start date and time of the material sample action run in ISO format
+            endDateTime:
+              type: string
+              format: date-time
+              nullable: true
+              description: end date and time of the material sample action run in ISO format
         relationships:
           type: object
           nullable: true
