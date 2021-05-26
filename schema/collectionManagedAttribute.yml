@@ -235,15 +235,3 @@ components:
                   nullable: true
                   description: The group in which the collection managed attribute belongs to
               
-        # type:
-        #   enum: [managed-attribute]      
-        #   description: The type of data being returned.
-        # attributes:
-        #   type: object
-        #   properties:
-        #     name:
-        #       type: string
-        #       description: The name of the collection managed attribute
-        #     key:
-        #       type: string
-        #       description: The name of the collection managed attribute
