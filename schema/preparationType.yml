@@ -1,0 +1,194 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Preparation type schema
+  version: "1.0.0"
+  title: Preparation type schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/preparation-type:
+    get:
+      summary: Get preparation type
+      operationId: getPreparationTypes
+      description: By passing in query string, user can get available preparation types authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the preparation types
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: preparation types satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/PreparationType'                
+        '404':
+          description: preparation type not found
+    post:
+      summary: Add preparation type
+      operationId: addPreparationType
+      description: Adds a preparation type
+      responses:
+        '201':
+          description: preparation type created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewPreparationType'
+        description: PreparationType to add
+  /v1/preparation-type/{Id}:
+    get:
+      summary: Find preparation type by ID
+      description: Returns a single preparation type
+      operationId: getPreparationTypeById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of preparation type to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/PreparationType'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: PreparationType not found          
+    patch:
+      summary: Update preparation type
+      operationId: updatePreparationType
+      description: update a preparation type
+      parameters:
+        - name: Id
+          in: path
+          description: preparation type id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: preparation type updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/PreparationType'
+        description: preparation type to add
+    delete:
+      summary: Delete preparation type
+      operationId: deletePreparationType
+      description: delete a preparation type
+      parameters:
+        - name: Id
+          in: path
+          description: preparation type id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: preparation type marked as deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: preparation type not found       
+components:
+  schemas:
+    PreparationType:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonPreparationType'
+
+    NewPreparationType:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonPreparationType'
+
+    CommonPreparationType:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [preparation-type]      
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the preparation type
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the preparation type
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the preparation type was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              description: The group in which the preparation type belongs to
