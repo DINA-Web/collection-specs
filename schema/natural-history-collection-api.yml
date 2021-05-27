@@ -1,0 +1,35 @@
+openapi: 3.0.0
+servers:
+  - description: DINA - AAFC
+    url: https://virtserver.dina-aafc.com/AAFC/1.0.0
+info:
+  description: Collection API Schema
+  version: "0.1.0"
+  title: Collection Schema - DRAFT
+  contact:
+    email: dina-aafc@canada.ca
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+   
+paths:
+  /v1/collecting-event:
+    $ref: 'collectingEvent.yml#/paths/~1v1~1collecting-event'
+  /v1/collecting-event/{Id}:
+    $ref: 'collectingEvent.yml#/paths/~1v1~1collecting-event~1{Id}'
+  /v1/collection:
+    $ref: 'collection.yml#/paths/~1v1~1collection'
+  /v1/collection/{Id}:
+    $ref: 'collection.yml#/paths/~1v1~1collection~1{Id}'
+  /v1/material-sample:
+    $ref: 'materialSample.yml#/paths/~1v1~1material-sample'
+  /v1/material-sample/{Id}:
+    $ref: 'materialSample.yml#/paths/~1v1~1material-sample~1{Id}'
+  /v1/material-sample-action-definition:
+    $ref: 'materialSampleActionDefinition.yml#/paths/~1v1~1material-sample-action-definition'
+  /v1/material-sample-action-definition/{Id}:
+    $ref: 'materialSampleActionDefinition.yml#/paths/~1v1~1material-sample-action-definition~1{Id}'
+  /v1/preparation-type:
+    $ref: 'preparationType.yml#/paths/~1v1~1preparation-type'
+  /v1/preparation-type/{Id}:
+    $ref: 'preparationType.yml#/paths/~1v1~1preparation-type~1{Id}'
