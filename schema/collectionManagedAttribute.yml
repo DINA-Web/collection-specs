@@ -1,0 +1,233 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Collection Managed Attribute schema
+  version: "1.0.0"
+  title: Collection Managed Attribute schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/managed-attribute:
+    get:
+      summary: Get collection managed attribute
+      operationId: getCollectionManagedAttributes
+      description: By passing in query string, user can get available collection managed attributes authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the collection managed attributes
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: collection managed attributes satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/CollectionManagedAttribute'                
+        '404':
+          description: collection managed attribute not found
+    post:
+      summary: Add collection managed attribute
+      operationId: addCollectionManagedAttribute
+      description: Adds a collection managed attribute
+      responses:
+        '201':
+          description: collection managed attribute created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewCollectionManagedAttribute'
+        description: CollectionManagedAttribute to add
+  /v1/managed-attribute/{Id}:
+    get:
+      summary: Find collection managed attribute by ID
+      description: Returns a single collection managed attribute
+      operationId: getCollectionManagedAttributeById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of collection managed attribute to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionManagedAttribute'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: CollectionManagedAttribute not found          
+    patch:
+      summary: Update collection managed attribute
+      operationId: updateCollectionManagedAttribute
+      description: update a collection managed attribute
+      parameters:
+        - name: Id
+          in: path
+          description: collection managed attribute id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: collection managed attribute updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CollectionManagedAttribute'
+        description: collection managed attribute to add
+    delete:
+      summary: Delete collection managed attribute
+      operationId: deleteCollectionManagedAttribute
+      description: delete a collection managed attribute
+      parameters:
+        - name: Id
+          in: path
+          description: collection managed attribute id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: collection managed attribute marked as deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: collection managed attribute not found       
+components:
+  schemas:
+    CollectionManagedAttribute:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonCollectionManagedAttribute'
+
+    NewCollectionManagedAttribute:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonCollectionManagedAttribute'
+
+    CommonCollectionManagedAttribute:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:       
+        data:
+          type: object
+          required:
+            - id
+            - type
+            - attributes
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+            type:
+              enum: [managed-attribute]      
+            attributes:
+              type: object
+              required:
+                - name
+                - managedAttributeType
+              properties:
+                name:
+                  type: string
+                  description: name of the managed attribute
+                  example: 
+                    collectionView
+                key:
+                  type: string
+                  description: key of the managed attribute
+                  example: 
+                    collection_view
+                managedAttributeType:
+                  description: type of the managed attribute          
+                  enum: [
+                     STRING,
+                     INTEGER]
+                managedAttributeComponent:
+                  description: component of the managed attribute
+                  enum: [
+                    COLLECTING_EVENT,
+                    MATERIAL_SAMPLE
+                  ]
+                acceptedValues:
+                  type: array
+                  description: accepted values of the named attribute (if any)      
+                  items: 
+                    oneOf:
+                      - type: string
+                      - type: integer
+                  example: 
+                    - dorsal
+                    - 1      
+                createdBy:
+                  type: string      
+                  readOnly: true
+                  description: authenticated user who create the collection managed attribute
+                createdOn:              
+                  type: string
+                  format: date-time                            
+                  readOnly: true
+                  description: date and time when the collection managed attribute was created in ISO format
+                  example: 1985-04-12T23:20:50.52Z
+              
