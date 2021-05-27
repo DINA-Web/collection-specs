@@ -179,7 +179,6 @@ components:
             agentId:
               type: string
               format: uuid
-              nullable: true
               description: the agent id 
             createdBy:
               type: string      
