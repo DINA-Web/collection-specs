@@ -202,11 +202,9 @@ components:
               description: end date and time of the material sample action run in ISO format
         relationships:
           type: object
-          nullable: true
           properties:
             materialSampleActionDefinition:
               type: object
-              nullable: true
               required:
                 - data
               properties:
@@ -225,7 +223,6 @@ components:
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             sourceMaterialSample:
               type: object
-              nullable: true
               required:
                 - data
               properties:
