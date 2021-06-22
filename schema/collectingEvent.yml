@@ -258,6 +258,15 @@ components:
               type: string
               nullable: true
               description: The original textual description of the place.
+            managedAttributes:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
             geographicPlaceNameSourceDetail:
               type: object
               nullable: true
