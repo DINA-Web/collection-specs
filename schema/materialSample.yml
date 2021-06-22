@@ -198,6 +198,11 @@ components:
               type: string
               nullable: true
               description: The group in which the material sample belongs to
+            managedAttributes:
+              type: object
+              description: The manage attribute, with key and value pair
+              additionalProperties:
+                type: string
         relationships:
           type: object
           nullable: true
