@@ -260,13 +260,9 @@ components:
               description: The original textual description of the place.
             managedAttributes:
               type: object
+              description: The manage attribute, with key and value pair
               additionalProperties:
-                type: object
-                properties:
-                  key:
-                    type: string
-                  value:
-                    type: string
+                type: string
             geographicPlaceNameSourceDetail:
               type: object
               nullable: true
