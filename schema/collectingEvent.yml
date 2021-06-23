@@ -258,7 +258,7 @@ components:
               type: string
               nullable: true
               description: The original textual description of the place.
-            managedAttributes:
+            managedAttributeValues:
               type: object
               description: The manage attribute, with key and value pair
               additionalProperties:
