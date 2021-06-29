@@ -176,6 +176,20 @@ components:
         attributes:
           type: object
           properties:
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the collecting event
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the collecting event was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the collecting event belongs to
             dwcVerbatimCoordinates:
               type: string
               nullable: true
@@ -230,10 +244,14 @@ components:
               type: string
               nullable: true
               description: state or province name
-            geographicPlaceName:
-              type: string
+            dwcMinimumElevationInMeters:
+              type: integer
               nullable: true
-              description: geographic place name
+              description: Minimum elevation in meters
+            dwcMinimumDepthInMeters:
+              type: integer
+              nullable: true
+              description: Minimum depth in meters
             habitat:
               type: string
               nullable: true
@@ -250,10 +268,6 @@ components:
               type: string
               nullable: true
               description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Ending date and time must be after startEventDateTime and before current date
-            verbatimCollectors:
-              type: string
-              nullable: true
-              description: Verbatim name given to the collector group which participated in the collecting event.
             dwcVerbatimLocality:
               type: string
               nullable: true
@@ -263,6 +277,10 @@ components:
               description: The manage attribute, with key and value pair
               additionalProperties:
                 type: string
+            geographicPlaceNameSource:
+              type: string
+              nullable: true
+              enum: [OSM]    
             geographicPlaceNameSourceDetail:
               type: object
               nullable: true

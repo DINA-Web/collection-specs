@@ -192,3 +192,20 @@ components:
             group:
               type: string
               description: The group in which the preparation type belongs to
+            multilingualDescription:
+              type: object
+              nullable: true
+              properties:
+                descriptions:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      desc:
+                        type: string
+                        description: the description
+

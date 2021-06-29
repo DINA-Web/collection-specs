@@ -192,3 +192,32 @@ components:
             group:
               type: string
               description: The group in which the material sample action definition belongs to
+            actionType:
+              type: string
+              enum: [
+                SLIT,
+                MERGE,
+                ADD]
+            formTemplates:
+              type: object
+              properties:
+                COLLECTING_EVENT:
+                  type: object
+                  properties:
+                    allowNew:
+                      type: boolean
+                    allowExisting:
+                      type: boolean
+                    templatesFields:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        properties:
+                          enabled:
+                            type: boolean
+                          defaultValue:
+                            type: string
+                MATERIAL_SAMPLE:
+                  $ref: '#/components/schemas/CommonMaterialSampleActionDefinition/properties/attributes/properties/formTemplates/properties/COLLECTING_EVENT'
+
+
