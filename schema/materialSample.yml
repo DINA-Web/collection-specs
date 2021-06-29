@@ -303,7 +303,7 @@ components:
                     - id
                   properties:
                     type:
-                      enum: [material-sample]
+                      enum: [person]
                     id:
                       type: string
                       format: uuid
