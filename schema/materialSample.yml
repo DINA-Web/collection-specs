@@ -204,13 +204,15 @@ components:
               additionalProperties:
                 type: string
             dwcOtherCatalogNumbers:
-              type: integer
+              type: array
               nullable: true
-              description: Minimum elevation in meters
+              description: Other catalog numbers
+              items:
+                type: string
             preparationDate:
-              type: integer
+              type: string
               nullable: true
-              description: Minimum depth in meters
+              description: The date on which the material sample was prepared.
         relationships:
           type: object
           nullable: true
