@@ -203,6 +203,16 @@ components:
               description: The manage attribute, with key and value pair
               additionalProperties:
                 type: string
+            dwcOtherCatalogNumbers:
+              type: array
+              nullable: true
+              description: Other catalog numbers
+              items:
+                type: string
+            preparationDate:
+              type: string
+              nullable: true
+              description: The date on which the material sample was prepared.
         relationships:
           type: object
           nullable: true
@@ -282,6 +292,23 @@ components:
                         format: uuid
                         description: materialSample's child id
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            preparedBy:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [person]
+                    id:
+                      type: string
+                      format: uuid
+                      description: person who prepared the material sample
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             attachment:
               type: object
               nullable: true
