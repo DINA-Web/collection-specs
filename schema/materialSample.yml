@@ -213,6 +213,14 @@ components:
               type: string
               nullable: true
               description: The date on which the material sample was prepared.
+            preparationRemarks:
+              type: string
+              nullable: true
+              description: Remarks on the preparation of the material sample
+            dwcDegreeOfEstablishment:
+              type: string
+              nullable: true
+              description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
         relationships:
           type: object
           nullable: true
