@@ -7,36 +7,70 @@ hide circle
 hide methods
 
 class "CollectingEvent" as ce {
--lat/long
--date
+-dwcVerbatimLatitude
+-dwcVerbatimLongitude
+-dwcVerbatimLocality
+-verbatimEventDateTime
+-geographicPlaceNameSource
 -collectors
+-attachments
 }
 
-class "PhysicalEntity" as pe {
--state
--catalogueNumber[not unique]
--organismId
+class "GeographicPlaceNameSourceDetail" as placedetail {
+-sourceUrl
+-country
+-stateProvince
+-higherGeographicPlaces
+-recordedOn
 }
 
-class "Observation" as obs {
+class "GeoreferenceAssertion" as georef {
+-dwcDecimalLatitude
+-dwcDecimalLongitude
+-dwcCoordinateUncertaintyInMeters
+-georeferencedBy
+-dwcGeoreferenceVerificationStatus
+}
+
+class "MaterialSample" as ms {
+-materialSampleName
+-dwcCatalogueNumber[not unique]
+-dwcOtherCatalogNumbers
+-preparedBy
+-preparationDate
 }
 
 skinparam linetype spline
 
-class "Identification" as identification{
--count
+class "Determination" as determination{
+-scientificName
+-determinationDate
 }
 
-class "PreparationProcess" as preparation{
--preparationType
+class "PreparationType" as preparation{
+-name
+-description
 }
 
-ce "1..* " --- "0..*" pe
-ce "1 " -- "0..*" obs
+class "MaterialSampleType" as materialsampletype{
+-name
+-description
+}
+
+class "StorageUnit" as storageunit{
+-name
+-type
+}
+
+ce "1 " -- "0..*" georef
+ce "1 " -- "1" placedetail
+ce "0..1 " --- "0..*" ms
+
 skinparam linetype ortho
-pe "1 " --- "0..*" identification
-pe "1..*" --- "0..*" preparation
-pe -[#red,dashed]-> pe
-obs "1 " -- "0..*" identification
+ms "1 " --- "0..*" determination
+ms "0..*" --- "0..1" preparation
+ms "0..*" --- "0..1" materialsampletype
+ms "0..*" --- "0..1" storageunit
+ms -[#red,dashed]-> ms
 
 @enduml
