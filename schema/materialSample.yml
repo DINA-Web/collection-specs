@@ -221,6 +221,72 @@ components:
               type: string
               nullable: true
               description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
+            determination:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  verbatimScientificName:
+                    type: string
+                    nullable: true
+                  verbatimAgent:
+                    type: string
+                    nullable: true
+                  verbatimDate:
+                    type: string
+                    nullable: true
+                  scientificName:
+                    type: string
+                    nullable: true
+                  transcriberRemarks:
+                    type: string
+                    nullable: true
+                  typeStatus:
+                    type: string
+                    nullable: true
+                  typeStatusEvidence:
+                    type: string
+                    nullable: true
+                  determiner:
+                    type: array
+                    nullable: true
+                    items:
+                      type: string
+                      format: uuid
+                  determinedOn:
+                    type: string
+                    nullable: true
+                  qualifier:
+                    type: string
+                    nullable: true
+                  ScientificNameSource:
+                    type: string
+                    nullable: true
+                    enum: [COLPLUS]
+                  scientificNameDetails:
+                    type: string
+                    nullable: true
+            hierarchy:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                    description: Identifier of the hierarchical object as UUID
+                  name:
+                    type: string
+                    nullable: true
+                  rank:
+                    type: number
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: true                  
         relationships:
           type: object
           nullable: true
