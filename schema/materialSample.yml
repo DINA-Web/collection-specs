@@ -221,6 +221,63 @@ components:
               type: string
               nullable: true
               description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
+            determination:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  verbatimScientificName:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  verbatimAgent:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  verbatimDate:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  scientificName:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  transcriberRemarks:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  typeStatus:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  typeStatusEvidence:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  determiner:
+                    type: array
+                    nullable: true
+                    description: A list of uuid who determined the georeference for the location.
+                    items:
+                      type: string
+                      format: uuid
+                  determinedOn:
+                    type: string
+                    nullable: true
+                    description: The date on which the Location was georeferenced.
+                  qualifier:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
+                  ScientificNameSource:
+                    type: string
+                    nullable: true
+                    enum: [COLPLUS]
+                  scientificNameDetails:
+                    type: string
+                    nullable: true
+                    description: A map, gazetteer, or other resource used to georeference the Location.
         relationships:
           type: object
           nullable: true

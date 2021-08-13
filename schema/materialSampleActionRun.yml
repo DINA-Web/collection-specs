@@ -190,6 +190,10 @@ components:
               readOnly: true
               description: date and time when the material sample action run was created in ISO format
               example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              nullable: true
+              description: The group in which the material sample belongs to
             startDateTime:
               type: string
               format: date-time
