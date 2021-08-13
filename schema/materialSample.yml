@@ -230,46 +230,36 @@ components:
                   verbatimScientificName:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   verbatimAgent:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   verbatimDate:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   scientificName:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   transcriberRemarks:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   typeStatus:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   typeStatusEvidence:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   determiner:
                     type: array
                     nullable: true
-                    description: A list of uuid who determined the georeference for the location.
                     items:
                       type: string
                       format: uuid
                   determinedOn:
                     type: string
                     nullable: true
-                    description: The date on which the Location was georeferenced.
                   qualifier:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
                   ScientificNameSource:
                     type: string
                     nullable: true
@@ -277,7 +267,26 @@ components:
                   scientificNameDetails:
                     type: string
                     nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
+            hierarchy:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                    description: Identifier of the hierarchical object as UUID
+                  name:
+                    type: string
+                    nullable: true
+                  rank:
+                    type: number
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: true                  
         relationships:
           type: object
           nullable: true
