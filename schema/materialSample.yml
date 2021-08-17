@@ -221,6 +221,9 @@ components:
               type: string
               nullable: true
               description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
+            host:
+              type: string
+              nullable: true
             determination:
               type: array
               nullable: true
