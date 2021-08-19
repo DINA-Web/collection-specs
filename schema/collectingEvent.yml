@@ -264,6 +264,10 @@ components:
               type: string
               nullable: true
               description: habitat name
+            substrate:
+              type: string
+              nullable: true
+              description: surface on which an organism lives
             verbatimEventDateTime:  
               type: string 
               nullable: true
