@@ -252,6 +252,14 @@ components:
               type: integer
               nullable: true
               description: Minimum depth in meters
+            dwcMaximumElevationInMeters:
+              type: integer
+              nullable: true
+              description: Maximum elevation in meters
+            dwcMaximumDepthInMeters:
+              type: integer
+              nullable: true
+              description: Maximum depth in meters
             habitat:
               type: string
               nullable: true
