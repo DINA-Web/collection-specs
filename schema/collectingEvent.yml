@@ -268,6 +268,10 @@ components:
               type: string
               nullable: true
               description: surface on which an organism lives
+            remarks:
+              type: string
+              nullable: true
+              description: remarks on the collecting event
             verbatimEventDateTime:  
               type: string 
               nullable: true
