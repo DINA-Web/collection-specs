@@ -233,7 +233,7 @@ components:
                   verbatimScientificName:
                     type: string
                     nullable: true
-                  verbatimAgent:
+                  verbatimDeterminer:
                     type: string
                     nullable: true
                   verbatimDate:
