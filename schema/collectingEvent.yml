@@ -265,9 +265,11 @@ components:
               nullable: true
               description: habitat name
             substrate:
-              type: string
+              type: array
               nullable: true
-              description: surface on which an organism lives
+              items:
+                type: string
+                description: surface on which an organism lives
             remarks:
               type: string
               nullable: true
