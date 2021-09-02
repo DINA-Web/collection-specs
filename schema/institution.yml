@@ -189,9 +189,6 @@ components:
               readOnly: true
               description: date and time when the institution was created in ISO format
               example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the institution belongs to
             multilingualDescription:
               type: object
               nullable: true
