@@ -1,0 +1,211 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Institution schema
+  version: "1.0.0"
+  title: Institution schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/institution:
+    get:
+      summary: Get institution
+      operationId: getInstitutions
+      description: By passing in query string, user can get available institutions authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the institutions
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: institutions satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Institution'                
+        '404':
+          description: institution not found
+    post:
+      summary: Add institution
+      operationId: addInstitution
+      description: Adds a institution
+      responses:
+        '201':
+          description: institution created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewInstitution'
+        description: Institution to add
+  /v1/institution/{Id}:
+    get:
+      summary: Find institution by ID
+      description: Returns a single institution
+      operationId: getInstitutionById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of institution to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/Institution'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: Institution not found          
+    patch:
+      summary: Update institution
+      operationId: updateInstitution
+      description: update a institution
+      parameters:
+        - name: Id
+          in: path
+          description: institution id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: institution updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+        description: institution to add
+    delete:
+      summary: Delete institution
+      operationId: deleteInstitution
+      description: delete a institution
+      parameters:
+        - name: Id
+          in: path
+          description: institution id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: institution marked as deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: institution not found       
+components:
+  schemas:
+    Institution:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonInstitution'
+
+    NewInstitution:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonInstitution'
+
+    CommonInstitution:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [institution]      
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the institution
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the institution
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the institution was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              description: The group in which the institution belongs to
+            multilingualDescription:
+              type: object
+              nullable: true
+              properties:
+                descriptions:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      desc:
+                        type: string
+                        description: the description
+
