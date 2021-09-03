@@ -11,6 +11,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14'
-      - name: yarn test and build
+      - name: building using redoc-cli
         run: |
           npx redoc-cli bundle schema/natural-history-collection-api.yml -o redoc/index.html
+          
+      - name: Deploy GitHub Pages (only on master branch)
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: redoc
