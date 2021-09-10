@@ -232,17 +232,16 @@ components:
               nullable: true
               items:
                 type: object
-                required:
-                  - type
-                  - id
                 properties:
-                  type:
-                    enum: [ material-sample ]
                   id:
                     type: string
                     format: uuid
                     description: materialSample's child id
                     example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+                  materialSampleName: 
+                    type: string
+                    nullable: true
+                    description: Name of the material sample
             determination:
               type: array
               nullable: true
