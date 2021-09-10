@@ -245,19 +245,19 @@ components:
               nullable: true
               description: state or province name
             dwcMinimumElevationInMeters:
-              type: integer
+              type: number
               nullable: true
               description: Minimum elevation in meters
             dwcMinimumDepthInMeters:
-              type: integer
+              type: number
               nullable: true
               description: Minimum depth in meters
             dwcMaximumElevationInMeters:
-              type: integer
+              type: number
               nullable: true
               description: Maximum elevation in meters
             dwcMaximumDepthInMeters:
-              type: integer
+              type: number
               nullable: true
               description: Maximum depth in meters
             habitat:
