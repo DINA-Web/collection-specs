@@ -246,18 +246,30 @@ components:
               description: state or province name
             dwcMinimumElevationInMeters:
               type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
               description: Minimum elevation in meters
             dwcMinimumDepthInMeters:
               type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
               description: Minimum depth in meters
             dwcMaximumElevationInMeters:
               type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
               description: Maximum elevation in meters
             dwcMaximumDepthInMeters:
               type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
               description: Maximum depth in meters
             habitat:
