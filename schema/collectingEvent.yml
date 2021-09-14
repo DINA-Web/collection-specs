@@ -305,6 +305,14 @@ components:
               description: The manage attribute, with key and value pair
               additionalProperties:
                 type: string
+            publiclyReleasable:
+              type: boolean
+              nullable: true
+              description: whether or not the collecting event is publicly releasable
+            notPubliclyReleasableReason:
+              type: string
+              nullable: true
+              description: text description of reason why the collecting event is not publicly releasable
             geographicPlaceNameSource:
               type: string
               nullable: true
