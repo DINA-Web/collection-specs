@@ -227,6 +227,12 @@ components:
             host:
               type: string
               nullable: true
+            tags:
+              type: array
+              nullable: true
+              description: tags for the material sample
+              items:
+                type: string 
             determination:
               type: array
               nullable: true
