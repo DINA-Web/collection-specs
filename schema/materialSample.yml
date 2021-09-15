@@ -233,6 +233,14 @@ components:
               description: tags for the material sample
               items:
                 type: string 
+            publiclyReleasable:
+              type: boolean
+              nullable: true
+              description: whether or not the material sample is publicly releasable
+            notPubliclyReleasableReason:
+              type: string
+              nullable: true
+              description: text description of reason why the material sample is not publicly releasable
             determination:
               type: array
               nullable: true
