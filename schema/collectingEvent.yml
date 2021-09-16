@@ -245,21 +245,33 @@ components:
               nullable: true
               description: state or province name
             dwcMinimumElevationInMeters:
-              type: integer
+              type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
-              description: Minimum elevation in meters
+              description: Minimum elevation in meters. With a precision of 7 digits and a scale of 2 decimals.
             dwcMinimumDepthInMeters:
-              type: integer
+              type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
-              description: Minimum depth in meters
+              description: Minimum depth in meters. With a precision of 7 digits and a scale of 2 decimals.
             dwcMaximumElevationInMeters:
-              type: integer
+              type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
-              description: Maximum elevation in meters
+              description: Maximum elevation in meters. With a precision of 7 digits and a scale of 2 decimals.
             dwcMaximumDepthInMeters:
-              type: integer
+              type: number
+              minimum: 0
+              maximum: 15000
+              multipleOf: 0.01
               nullable: true
-              description: Maximum depth in meters
+              description: Maximum depth in meters. With a precision of 7 digits and a scale of 2 decimals.
             habitat:
               type: string
               nullable: true
@@ -293,6 +305,14 @@ components:
               description: The manage attribute, with key and value pair
               additionalProperties:
                 type: string
+            publiclyReleasable:
+              type: boolean
+              nullable: true
+              description: whether or not the collecting event is publicly releasable
+            notPubliclyReleasableReason:
+              type: string
+              nullable: true
+              description: text description of reason why the collecting event is not publicly releasable
             geographicPlaceNameSource:
               type: string
               nullable: true
