@@ -227,6 +227,12 @@ components:
             host:
               type: string
               nullable: true
+            materialSampleState:
+              type: string
+              nullable: true
+            materialSampleRemarks:
+              type: string
+              nullable: true
             materialSampleChildren:
               type: array
               nullable: true
