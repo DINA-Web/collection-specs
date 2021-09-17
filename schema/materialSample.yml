@@ -227,6 +227,21 @@ components:
             host:
               type: string
               nullable: true
+            materialSampleChildren:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: materialSample's child id
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+                  materialSampleName: 
+                    type: string
+                    nullable: true
+                    description: Name of the material sample
             tags:
               type: array
               nullable: true
@@ -367,25 +382,6 @@ components:
                       format: uuid
                       description: materialSample's parent id
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            materialSampleChildren:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [material-sample]
-                      id:
-                        type: string
-                        format: uuid
-                        description: materialSample's child id
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
             preparedBy:
               type: object
               nullable: true
