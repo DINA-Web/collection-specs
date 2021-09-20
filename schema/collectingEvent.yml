@@ -331,6 +331,12 @@ components:
                   type: string
                   format: url
                   description: the source's url
+            tags:
+              type: array
+              nullable: true
+              description: tags for the collecting event
+              items:
+                type: string 
             host:
               type: string
               nullable: true
