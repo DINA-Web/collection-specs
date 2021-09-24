@@ -262,6 +262,22 @@ components:
               type: string
               nullable: true
               description: text description of reason why the material sample is not publicly releasable
+            organism:
+              type: object
+              nullable: true
+              properties:
+                lifeStage:
+                  type: string
+                  nullable: true
+                sex:
+                  type: string
+                  nullable: true
+                substrate:
+                  type: string
+                  nullable: true
+                remarks:
+                  type: string
+                  nullable: true
             determination:
               type: array
               nullable: true
