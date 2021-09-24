@@ -294,13 +294,28 @@ components:
                   actionStatus:
                     type: string
                     nullable: true
-                  assignedTo:
-                    type: string
-                    format: uuid
-                    nullable: true
                   remarks:
                     type: string
                     nullable: true
+                  assignedTo:
+                    type: object
+                    nullable: true
+                    required:
+                      - data
+                    properties:
+                      data:
+                        type: object
+                        required:
+                          - type
+                          - id
+                        properties:
+                          type:
+                            enum: [user]
+                          id:
+                            type: string
+                            format: uuid
+                            description: user's id which this scheduled action is assigned to
+                            example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             determination:
               type: array
               nullable: true
