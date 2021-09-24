@@ -278,6 +278,29 @@ components:
                 remarks:
                   type: string
                   nullable: true
+            scheduledActions:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  actionType:
+                    type: string
+                    nullable: true
+                  date:
+                    type: string
+                    format: date
+                    nullable: true
+                  actionStatus:
+                    type: string
+                    nullable: true
+                  assignedTo:
+                    type: string
+                    format: uuid
+                    nullable: true
+                  remarks:
+                    type: string
+                    nullable: true
             determination:
               type: array
               nullable: true
