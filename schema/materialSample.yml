@@ -301,21 +301,16 @@ components:
                     type: object
                     nullable: true
                     required:
-                      - data
+                      - type
+                      - id
                     properties:
-                      data:
-                        type: object
-                        required:
-                          - type
-                          - id
-                        properties:
-                          type:
-                            enum: [user]
-                          id:
-                            type: string
-                            format: uuid
-                            description: user's id which this scheduled action is assigned to
-                            example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                      type:
+                        enum: [user]
+                      id:
+                        type: string
+                        format: uuid
+                        description: user's id which this scheduled action is assigned to
+                        example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             determination:
               type: array
               nullable: true
