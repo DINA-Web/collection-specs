@@ -205,4 +205,17 @@ components:
                       desc:
                         type: string
                         description: the description
+            webpage:
+              type: string
+              format: uri
+              nullable: true
+              description: The webpage of the institution
+            physicalAddress:
+              type: string   
+              nullable: true   
+              description: The physical address of the institution
+            remarks:              
+              type: string
+              nullable: true
+              description: remarks regarding the institution
 
