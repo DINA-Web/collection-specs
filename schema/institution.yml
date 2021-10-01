@@ -210,7 +210,7 @@ components:
               format: uri
               nullable: true
               description: The webpage of the institution
-            physicalAddress:
+            address:
               type: string   
               nullable: true   
               description: The physical address of the institution
