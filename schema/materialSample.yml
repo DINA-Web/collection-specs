@@ -262,6 +262,10 @@ components:
               type: string
               nullable: true
               description: text description of reason why the material sample is not publicly releasable
+            filedAs:
+              type: string
+              nullable: true
+              description: text for what the material sample is filed as
             organism:
               type: object
               nullable: true
