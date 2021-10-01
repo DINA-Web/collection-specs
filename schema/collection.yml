@@ -196,3 +196,20 @@ components:
               type: string
               nullable: true
               description: The code of the collection
+            webpage:
+              type: string
+              format: uri
+              nullable: true
+              description: The webpage of the collection
+            contact:
+              type: string   
+              nullable: true   
+              description: The contact of the collection
+            address:
+              type: string   
+              nullable: true   
+              description: The address of the collection
+            remarks:              
+              type: string
+              nullable: true
+              description: remarks regarding the collection
