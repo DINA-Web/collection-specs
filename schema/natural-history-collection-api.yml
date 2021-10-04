@@ -45,3 +45,7 @@ paths:
     $ref: 'institution.yml#/paths/~1v1~1institution'
   /v1/institution/{Id}:
     $ref: 'institution.yml#/paths/~1v1~1institution~1{Id}'
+  /v1/storage-unit-type:
+    $ref: 'storageUnitType.yml#/paths/~1v1~1storage-unit-type'
+  /v1/storage-unit-type/{Id}:
+    $ref: 'storageUnitType.yml#/paths/~1v1~1storage-unit-type~1{Id}'
