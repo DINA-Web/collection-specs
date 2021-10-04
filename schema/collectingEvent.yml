@@ -340,6 +340,20 @@ components:
             host:
               type: string
               nullable: true
+            exttensions:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    nullable: true
+                  values:
+                    type: object
+                    description: The manage attribute, with key and value pair
+                    additionalProperties:
+                      type: string
             geoReferenceAssertions:
               type: array
               nullable: true
