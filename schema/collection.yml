@@ -220,7 +220,7 @@ components:
                 type: object
                 properties:
                   type:
-                    enum: [GRSciColl, Index_Herbariorum]
+                    enum: [GRSCICOLL, INDEX_HERBARIORUM]
                   uri:
                     type: string
                     format: uri

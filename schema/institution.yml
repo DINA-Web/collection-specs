@@ -225,7 +225,7 @@ components:
                 type: object
                 properties:
                   type:
-                    enum: [GRSciColl]
+                    enum: [GRSCICOLL]
                   uri:
                     type: string
                     format: uri
