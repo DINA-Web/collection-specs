@@ -266,6 +266,10 @@ components:
               type: string
               nullable: true
               description: text for what the material sample is filed as
+            preparationMethod:
+              type: string
+              nullable: true
+              description: text for material sample's preparation method      
             organism:
               type: object
               nullable: true
