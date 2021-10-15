@@ -213,3 +213,14 @@ components:
               type: string
               nullable: true
               description: remarks regarding the collection
+            identifiers:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  type:
+                    enum: [GRSCICOLL, INDEX_HERBARIORUM]
+                  uri:
+                    type: string
+                    format: uri
