@@ -218,4 +218,15 @@ components:
               type: string
               nullable: true
               description: remarks regarding the institution
+            identifiers:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  type:
+                    enum: [GRSCICOLL]
+                  uri:
+                    type: string
+                    format: uri
 
