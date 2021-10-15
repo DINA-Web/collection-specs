@@ -340,6 +340,40 @@ components:
             host:
               type: string
               nullable: true
+            extensions:
+              type: array
+              nullable: true
+              items:
+                type: number
+                nullable: true
+                properties:
+                  name:
+                    type: string
+                    nullable: true
+                  key:
+                    type: string
+                    nullable: true
+                  version:
+                    type: string
+                    nullable: true
+                  fields:
+                    type: array
+                    nullable: true
+                    items:
+                      type: object
+                      properties:
+                        term:
+                          type: string
+                          nullable: true
+                        name:
+                          type: string
+                          nullable: true
+                        definition:
+                          type: string
+                          nullable: true
+                        dinaComponent:
+                          type: string
+                          nullable: true
             geoReferenceAssertions:
               type: array
               nullable: true
