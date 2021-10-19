@@ -14,6 +14,8 @@ info:
 paths:
   /v1/material-sample-action-definition:
     get:
+      tags:
+        - Material Sample Action Definition
       summary: Get material sample action definition
       operationId: getMaterialSampleActionDefinitions
       description: By passing in query string, user can get available material sample action definitions authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: material sample action definition not found
     post:
+      tags:
+        - Material Sample Action Definition
       summary: Add material sample action definition
       operationId: addMaterialSampleActionDefinition
       description: Adds a material sample action definition
@@ -70,6 +74,8 @@ paths:
         description: MaterialSampleActionDefinition to add
   /v1/material-sample-action-definition/{Id}:
     get:
+      tags:
+        - Material Sample Action Definition
       summary: Find material sample action definition by ID
       description: Returns a single material sample action definition
       operationId: getMaterialSampleActionDefinitionById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: MaterialSampleActionDefinition not found          
     patch:
+      tags:
+        - Material Sample Action Definition
       summary: Update material sample action definition
       operationId: updateMaterialSampleActionDefinition
       description: update a material sample action definition
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/MaterialSampleActionDefinition'
         description: material sample action definition to add
     delete:
+      tags:
+        - Material Sample Action Definition
       summary: Delete material sample action definition
       operationId: deleteMaterialSampleActionDefinition
       description: delete a material sample action definition

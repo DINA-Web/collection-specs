@@ -14,6 +14,8 @@ info:
 paths:
   /v1/managed-attribute:
     get:
+      tags:
+        - Collection Managed Attribute
       summary: Get collection managed attribute
       operationId: getCollectionManagedAttributes
       description: By passing in query string, user can get available collection managed attributes authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: collection managed attribute not found
     post:
+      tags:
+        - Collection Managed Attribute
       summary: Add collection managed attribute
       operationId: addCollectionManagedAttribute
       description: Adds a collection managed attribute
@@ -70,6 +74,8 @@ paths:
         description: CollectionManagedAttribute to add
   /v1/managed-attribute/{Id}:
     get:
+      tags:
+        - Collection Managed Attribute
       summary: Find collection managed attribute by ID
       description: Returns a single collection managed attribute
       operationId: getCollectionManagedAttributeById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: CollectionManagedAttribute not found          
     patch:
+      tags:
+        - Collection Managed Attribute
       summary: Update collection managed attribute
       operationId: updateCollectionManagedAttribute
       description: update a collection managed attribute
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/CollectionManagedAttribute'
         description: collection managed attribute to add
     delete:
+      tags:
+        - Collection Managed Attribute
       summary: Delete collection managed attribute
       operationId: deleteCollectionManagedAttribute
       description: delete a collection managed attribute

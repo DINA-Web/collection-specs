@@ -14,6 +14,8 @@ info:
 paths:
   /v1/collection:
     get:
+      tags:
+        - Collection
       summary: Get collection
       operationId: getCollections
       description: By passing in query string, user can get available collections authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: collection not found
     post:
+      tags:
+        - Collection
       summary: Add collection
       operationId: addCollection
       description: Adds a collection
@@ -70,6 +74,8 @@ paths:
         description: Collection to add
   /v1/collection/{Id}:
     get:
+      tags:
+        - Collection
       summary: Find collection by ID
       description: Returns a single collection
       operationId: getCollectionById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: Collection not found          
     patch:
+      tags:
+        - Collection
       summary: Update collection
       operationId: updateCollection
       description: update a collection
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/Collection'
         description: collection to add
     delete:
+      tags:
+        - Collection
       summary: Delete collection
       operationId: deleteCollection
       description: delete a collection
