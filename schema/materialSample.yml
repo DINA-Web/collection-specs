@@ -258,21 +258,6 @@ components:
                     type: string
                     nullable: true
                     description: Name of the material sample
-            associations:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  associatedSample:
-                    type: string
-                    format: uuid
-                    description: materialSample's associated id
-                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-                  associationType:
-                    type: string
-                    nullable: true
-                    description: type of association
             tags:
               type: array
               nullable: true
