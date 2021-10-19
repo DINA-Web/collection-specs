@@ -286,6 +286,16 @@ components:
                 remarks:
                   type: string
                   nullable: true
+            hostOrganism:
+              type: object
+              nullable: true
+              properties:
+                name:
+                  type: string
+                  nullable: true
+                remarks:
+                  type: string
+                  nullable: true
             scheduledActions:
               type: array
               nullable: true
