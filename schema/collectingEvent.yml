@@ -14,6 +14,8 @@ info:
 paths:
   /v1/collecting-event:
     get:
+      tags:
+        - Collecting Event
       summary: Get collecting event
       operationId: getCollectingEvents
       description: By passing in query string, user can get available collecting events authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: collecting event not found
     post:
+      tags:
+        - Collecting Event
       summary: Add collecting event
       operationId: addCollectingEvent
       description: Adds a collecting event
@@ -70,6 +74,8 @@ paths:
         description: CollectingEvent to add
   /v1/collecting-event/{Id}:
     get:
+      tags:
+        - Collecting Event
       summary: Find collecting event by ID
       description: Returns a single collecting event
       operationId: getCollectingEventById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: CollectingEvent not found          
     patch:
+      tags:
+        - Collecting Event
       summary: Update collecting event
       operationId: updateCollectingEvent
       description: update a collecting event
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/CollectingEvent'
         description: collecting event to add
     delete:
+      tags:
+        - Collecting Event
       summary: Delete collecting event
       operationId: deleteCollectingEvent
       description: delete a collecting event

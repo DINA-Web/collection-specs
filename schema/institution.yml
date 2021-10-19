@@ -14,6 +14,8 @@ info:
 paths:
   /v1/institution:
     get:
+      tags:
+        - Institution
       summary: Get institution
       operationId: getInstitutions
       description: By passing in query string, user can get available institutions authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: institution not found
     post:
+      tags:
+        - Institution
       summary: Add institution
       operationId: addInstitution
       description: Adds a institution
@@ -70,6 +74,8 @@ paths:
         description: Institution to add
   /v1/institution/{Id}:
     get:
+      tags:
+        - Institution
       summary: Find institution by ID
       description: Returns a single institution
       operationId: getInstitutionById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: Institution not found          
     patch:
+      tags:
+        - Institution
       summary: Update institution
       operationId: updateInstitution
       description: update a institution
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/Institution'
         description: institution to add
     delete:
+      tags:
+        - Institution
       summary: Delete institution
       operationId: deleteInstitution
       description: delete a institution

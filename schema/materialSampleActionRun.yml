@@ -14,6 +14,8 @@ info:
 paths:
   /v1/material-sample-action-run:
     get:
+      tags:
+        - Material Sample Action Run
       summary: Get material sample action run
       operationId: getMaterialSampleActionRuns
       description: By passing in query string, user can get available material sample action runs authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: material sample action run not found
     post:
+      tags:
+        - Material Sample Action Run
       summary: Add material sample action run
       operationId: addMaterialSampleActionRun
       description: Adds a material sample action run
@@ -70,6 +74,8 @@ paths:
         description: MaterialSampleActionRun to add
   /v1/material-sample-action-run/{Id}:
     get:
+      tags:
+        - Material Sample Action Run
       summary: Find material sample action run by ID
       description: Returns a single material sample action run
       operationId: getMaterialSampleActionRunById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: MaterialSampleActionRun not found          
     patch:
+      tags:
+        - Material Sample Action Run
       summary: Update material sample action run
       operationId: updateMaterialSampleActionRun
       description: update a material sample action run
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/MaterialSampleActionRun'
         description: material sample action run to add
     delete:
+      tags:
+        - Material Sample Action Run
       summary: Delete material sample action run
       operationId: deleteMaterialSampleActionRun
       description: delete a material sample action run

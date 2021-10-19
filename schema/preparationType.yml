@@ -14,6 +14,8 @@ info:
 paths:
   /v1/preparation-type:
     get:
+      tags:
+        - Preparation Type
       summary: Get preparation type
       operationId: getPreparationTypes
       description: By passing in query string, user can get available preparation types authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: preparation type not found
     post:
+      tags:
+        - Preparation Type
       summary: Add preparation type
       operationId: addPreparationType
       description: Adds a preparation type
@@ -70,6 +74,8 @@ paths:
         description: PreparationType to add
   /v1/preparation-type/{Id}:
     get:
+      tags:
+        - Preparation Type
       summary: Find preparation type by ID
       description: Returns a single preparation type
       operationId: getPreparationTypeById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: PreparationType not found          
     patch:
+      tags:
+        - Preparation Type
       summary: Update preparation type
       operationId: updatePreparationType
       description: update a preparation type
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/PreparationType'
         description: preparation type to add
     delete:
+      tags:
+        - Preparation Type
       summary: Delete preparation type
       operationId: deletePreparationType
       description: delete a preparation type

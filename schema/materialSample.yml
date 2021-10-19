@@ -14,6 +14,8 @@ info:
 paths:
   /v1/material-sample:
     get:
+      tags:
+        - Material Sample
       summary: Get material sample
       operationId: getMaterialSamples
       description: By passing in query string, user can get available material samples authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: material sample not found
     post:
+      tags:
+        - Material Sample
       summary: Add material sample
       operationId: addMaterialSample
       description: Adds a material sample
@@ -70,6 +74,8 @@ paths:
         description: MaterialSample to add
   /v1/material-sample/{Id}:
     get:
+      tags:
+        - Material Sample
       summary: Find material sample by ID
       description: Returns a single material sample
       operationId: getMaterialSampleById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: MaterialSample not found          
     patch:
+      tags:
+        - Material Sample
       summary: Update material sample
       operationId: updateMaterialSample
       description: update a material sample
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/MaterialSample'
         description: material sample to add
     delete:
+      tags:
+        - Material Sample
       summary: Delete material sample
       operationId: deleteMaterialSample
       description: delete a material sample
