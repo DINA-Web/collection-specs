@@ -520,3 +520,23 @@ components:
                         format: uuid
                         description: Unique identifier metadata for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            preparationAttachment:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: metadata
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier metadata for the resource
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
