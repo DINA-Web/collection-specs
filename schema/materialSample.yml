@@ -14,6 +14,8 @@ info:
 paths:
   /v1/material-sample:
     get:
+      tags:
+        - Material Sample
       summary: Get material sample
       operationId: getMaterialSamples
       description: By passing in query string, user can get available material samples authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: material sample not found
     post:
+      tags:
+        - Material Sample
       summary: Add material sample
       operationId: addMaterialSample
       description: Adds a material sample
@@ -70,6 +74,8 @@ paths:
         description: MaterialSample to add
   /v1/material-sample/{Id}:
     get:
+      tags:
+        - Material Sample
       summary: Find material sample by ID
       description: Returns a single material sample
       operationId: getMaterialSampleById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: MaterialSample not found          
     patch:
+      tags:
+        - Material Sample
       summary: Update material sample
       operationId: updateMaterialSample
       description: update a material sample
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/MaterialSample'
         description: material sample to add
     delete:
+      tags:
+        - Material Sample
       summary: Delete material sample
       operationId: deleteMaterialSample
       description: delete a material sample
@@ -248,6 +258,24 @@ components:
                     type: string
                     nullable: true
                     description: Name of the material sample
+            associations:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  associatedSample:
+                    type: string
+                    format: uuid
+                    description: materialSample's associated id
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+                  remarks:
+                    type: string
+                    description: remarks of the association
+                  associationType:
+                    type: string
+                    nullable: true
+                    description: type of association
             tags:
               type: array
               nullable: true
@@ -281,6 +309,16 @@ components:
                   type: string
                   nullable: true
                 substrate:
+                  type: string
+                  nullable: true
+                remarks:
+                  type: string
+                  nullable: true
+            hostOrganism:
+              type: object
+              nullable: true
+              properties:
+                name:
                   type: string
                   nullable: true
                 remarks:

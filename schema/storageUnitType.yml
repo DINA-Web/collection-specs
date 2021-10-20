@@ -3,7 +3,7 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
 info:
-  description: storage unit type schema
+  description: Storage Unit Type schema
   version: "1.0.0"
   title: storage unit type schema
   contact:
@@ -14,6 +14,8 @@ info:
 paths:
   /v1/storage-unit-type:
     get:
+      tags:
+        - Storage Unit Type
       summary: Get storage unit type
       operationId: getStorageUnitTypes
       description: By passing in query string, user can get available storage unit types authorised
@@ -54,6 +56,8 @@ paths:
         '404':
           description: storage unit type not found
     post:
+      tags:
+        - Storage Unit Type
       summary: Add storage unit type
       operationId: addStorageUnitType
       description: Adds a storage unit type
@@ -70,6 +74,8 @@ paths:
         description: StorageUnitType to add
   /v1/storage-unit-type/{Id}:
     get:
+      tags:
+        - Storage Unit Type
       summary: Find storage unit type by ID
       description: Returns a single storage unit type
       operationId: getStorageUnitTypeById
@@ -93,6 +99,8 @@ paths:
         '404':
           description: StorageUnitType not found          
     patch:
+      tags:
+        - Storage Unit Type
       summary: Update storage unit type
       operationId: updateStorageUnitType
       description: update a storage unit type
@@ -116,6 +124,8 @@ paths:
               $ref: '#/components/schemas/StorageUnitType'
         description: storage unit type to add
     delete:
+      tags:
+        - Storage Unit Type
       summary: Delete storage unit type
       operationId: deleteStorageUnitType
       description: delete a storage unit type
