@@ -392,6 +392,7 @@ components:
                       format: uuid
                   determinedOn:
                     type: string
+                    format: date
                     nullable: true
                   qualifier:
                     type: string
