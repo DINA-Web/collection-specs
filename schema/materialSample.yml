@@ -224,6 +224,7 @@ components:
                 type: string
             preparationDate:
               type: string
+              format: date
               nullable: true
               description: The date on which the material sample was prepared.
             preparationRemarks:
@@ -392,6 +393,7 @@ components:
                       format: uuid
                   determinedOn:
                     type: string
+                    format: date
                     nullable: true
                   qualifier:
                     type: string
