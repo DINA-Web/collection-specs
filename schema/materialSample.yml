@@ -427,7 +427,7 @@ components:
                     nullable: true
             allowDuplicateName:
               type: boolean
-              nullable: true
+              nullable: false
               description: whether or not the material sample name constraint is enforced
         relationships:
           type: object
