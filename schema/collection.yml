@@ -234,3 +234,37 @@ components:
                   uri:
                     type: string
                     format: uri
+            subCollections:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: collection's child id
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+        relationships:
+          type: object
+          nullable: true
+          properties:
+            parentCollection:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [collection]
+                    id:
+                      type: string
+                      format: uuid
+                      description: collection's parent id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
