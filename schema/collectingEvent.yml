@@ -370,6 +370,7 @@ components:
                     description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
                   dwcGeoreferencedDate:
                     type: string
+                    format: date
                     nullable: true
                     description: The date on which the Location was georeferenced.
                   georeferencedBy:
