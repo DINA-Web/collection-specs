@@ -234,3 +234,44 @@ components:
                   uri:
                     type: string
                     format: uri
+        relationships:
+          type: object
+          nullable: true
+          properties:
+            institution:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [institution]
+                    id:
+                      type: string
+                      format: uuid
+                      description: collection's institution id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            parentCollection:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [collection]
+                    id:
+                      type: string
+                      format: uuid
+                      description: collection's parent id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
