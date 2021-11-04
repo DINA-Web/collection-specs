@@ -196,6 +196,9 @@ components:
               readOnly: true
               description: date and time when the acquisition event was created in ISO format
               example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              description: The group in which the acquisition event belongs to
             receivedDate:
               type: string
               format: date
