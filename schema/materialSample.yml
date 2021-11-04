@@ -545,3 +545,21 @@ components:
                         format: uuid
                         description: Unique identifier metadata for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            acquisitionEvent:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [acquisition-event]
+                    id:
+                      type: string
+                      format: uuid
+                      description: materialSample's acquisitionEvent id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
