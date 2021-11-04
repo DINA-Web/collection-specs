@@ -94,6 +94,9 @@ components:
                   minimum: 1
                   default: 1
                   description: The amount of ids that were reserved.
+                group:
+                  type: string
+                  description: The name of the group used for the collection.
                 result:
                   type: object
                   required:
