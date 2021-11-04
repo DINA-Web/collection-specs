@@ -209,7 +209,6 @@ components:
               description: barcode for the material sample
             group:
               type: string
-              nullable: true
               description: The group in which the material sample belongs to
             managedAttributes:
               type: object

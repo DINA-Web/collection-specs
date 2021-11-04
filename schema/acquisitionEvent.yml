@@ -198,7 +198,6 @@ components:
               example: 1985-04-12T23:20:50.52Z
             group:
               type: string
-              nullable: true
               description: The group in which the acquisition event belongs to
             receivedDate:
               type: string
