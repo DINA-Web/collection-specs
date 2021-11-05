@@ -403,12 +403,12 @@ components:
                     enum: [COLPLUS]
                   scientificNameDetails:
                     type: object
-                      properties:
-                        sourceUrl:
-                          type: string
-                        recordedOn:
-                          type: string
-                          format: date
+                    properties:
+                      sourceUrl:
+                        type: string
+                      recordedOn:
+                        type: string
+                        format: date
             hierarchy:
               type: array
               nullable: true
