@@ -406,6 +406,8 @@ components:
                     properties:
                       sourceUrl:
                         type: string
+                      labelHtml:
+                        type: string
                       recordedOn:
                         type: string
                         format: date
