@@ -402,8 +402,13 @@ components:
                     nullable: true
                     enum: [COLPLUS]
                   scientificNameDetails:
-                    type: string
-                    nullable: true
+                    type: object
+                      properties:
+                        sourceUrl:
+                          type: string
+                        recordedOn:
+                          type: string
+                          format: date
             hierarchy:
               type: array
               nullable: true
