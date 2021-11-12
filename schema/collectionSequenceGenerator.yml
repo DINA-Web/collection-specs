@@ -1,0 +1,111 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Collection Sequence Generator Schema
+  version: "1.0.0"
+  title: Collection Sequence Generator Schema
+  contact:
+    email: dina-aafc@canada.ca
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/collection-sequence-generator:
+    post:
+      tags:
+        - Collection Sequence Generator
+      summary: Add collection
+      operationId: collectionSequenceGenerator
+      description: Generates a set of reserved ids to use when naming a Material Sample that is using a collection. The result will provide the lowest and highest ID reserved, so all the IDs between these two values have been reserved if you are generating more than one using the amount attribute.
+      responses:
+        '201':
+          description: Collection sequence(s) generated.
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionGeneratorResponse'
+        '404':
+          description: Collection or Collection Sequence could not be found.
+        '422':
+          description: Data integrity violation
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CollectionGeneratorRequest'
+        description: Settings when generating sequences.
+components:
+  schemas:
+    CollectionGeneratorRequest:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - type
+            - attributes
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9
+              description: The UUID of the collection to generate a sequence of ids for.
+            type:
+              enum: [collection-sequence-generator]      
+              description: The type of data being performed.
+            attributes:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  minimum: 1
+                  default: 1
+                  description: The amount of the ids to reserve from the collection.
+    CollectionGeneratorResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - type
+            - attributes
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9
+              description: The UUID of the collection to generate a sequence of ids for.
+            type:
+              enum: [collection-sequence-generator]      
+              description: The type of data being returned.
+            attributes:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  minimum: 1
+                  default: 1
+                  description: The amount of ids that were reserved.
+                group:
+                  type: string
+                  description: The name of the group used for the collection.
+                result:
+                  type: object
+                  required:
+                    - lowReservedID
+                    - highReservedID
+                  properties:
+                    lowReservedID:
+                      type: number
+                      description: Lowest number reserved in the sequence.
+                    highReservedID:
+                      type: number
+                      description: Highest number reserved in the sequence. Comparing this number to the lowReservedID will indicate all the ids reserved for this request.

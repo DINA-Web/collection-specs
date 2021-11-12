@@ -21,6 +21,8 @@ paths:
     $ref: 'collection.yml#/paths/~1v1~1collection'
   /v1/collection/{Id}:
     $ref: 'collection.yml#/paths/~1v1~1collection~1{Id}'
+  /v1/collection-sequence-generator:
+    $ref: 'collectionSequenceGenerator.yml#/paths/~1v1~1collection-sequence-generator'
   /v1/managed-attribute:
     $ref: 'collectionManagedAttribute.yml#/paths/~1v1~1managed-attribute'
   /v1/managed-attribute/{Id}:
