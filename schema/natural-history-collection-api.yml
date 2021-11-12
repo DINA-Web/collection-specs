@@ -49,3 +49,7 @@ paths:
     $ref: 'storageUnitType.yml#/paths/~1v1~1storage-unit-type'
   /v1/storage-unit-type/{Id}:
     $ref: 'storageUnitType.yml#/paths/~1v1~1storage-unit-type~1{Id}'
+  /v1/acquisition-event:
+    $ref: 'acquisitionEvent.yml#/paths/~1v1~1acquisition-event'
+  /v1/acquisition-event/{Id}:
+    $ref: 'acquisitionEvent.yml#/paths/~1v1~1acquisition-event~1{Id}'

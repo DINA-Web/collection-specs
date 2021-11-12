@@ -3,26 +3,26 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
 info:
-  description: Collection schema
+  description: Acquisition event schema
   version: "1.0.0"
-  title: Collection schema
+  title: Acquisition event schema
   contact:
     email: you@your-company.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /v1/collection:
+  /v1/acquisition-event:
     get:
       tags:
-        - Collection
-      summary: Get collection
-      operationId: getCollections
-      description: By passing in query string, user can get available collections authorised
+        - Acquisition Event
+      summary: Get acquisition event
+      operationId: getAcquisitionEvents
+      description: By passing in query string, user can get available acquisition events authorised
       parameters:
         - in: query
           name: filter[rsql]
-          description: pass an optional search string for looking up the collections
+          description: pass an optional search string for looking up the acquisition events
           schema:
             type: string
         - in: query
@@ -46,43 +46,43 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: collections satifying the query restrictions
+          description: acquisition events satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Collection'                
+                  $ref: '#/components/schemas/AcquisitionEvent'                
         '404':
-          description: collection not found
+          description: acquisition event not found
     post:
       tags:
-        - Collection
-      summary: Add collection
-      operationId: addCollection
-      description: Adds a collection
+        - Acquisition Event
+      summary: Add acquisition event
+      operationId: addAcquisitionEvent
+      description: Adds a acquisition event
       responses:
         '201':
-          description: collection created
+          description: acquisition event created
         '422':
           description: Data integrity violation          
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/NewCollection'
-        description: Collection to add
-  /v1/collection/{Id}:
+              $ref: '#/components/schemas/NewAcquisitionEvent'
+        description: AcquisitionEvent to add
+  /v1/acquisition-event/{Id}:
     get:
       tags:
-        - Collection
-      summary: Find collection by ID
-      description: Returns a single collection
-      operationId: getCollectionById
+        - Acquisition Event
+      summary: Find acquisition event by ID
+      description: Returns a single acquisition event
+      operationId: getAcquisitionEventById
       parameters:
         - name: Id
           in: path
-          description: ID of collection to return
+          description: ID of acquisition event to return
           required: true
           schema:
             type: string
@@ -93,60 +93,60 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/Collection'
+                $ref: '#/components/schemas/AcquisitionEvent'
         '400':
           description: Not a valid uuid                
         '404':
-          description: Collection not found          
+          description: AcquisitionEvent not found          
     patch:
       tags:
-        - Collection
-      summary: Update collection
-      operationId: updateCollection
-      description: update a collection
+        - Acquisition Event
+      summary: Update acquisition event
+      operationId: updateAcquisitionEvent
+      description: update a acquisition event
       parameters:
         - name: Id
           in: path
-          description: collection id to patch
+          description: acquisition event id to patch
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: collection updated
+          description: acquisition event updated
         '400':
           description: invalid input, object invalid
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Collection'
-        description: collection to add
+              $ref: '#/components/schemas/AcquisitionEvent'
+        description: acquisition event to add
     delete:
       tags:
-        - Collection
-      summary: Delete collection
-      operationId: deleteCollection
-      description: delete a collection
+        - Acquisition Event
+      summary: Delete acquisition event
+      operationId: deleteAcquisitionEvent
+      description: delete a acquisition event
       parameters:
         - name: Id
           in: path
-          description: collection id to delete
+          description: acquisition event id to delete
           required: true
           schema:
             type: string
             format: uuid            
       responses:
         '200':
-          description: collection marked as deleted
+          description: acquisition event marked as deleted
         '400':
           description: Not a valid uuid          
         '404':
-          description: collection not found       
+          description: acquisition event not found       
 components:
   schemas:
-    Collection:
+    AcquisitionEvent:
       type: object
       required:
         - data
@@ -162,9 +162,9 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonCollection'
+            - $ref: '#/components/schemas/CommonAcquisitionEvent'
 
-    NewCollection:
+    NewAcquisitionEvent:
       type: object
       required:
         - data
@@ -172,95 +172,55 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonCollection'
+            - $ref: '#/components/schemas/CommonAcquisitionEvent'
 
-    CommonCollection:
+    CommonAcquisitionEvent:
       type: object
       required:
         - type
         - attributes       
       properties:            
         type:
-          enum: [collection]      
+          enum: [acquisition-event]      
           description: The type of data being returned.
         attributes:
           type: object
           properties:
-            name:
-              type: string
-              description: The name of the collection
             createdBy:
               type: string      
               readOnly: true
-              description: authenticated user who create the collection
+              description: authenticated user who created the acquisition event
             createdOn:              
               type: string
               format: date-time                            
               readOnly: true
-              description: date and time when the collection was created in ISO format
+              description: date and time when the acquisition event was created in ISO format
               example: 1985-04-12T23:20:50.52Z
-            group:
+            receivedDate:
               type: string
-              description: The group in which the collection belongs to
-            code:
-              type: string
+              format: date
               nullable: true
-              description: The code of the collection
-            webpage:
-              type: string
-              format: uri
-              nullable: true
-              description: The webpage of the collection
-            contact:
-              type: string   
-              nullable: true   
-              description: The contact of the collection
-            address:
-              type: string   
-              nullable: true   
-              description: The address of the collection
-            remarks:              
+              description: The date on which the acquisition event was received.
+            receptionRemarks:              
               type: string
               nullable: true
-              description: remarks regarding the collection
-            identifiers:
-              type: array
+              description: remarks regarding the reception
+            externallyIsolatedOn:
+              type: string
+              format: date
               nullable: true
-              items:
-                type: object
-                properties:
-                  type:
-                    enum: [GRSCICOLL, INDEX_HERBARIORUM]
-                  uri:
-                    type: string
-                    format: uri
+              description: The date on which the acquisition event was externally isolated on.
+            externallyIsolationRemarks:              
+              type: string
+              nullable: true
+              description: remarks regarding the external isolation
         relationships:
           type: object
           nullable: true
           properties:
-            institution:
-              type: object
-              required:
-                - data
-              properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [institution]
-                    id:
-                      type: string
-                      format: uuid
-                      description: collection's institution id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            parentCollection:
+            receivedFrom:
               type: object
               nullable: true
-              required:
-                - data
               properties:
                 data:
                   type: object
@@ -269,9 +229,27 @@ components:
                     - id
                   properties:
                     type:
-                      enum: [collection]
+                      enum: [person]
                     id:
                       type: string
                       format: uuid
-                      description: collection's parent id
+                      description: person who gave the acquisition event
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            externallyIsolatedBy:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [person]
+                    id:
+                      type: string
+                      format: uuid
+                      description: person who externally isolated the acquisition event
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+
