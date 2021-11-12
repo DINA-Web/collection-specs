@@ -16,7 +16,7 @@ paths:
     post:
       tags:
         - Collection Sequence Generator
-      summary: Add collection
+      summary: Generate reserved IDs for collection
       operationId: collectionSequenceGenerator
       description: Generates a set of reserved ids to use when naming a Material Sample that is using a collection. The result will provide the lowest and highest ID reserved, so all the IDs between these two values have been reserved if you are generating more than one using the amount attribute.
       responses:
