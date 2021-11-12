@@ -290,6 +290,10 @@ components:
               type: string
               nullable: true
               description: text description of reason why the material sample is not publicly releasable
+            filedAs:
+              type: string
+              nullable: true
+              description: text for what the material sample is filed as
             preparationMethod:
               type: string
               nullable: true
@@ -412,14 +416,6 @@ components:
                         type: string
                         format: date
                         nullable: true
-                  isPrimary:
-                    type: boolean
-                    nullable: true
-                    description: whether or not it the primary determination
-                  isFiledAs:
-                    type: boolean
-                    nullable: true
-                    description: whether or not it the determination is filed as
             hierarchy:
               type: array
               nullable: true
