@@ -186,6 +186,10 @@ components:
         attributes:
           type: object
           properties:
+            version:
+              type: number
+              readOnly: true
+              description: Provides optimistic locking to prevent update data from being overridden by another transaction.
             createdBy:
               type: string      
               readOnly: true
