@@ -374,12 +374,18 @@ components:
                   transcriberRemarks:
                     type: string
                     nullable: true
+                    minLength: 0
+                    maxLength: 500
                   verbatimRemarks:
                     type: string
                     nullable: true
+                    minLength: 0
+                    maxLength: 500
                   determinationRemarks:
                     type: string
                     nullable: true
+                    minLength: 0
+                    maxLength: 500
                   typeStatus:
                     type: string
                     nullable: true
