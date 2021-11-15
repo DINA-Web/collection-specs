@@ -374,6 +374,12 @@ components:
                   transcriberRemarks:
                     type: string
                     nullable: true
+                  verbatimRemarks:
+                    type: string
+                    nullable: true
+                  determinationRemarks:
+                    type: string
+                    nullable: true
                   typeStatus:
                     type: string
                     nullable: true
