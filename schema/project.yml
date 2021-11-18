@@ -199,9 +199,6 @@ components:
               readOnly: true
               description: date and time when the project was created in ISO format
               example: 1985-04-12T23:20:50.52Z
-            name:
-              type: string
-              description: The name of the project
             group:
               type: string
               description: The group in which the project belongs to
