@@ -213,7 +213,7 @@ components:
               format: date
               nullable: true
               description: The date on which the acquisition event was externally isolated on.
-            iIsolationRemarks:              
+            isolationRemarks:              
               type: string
               nullable: true
               description: remarks regarding the external isolation
