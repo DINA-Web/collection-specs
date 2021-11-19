@@ -208,12 +208,12 @@ components:
               type: string
               nullable: true
               description: remarks regarding the reception
-            externallyIsolatedOn:
+            isolatedOn:
               type: string
               format: date
               nullable: true
               description: The date on which the acquisition event was externally isolated on.
-            externallyIsolationRemarks:              
+            iIsolationRemarks:              
               type: string
               nullable: true
               description: remarks regarding the external isolation
@@ -238,7 +238,7 @@ components:
                       format: uuid
                       description: person who gave the acquisition event
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            externallyIsolatedBy:
+            isolatedBy:
               type: object
               nullable: true
               properties:
