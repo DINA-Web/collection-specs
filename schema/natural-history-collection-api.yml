@@ -55,3 +55,7 @@ paths:
     $ref: 'acquisitionEvent.yml#/paths/~1v1~1acquisition-event'
   /v1/acquisition-event/{Id}:
     $ref: 'acquisitionEvent.yml#/paths/~1v1~1acquisition-event~1{Id}'
+  /v1/project:
+    $ref: 'project.yml#/paths/~1v1~1project'
+  /v1/project/{Id}:
+    $ref: 'project.yml#/paths/~1v1~1project~1{Id}'

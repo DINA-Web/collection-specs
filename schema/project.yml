@@ -1,0 +1,259 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Project schema
+  version: "1.0.0"
+  title: Project schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/project:
+    get:
+      tags:
+        - Project
+      summary: Get project
+      operationId: getProjects
+      description: By passing in query string, user can get available projects authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the projects
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: projects satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Project'                
+        '404':
+          description: project not found
+    post:
+      tags:
+        - Project
+      summary: Add project
+      operationId: addProject
+      description: Adds a project
+      responses:
+        '201':
+          description: project created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewProject'
+        description: Project to add
+  /v1/project/{Id}:
+    get:
+      tags:
+        - Project
+      summary: Find project by ID
+      description: Returns a single project
+      operationId: getProjectById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of project to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: Project not found          
+    patch:
+      tags:
+        - Project
+      summary: Update project
+      operationId: updateProject
+      description: update a project
+      parameters:
+        - name: Id
+          in: path
+          description: project id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: project updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/Project'
+        description: project to add
+    delete:
+      tags:
+        - Project
+      summary: Delete project
+      operationId: deleteProject
+      description: delete a project
+      parameters:
+        - name: Id
+          in: path
+          description: project id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: project marked as deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: project not found       
+components:
+  schemas:
+    Project:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonProject'
+
+    NewProject:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonProject'
+
+    CommonProject:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [project]      
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the project
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the project
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the project was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              description: The group in which the project belongs to
+            startDate:
+              type: string
+              format: date
+              nullable: true
+              description: The start date of the project
+            endDate:
+              type: string
+              format: date
+              nullable: true
+              description: The end date of the project
+            status:
+              type: string
+              nullable: true
+              description: the status of the project
+            multilingualDescription:
+              type: object
+              nullable: true
+              properties:
+                descriptions:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      desc:
+                        type: string
+                        description: the description
+        relationships:
+          type: object
+          nullable: true
+          properties:
+            attachment:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: metadata
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier metadata for the resource
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+
