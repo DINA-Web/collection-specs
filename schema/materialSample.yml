@@ -582,3 +582,24 @@ components:
                         format: uuid
                         description: Unique identifier metadata for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            projects:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: project
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier project for the resource
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+
