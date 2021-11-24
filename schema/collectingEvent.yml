@@ -344,7 +344,7 @@ components:
               type: array
               nullable: true
               items:
-                type: number
+                type: object
                 nullable: true
                 properties:
                   name:
