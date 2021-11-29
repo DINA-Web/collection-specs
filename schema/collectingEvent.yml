@@ -342,6 +342,7 @@ components:
                 selectedGeographicPlace:
                   $ref: '#/components/schemas/SourceAdministrativeLevel'
                 higherGeographicPlaces:
+                  nullable: true
                   type: array
                   items:
                     $ref: '#/components/schemas/SourceAdministrativeLevel'
