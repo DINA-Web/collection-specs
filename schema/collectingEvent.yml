@@ -330,16 +330,35 @@ components:
               type: object
               nullable: true
               properties:
-                sourceID:
-                  type: string
-                  description: identifier of the source
-                sourceIdType:
-                  type: string
-                  description: OSM identifiers have type (Eg. Node, way ...)
                 sourceURL:
                   type: string
+                  nullable: true
                   format: url
                   description: the source's url
+                customGeographicPlace:
+                  type: string
+                  nullable: true
+                  description: input a customGeographicPlace OR a selectedGeographicPlace but not both
+                selectedGeographicPlace:
+                  $ref: '#/components/schemas/SourceAdministrativeLevel'
+                higherGeographicPlaces:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SourceAdministrativeLevel'
+                stateProvice:
+                  $ref: '#/components/schemas/SourceAdministrativeLevel'
+                country:
+                  type: object
+                  properties:
+                    code:
+                      nullable: true
+                      type: string
+                      minLength: 2
+                      maxLength: 2
+                      description: 2 character country code
+                    name:
+                      nullable: true
+                      type: string
             tags:
               type: array
               nullable: true
@@ -449,3 +468,18 @@ components:
                         format: uuid
                         description: Unique identifier metadata for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+    SourceAdministrativeLevel:
+      type: object
+      nullable: true
+      properties:
+          id:
+            type: string
+            description: identifier of the selected GeographicPlace
+          element:
+            type: string
+            description:  "on OSM it's the osm_type (N, W or R: Node, Way or Relation) https://wiki.openstreetmap.org/wiki/Elements"
+          placeType:
+            type: string
+            description:  "on OSM it's usually the place_type (https://wiki.openstreetmap.org/wiki/Key:place) with a fallback on class:type"
+          name:
+            type: string    
