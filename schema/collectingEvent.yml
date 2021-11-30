@@ -426,6 +426,24 @@ components:
                     type: string
                     nullable: true
                     enum: [GEOREFERENCING_NOT_POSSIBLE]
+            extensionValues:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  extKey:
+                    type: string
+                    nullable: true
+                  extVersion:
+                    type: string
+                    nullable: true
+                  extTerm:
+                    type: string
+                    nullable: true
+                  value:
+                    type: string
+                    nullable: true
         relationships:
           type: object
           nullable: true
