@@ -594,9 +594,8 @@ components:
                       - type
                       - id
                     properties:
-                      type: 
-                        type: string
-                        example: metadata
+                      type:
+                        enum: [material-sample-type]
                       id:
                         type: string
                         format: uuid
