@@ -587,20 +587,18 @@ components:
               nullable: true
               properties:
                 data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        enum: [material-sample-type]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the material sample type for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [material-sample-type]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Unique identifier of the material sample type for the resource
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             projects:
               type: object
               nullable: true
