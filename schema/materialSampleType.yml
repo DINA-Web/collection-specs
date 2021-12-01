@@ -1,0 +1,201 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Material Sample Type schema
+  version: "1.0.0"
+  title: material sample type schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/material-sample-type:
+    get:
+      tags:
+        - Material Sample Type
+      summary: Get material sample type
+      operationId: getMaterialSampleTypes
+      description: By passing in query string, user can get available material sample types authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the material sample types
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: material sample types satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/MaterialSampleType'                
+        '404':
+          description: material sample type not found
+    post:
+      tags:
+        - Material Sample Type
+      summary: Add material sample type
+      operationId: addMaterialSampleType
+      description: Adds a material sample type
+      responses:
+        '201':
+          description: material sample type created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewMaterialSampleType'
+        description: MaterialSampleType to add
+  /v1/material-sample-type/{Id}:
+    get:
+      tags:
+        - Material Sample Type
+      summary: Find material sample type by ID
+      description: Returns a single material sample type
+      operationId: getMaterialSampleTypeById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of material sample type to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleType'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: MaterialSampleType not found          
+    patch:
+      tags:
+        - Material Sample Type
+      summary: Update material sample type
+      operationId: updateMaterialSampleType
+      description: update a material sample type
+      parameters:
+        - name: Id
+          in: path
+          description: material sample type id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: material sample type updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/MaterialSampleType'
+        description: material sample type to add
+    delete:
+      tags:
+        - Material Sample Type
+      summary: Delete material sample type
+      operationId: deleteMaterialSampleType
+      description: delete a material sample type
+      parameters:
+        - name: Id
+          in: path
+          description: material sample type id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: material sample type marked as deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: material sample type not found       
+components:
+  schemas:
+    MaterialSampleType:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSampleType'
+
+    NewMaterialSampleType:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSampleType'
+
+    CommonMaterialSampleType:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [material-sample-type]      
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the material sample type
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the material sample type
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the material sample type was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
