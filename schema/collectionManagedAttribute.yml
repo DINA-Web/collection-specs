@@ -218,7 +218,8 @@ components:
                   description: component of the managed attribute
                   enum: [
                     COLLECTING_EVENT,
-                    MATERIAL_SAMPLE
+                    MATERIAL_SAMPLE,
+                    DETERMINATION
                   ]
                 acceptedValues:
                   type: array
