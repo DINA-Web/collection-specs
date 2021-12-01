@@ -59,3 +59,7 @@ paths:
     $ref: 'project.yml#/paths/~1v1~1project'
   /v1/project/{Id}:
     $ref: 'project.yml#/paths/~1v1~1project~1{Id}'
+  /v1/material-sample-type:
+    $ref: 'materialSampleType.yml#/paths/~1v1~1material-sample-type'
+  /v1/material-sample-type/{Id}:
+    $ref: 'materialSampleType.yml#/paths/~1v1~1material-sample-type~1{Id}'
