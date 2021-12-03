@@ -241,4 +241,20 @@ components:
                   readOnly: true
                   description: date and time when the collection managed attribute was created in ISO format
                   example: 1985-04-12T23:20:50.52Z
+                multilingualDescription:
+                  type: object
+                  nullable: true
+                  properties:
+                    descriptions:
+                      type: array
+                      nullable: true
+                      items:
+                        type: object
+                        properties:
+                          lang:
+                            type: string
+                            description: language of the description
+                          desc:
+                            type: string
+                            description: the description
               
