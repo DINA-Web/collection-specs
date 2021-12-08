@@ -230,10 +230,14 @@ components:
               type: string
               nullable: true
               description: Remarks on the preparation of the material sample
+              minLength: 0
+              maxLength: 1000
             dwcDegreeOfEstablishment:
               type: string
               nullable: true
               description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
+              minLength: 0
+              maxLength: 1000
             host:
               type: string
               nullable: true
@@ -248,10 +252,12 @@ components:
               type: string
               nullable: true
               minLength: 0
-              maxLength: 500
+              maxLength: 1000
             materialSampleRemarks:
               type: string
               nullable: true
+              minLength: 0
+              maxLength: 1000
             materialSampleChildren:
               type: array
               nullable: true
@@ -281,6 +287,8 @@ components:
                   remarks:
                     type: string
                     description: remarks of the association
+                    minLength: 0
+                    maxLength: 1000
                   associationType:
                     type: string
                     nullable: true
@@ -319,6 +327,8 @@ components:
                 remarks:
                   type: string
                   nullable: true
+                  minLength: 0
+                  maxLength: 1000
             hostOrganism:
               type: object
               nullable: true
@@ -329,6 +339,8 @@ components:
                 remarks:
                   type: string
                   nullable: true
+                  minLength: 0
+                  maxLength: 1000
             scheduledActions:
               type: array
               nullable: true
@@ -348,6 +360,8 @@ components:
                   remarks:
                     type: string
                     nullable: true
+                    minLength: 0
+                    maxLength: 1000
                   assignedTo:
                     type: object
                     nullable: true
@@ -384,17 +398,17 @@ components:
                     type: string
                     nullable: true
                     minLength: 0
-                    maxLength: 500
+                    maxLength: 1000
                   verbatimRemarks:
                     type: string
                     nullable: true
                     minLength: 0
-                    maxLength: 500
+                    maxLength: 1000
                   determinationRemarks:
                     type: string
                     nullable: true
                     minLength: 0
-                    maxLength: 500
+                    maxLength: 1000
                   typeStatus:
                     type: string
                     nullable: true
