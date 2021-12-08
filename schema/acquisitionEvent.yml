@@ -208,6 +208,8 @@ components:
               type: string
               nullable: true
               description: remarks regarding the reception
+              minLength: 0
+              maxLength: 1000
             isolatedOn:
               type: string
               format: date
@@ -217,6 +219,8 @@ components:
               type: string
               nullable: true
               description: remarks regarding the isolation
+              minLength: 0
+              maxLength: 1000
         relationships:
           type: object
           nullable: true

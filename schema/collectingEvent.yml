@@ -297,6 +297,8 @@ components:
               type: string
               nullable: true
               description: remarks on the collecting event
+              minLength: 0
+              maxLength: 1000
             verbatimEventDateTime:  
               type: string 
               nullable: true
@@ -419,6 +421,8 @@ components:
                     type: string
                     nullable: true
                     description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
+                    minLength: 0
+                    maxLength: 1000
                   dwcGeodeticDatum:
                     type: string
                     nullable: true
