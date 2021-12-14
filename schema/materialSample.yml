@@ -428,7 +428,7 @@ components:
                   qualifier:
                     type: string
                     nullable: true
-                  ScientificNameSource:
+                  scientificNameSource:
                     type: string
                     nullable: true
                     enum: [COLPLUS, GNA]
