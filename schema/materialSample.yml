@@ -457,6 +457,14 @@ components:
                         type: string
                         format: date
                         nullable: true
+                      currentName:
+                        type: string
+                        nullable: true
+                        minLength: 0
+                        maxLength: 250
+                      isSynonym:
+                        type: boolean
+                        nullable: true
                   isPrimary:
                     type: boolean
                     nullable: true
