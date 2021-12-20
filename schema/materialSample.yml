@@ -465,6 +465,12 @@ components:
                     type: boolean
                     nullable: true
                     description: whether or not it the determination is filed as
+                  managedAttributes:
+                    type: object
+                    nullable: true
+                    description: The manage attribute, with key and value pair
+                    additionalProperties:
+                      type: string
             hierarchy:
               type: array
               nullable: true
