@@ -186,6 +186,10 @@ components:
         attributes:
           type: object
           properties:
+            version:
+              type: number
+              readOnly: true
+              description: Provides optimistic locking to prevent update data from being overridden by another transaction.
             createdBy:
               type: string      
               readOnly: true
@@ -198,7 +202,6 @@ components:
               example: 1985-04-12T23:20:50.52Z
             group:
               type: string
-              nullable: true
               description: The group in which the collecting event belongs to
             dwcVerbatimCoordinates:
               type: string
@@ -294,6 +297,8 @@ components:
               type: string
               nullable: true
               description: remarks on the collecting event
+              minLength: 0
+              maxLength: 1000
             verbatimEventDateTime:  
               type: string 
               nullable: true
@@ -331,16 +336,36 @@ components:
               type: object
               nullable: true
               properties:
-                sourceID:
-                  type: string
-                  description: identifier of the source
-                sourceIdType:
-                  type: string
-                  description: OSM identifiers have type (Eg. Node, way ...)
                 sourceURL:
                   type: string
+                  nullable: true
                   format: url
                   description: the source's url
+                customGeographicPlace:
+                  type: string
+                  nullable: true
+                  description: input a customGeographicPlace OR a selectedGeographicPlace but not both
+                selectedGeographicPlace:
+                  $ref: '#/components/schemas/SourceAdministrativeLevel'
+                higherGeographicPlaces:
+                  nullable: true
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SourceAdministrativeLevel'
+                stateProvice:
+                  $ref: '#/components/schemas/SourceAdministrativeLevel'
+                country:
+                  type: object
+                  properties:
+                    code:
+                      nullable: true
+                      type: string
+                      minLength: 2
+                      maxLength: 2
+                      description: 2 character country code
+                    name:
+                      nullable: true
+                      type: string
             tags:
               type: array
               nullable: true
@@ -396,6 +421,8 @@ components:
                     type: string
                     nullable: true
                     description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
+                    minLength: 0
+                    maxLength: 1000
                   dwcGeodeticDatum:
                     type: string
                     nullable: true
@@ -407,6 +434,24 @@ components:
                     type: string
                     nullable: true
                     enum: [GEOREFERENCING_NOT_POSSIBLE]
+            extensionValues:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  extKey:
+                    type: string
+                    nullable: true
+                  extVersion:
+                    type: string
+                    nullable: true
+                  extTerm:
+                    type: string
+                    nullable: true
+                  value:
+                    type: string
+                    nullable: true
         relationships:
           type: object
           nullable: true
@@ -450,3 +495,18 @@ components:
                         format: uuid
                         description: Unique identifier metadata for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+    SourceAdministrativeLevel:
+      type: object
+      nullable: true
+      properties:
+          id:
+            type: string
+            description: identifier of the selected GeographicPlace
+          element:
+            type: string
+            description:  "on OSM it's the osm_type (N, W or R: Node, Way or Relation) https://wiki.openstreetmap.org/wiki/Elements"
+          placeType:
+            type: string
+            description:  "on OSM it's usually the place_type (https://wiki.openstreetmap.org/wiki/Key:place) with a fallback on class:type"
+          name:
+            type: string    

@@ -3,26 +3,26 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
 info:
-  description: Institution schema
+  description: Project schema
   version: "1.0.0"
-  title: Institution schema
+  title: Project schema
   contact:
     email: you@your-company.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /v1/institution:
+  /v1/project:
     get:
       tags:
-        - Institution
-      summary: Get institution
-      operationId: getInstitutions
-      description: By passing in query string, user can get available institutions authorised
+        - Project
+      summary: Get project
+      operationId: getProjects
+      description: By passing in query string, user can get available projects authorised
       parameters:
         - in: query
           name: filter[rsql]
-          description: pass an optional search string for looking up the institutions
+          description: pass an optional search string for looking up the projects
           schema:
             type: string
         - in: query
@@ -46,43 +46,43 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: institutions satifying the query restrictions
+          description: projects satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Institution'                
+                  $ref: '#/components/schemas/Project'                
         '404':
-          description: institution not found
+          description: project not found
     post:
       tags:
-        - Institution
-      summary: Add institution
-      operationId: addInstitution
-      description: Adds a institution
+        - Project
+      summary: Add project
+      operationId: addProject
+      description: Adds a project
       responses:
         '201':
-          description: institution created
+          description: project created
         '422':
           description: Data integrity violation          
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/NewInstitution'
-        description: Institution to add
-  /v1/institution/{Id}:
+              $ref: '#/components/schemas/NewProject'
+        description: Project to add
+  /v1/project/{Id}:
     get:
       tags:
-        - Institution
-      summary: Find institution by ID
-      description: Returns a single institution
-      operationId: getInstitutionById
+        - Project
+      summary: Find project by ID
+      description: Returns a single project
+      operationId: getProjectById
       parameters:
         - name: Id
           in: path
-          description: ID of institution to return
+          description: ID of project to return
           required: true
           schema:
             type: string
@@ -93,60 +93,60 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/Institution'
+                $ref: '#/components/schemas/Project'
         '400':
           description: Not a valid uuid                
         '404':
-          description: Institution not found          
+          description: Project not found          
     patch:
       tags:
-        - Institution
-      summary: Update institution
-      operationId: updateInstitution
-      description: update a institution
+        - Project
+      summary: Update project
+      operationId: updateProject
+      description: update a project
       parameters:
         - name: Id
           in: path
-          description: institution id to patch
+          description: project id to patch
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: institution updated
+          description: project updated
         '400':
           description: invalid input, object invalid
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Institution'
-        description: institution to add
+              $ref: '#/components/schemas/Project'
+        description: project to add
     delete:
       tags:
-        - Institution
-      summary: Delete institution
-      operationId: deleteInstitution
-      description: delete a institution
+        - Project
+      summary: Delete project
+      operationId: deleteProject
+      description: delete a project
       parameters:
         - name: Id
           in: path
-          description: institution id to delete
+          description: project id to delete
           required: true
           schema:
             type: string
             format: uuid            
       responses:
         '200':
-          description: institution marked as deleted
+          description: project marked as deleted
         '400':
           description: Not a valid uuid          
         '404':
-          description: institution not found       
+          description: project not found       
 components:
   schemas:
-    Institution:
+    Project:
       type: object
       required:
         - data
@@ -162,9 +162,9 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonInstitution'
+            - $ref: '#/components/schemas/CommonProject'
 
-    NewInstitution:
+    NewProject:
       type: object
       required:
         - data
@@ -172,33 +172,50 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonInstitution'
+            - $ref: '#/components/schemas/CommonProject'
 
-    CommonInstitution:
+    CommonProject:
       type: object
       required:
         - type
         - attributes       
       properties:            
         type:
-          enum: [institution]      
+          enum: [project]      
           description: The type of data being returned.
         attributes:
           type: object
           properties:
             name:
               type: string
-              description: The name of the institution
+              description: The name of the project
             createdBy:
               type: string      
               readOnly: true
-              description: authenticated user who create the institution
+              description: authenticated user who create the project
             createdOn:              
               type: string
               format: date-time                            
               readOnly: true
-              description: date and time when the institution was created in ISO format
+              description: date and time when the project was created in ISO format
               example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              description: The group in which the project belongs to
+            startDate:
+              type: string
+              format: date
+              nullable: true
+              description: The start date of the project
+            endDate:
+              type: string
+              format: date
+              nullable: true
+              description: The end date of the project
+            status:
+              type: string
+              nullable: true
+              description: the status of the project
             multilingualDescription:
               type: object
               nullable: true
@@ -215,30 +232,28 @@ components:
                       desc:
                         type: string
                         description: the description
-            webpage:
-              type: string
-              format: uri
+        relationships:
+          type: object
+          nullable: true
+          properties:
+            attachment:
+              type: object
               nullable: true
-              description: The webpage of the institution
-            address:
-              type: string   
-              nullable: true   
-              description: The physical address of the institution
-            remarks:              
-              type: string
-              nullable: true
-              description: remarks regarding the institution
-              minLength: 0
-              maxLength: 1000
-            identifiers:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  type:
-                    enum: [GRSCICOLL]
-                  uri:
-                    type: string
-                    format: uri
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: metadata
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier metadata for the resource
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
 

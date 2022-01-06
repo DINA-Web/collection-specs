@@ -3,26 +3,26 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
 info:
-  description: Institution schema
+  description: Material Sample Type schema
   version: "1.0.0"
-  title: Institution schema
+  title: material sample type schema
   contact:
     email: you@your-company.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /v1/institution:
+  /v1/material-sample-type:
     get:
       tags:
-        - Institution
-      summary: Get institution
-      operationId: getInstitutions
-      description: By passing in query string, user can get available institutions authorised
+        - Material Sample Type
+      summary: Get material sample type
+      operationId: getMaterialSampleTypes
+      description: By passing in query string, user can get available material sample types authorised
       parameters:
         - in: query
           name: filter[rsql]
-          description: pass an optional search string for looking up the institutions
+          description: pass an optional search string for looking up the material sample types
           schema:
             type: string
         - in: query
@@ -46,43 +46,43 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: institutions satifying the query restrictions
+          description: material sample types satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Institution'                
+                  $ref: '#/components/schemas/MaterialSampleType'                
         '404':
-          description: institution not found
+          description: material sample type not found
     post:
       tags:
-        - Institution
-      summary: Add institution
-      operationId: addInstitution
-      description: Adds a institution
+        - Material Sample Type
+      summary: Add material sample type
+      operationId: addMaterialSampleType
+      description: Adds a material sample type
       responses:
         '201':
-          description: institution created
+          description: material sample type created
         '422':
           description: Data integrity violation          
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/NewInstitution'
-        description: Institution to add
-  /v1/institution/{Id}:
+              $ref: '#/components/schemas/NewMaterialSampleType'
+        description: MaterialSampleType to add
+  /v1/material-sample-type/{Id}:
     get:
       tags:
-        - Institution
-      summary: Find institution by ID
-      description: Returns a single institution
-      operationId: getInstitutionById
+        - Material Sample Type
+      summary: Find material sample type by ID
+      description: Returns a single material sample type
+      operationId: getMaterialSampleTypeById
       parameters:
         - name: Id
           in: path
-          description: ID of institution to return
+          description: ID of material sample type to return
           required: true
           schema:
             type: string
@@ -93,60 +93,60 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/Institution'
+                $ref: '#/components/schemas/MaterialSampleType'
         '400':
           description: Not a valid uuid                
         '404':
-          description: Institution not found          
+          description: MaterialSampleType not found          
     patch:
       tags:
-        - Institution
-      summary: Update institution
-      operationId: updateInstitution
-      description: update a institution
+        - Material Sample Type
+      summary: Update material sample type
+      operationId: updateMaterialSampleType
+      description: update a material sample type
       parameters:
         - name: Id
           in: path
-          description: institution id to patch
+          description: material sample type id to patch
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: institution updated
+          description: material sample type updated
         '400':
           description: invalid input, object invalid
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Institution'
-        description: institution to add
+              $ref: '#/components/schemas/MaterialSampleType'
+        description: material sample type to add
     delete:
       tags:
-        - Institution
-      summary: Delete institution
-      operationId: deleteInstitution
-      description: delete a institution
+        - Material Sample Type
+      summary: Delete material sample type
+      operationId: deleteMaterialSampleType
+      description: delete a material sample type
       parameters:
         - name: Id
           in: path
-          description: institution id to delete
+          description: material sample type id to delete
           required: true
           schema:
             type: string
             format: uuid            
       responses:
         '200':
-          description: institution marked as deleted
+          description: material sample type marked as deleted
         '400':
           description: Not a valid uuid          
         '404':
-          description: institution not found       
+          description: material sample type not found       
 components:
   schemas:
-    Institution:
+    MaterialSampleType:
       type: object
       required:
         - data
@@ -162,9 +162,9 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonInstitution'
+            - $ref: '#/components/schemas/CommonMaterialSampleType'
 
-    NewInstitution:
+    NewMaterialSampleType:
       type: object
       required:
         - data
@@ -172,73 +172,30 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonInstitution'
+            - $ref: '#/components/schemas/CommonMaterialSampleType'
 
-    CommonInstitution:
+    CommonMaterialSampleType:
       type: object
       required:
         - type
         - attributes       
       properties:            
         type:
-          enum: [institution]      
+          enum: [material-sample-type]      
           description: The type of data being returned.
         attributes:
           type: object
           properties:
             name:
               type: string
-              description: The name of the institution
+              description: The name of the material sample type
             createdBy:
               type: string      
               readOnly: true
-              description: authenticated user who create the institution
+              description: authenticated user who create the material sample type
             createdOn:              
               type: string
               format: date-time                            
               readOnly: true
-              description: date and time when the institution was created in ISO format
+              description: date and time when the material sample type was created in ISO format
               example: 1985-04-12T23:20:50.52Z
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
-            webpage:
-              type: string
-              format: uri
-              nullable: true
-              description: The webpage of the institution
-            address:
-              type: string   
-              nullable: true   
-              description: The physical address of the institution
-            remarks:              
-              type: string
-              nullable: true
-              description: remarks regarding the institution
-              minLength: 0
-              maxLength: 1000
-            identifiers:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  type:
-                    enum: [GRSCICOLL]
-                  uri:
-                    type: string
-                    format: uri
-

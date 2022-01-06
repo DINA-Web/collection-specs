@@ -21,6 +21,8 @@ paths:
     $ref: 'collection.yml#/paths/~1v1~1collection'
   /v1/collection/{Id}:
     $ref: 'collection.yml#/paths/~1v1~1collection~1{Id}'
+  /v1/collection-sequence-generator:
+    $ref: 'collectionSequenceGenerator.yml#/paths/~1v1~1collection-sequence-generator'
   /v1/managed-attribute:
     $ref: 'collectionManagedAttribute.yml#/paths/~1v1~1managed-attribute'
   /v1/managed-attribute/{Id}:
@@ -53,3 +55,11 @@ paths:
     $ref: 'acquisitionEvent.yml#/paths/~1v1~1acquisition-event'
   /v1/acquisition-event/{Id}:
     $ref: 'acquisitionEvent.yml#/paths/~1v1~1acquisition-event~1{Id}'
+  /v1/project:
+    $ref: 'project.yml#/paths/~1v1~1project'
+  /v1/project/{Id}:
+    $ref: 'project.yml#/paths/~1v1~1project~1{Id}'
+  /v1/material-sample-type:
+    $ref: 'materialSampleType.yml#/paths/~1v1~1material-sample-type'
+  /v1/material-sample-type/{Id}:
+    $ref: 'materialSampleType.yml#/paths/~1v1~1material-sample-type~1{Id}'
