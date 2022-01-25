@@ -1,0 +1,206 @@
+openapi: 3.0.0
+servers:
+  - description: DINA - AAFC
+    url: https://virtserver.dina-aafc.com/AAFC/1.0.0
+info:
+  description: Custom View schema
+  version: "1.0.0"
+  title: Custom View schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/custom-view:
+    get:
+      tags:
+        - Custom View
+      summary: Get Custom View
+      operationId: getCustomViews
+      description: By passing in query string, user can get Custom View authorised
+      parameters:
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: Custom View satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/CustomView'
+        '404':
+          description: Custom View not found
+    post:
+      tags:
+        - Custom View
+      summary: Add Custom View
+      operationId: addCustomView
+      description: Adds a Custom View
+      responses:
+        '201':
+          description: Custom View created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewCustomView'
+        description: Custom View to add
+  /v1/custom-view/{Id}:
+    get:
+      tags:
+        - Custom View
+      summary: Find custom view by ID
+      description: Returns a single custom view
+      operationId: getCustomViewById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of the custom view to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CustomView'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: Custom View not found
+    patch:
+      tags:
+        - Custom View
+      summary: Update Custom View
+      operationId: updateCustomView
+      description: Update a Custom View
+      parameters:
+        - name: Id
+          in: path
+          description: Custom View id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Custom View updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CustomView'
+        description: Custom View to add
+    delete:
+      tags:
+        - Custom View
+      summary: Delete Custom View
+      operationId: deleteCustomView
+      description: delete a Custom View
+      parameters:
+        - name: Id
+          in: path
+          description: Custom View id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: Custom View deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: Custom View not found
+components:
+  schemas:
+    CustomView:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonCustomView'
+
+    NewCustomView:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonCustomView'
+
+    CommonCustomView:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:
+        type:
+          enum: [custom-view]
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the custom view
+            group:
+              type: string
+              description: The group in which the custom view belongs to
+            restrictToCreatedBy:
+              type: boolean
+              description: Is the custom view restricted to the user represented by createdBY
+            viewConfiguration:
+              type: object
+              description: Configuration object of the custom view
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the custom view
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the custom view was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+
