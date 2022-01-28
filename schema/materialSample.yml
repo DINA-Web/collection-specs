@@ -312,7 +312,7 @@ components:
               nullable: true
               description: text for material sample's preparation method      
             organism:
-              type: object
+              type: array
               nullable: true
               properties:
                 uuid:
