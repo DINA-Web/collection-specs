@@ -63,6 +63,14 @@ paths:
     $ref: 'materialSampleType.yml#/paths/~1v1~1material-sample-type'
   /v1/material-sample-type/{Id}:
     $ref: 'materialSampleType.yml#/paths/~1v1~1material-sample-type~1{Id}'
+  /v1/custom-view:
+    $ref: 'customView.yml#/paths/~1v1~1custom-view'
+  /v1/custom-view/{Id}:
+    $ref: 'customView.yml#/paths/~1v1~1custom-view~1{Id}'
+     /v1/organism:
+    $ref: 'organism.yml#/paths/~1v1~1organism'
+  /v1/organism/{Id}:
+    $ref: 'organism.yml#/paths/~1v1~1organism~1{Id}'
   /v1/organism:
     $ref: 'organism.yml#/paths/~1v1~1organism'
   /v1/organism/{Id}:
