@@ -186,11 +186,6 @@ components:
         attributes:
           type: object
           properties:
-            uuid:
-              type: string
-              format: uuid
-              example: ea3fc3fc-b2bb-4c04-bbec-5d3984f04035
-              description: Identifier of the organism object as UUID
             createdBy:
               type: string      
               readOnly: true
