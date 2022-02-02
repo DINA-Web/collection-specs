@@ -310,133 +310,7 @@ components:
             preparationMethod:
               type: string
               nullable: true
-              description: text for material sample's preparation method      
-            organism:
-              type: array
-              nullable: true
-              properties:
-                uuid:
-                  type: string
-                  format: uuid
-                  example: 7ed2f730-1f63-4eee-bb9f-d24b232d3060
-                  description: Identifier of the organism object as UUID
-                determination:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      verbatimScientificName:
-                        type: string
-                        nullable: true
-                      verbatimDeterminer:
-                        type: string
-                        nullable: true
-                      verbatimDate:
-                        type: string
-                        nullable: true
-                      scientificName:
-                        type: string
-                        nullable: true
-                      transcriberRemarks:
-                        type: string
-                        nullable: true
-                        minLength: 0
-                        maxLength: 1000
-                      verbatimRemarks:
-                        type: string
-                        nullable: true
-                        minLength: 0
-                        maxLength: 1000
-                      determinationRemarks:
-                        type: string
-                        nullable: true
-                        minLength: 0
-                        maxLength: 1000
-                      typeStatus:
-                        type: string
-                        nullable: true
-                      typeStatusEvidence:
-                        type: string
-                        nullable: true
-                      determiner:
-                        type: array
-                        nullable: true
-                        items:
-                          type: string
-                          format: uuid
-                      determinedOn:
-                        type: string
-                        format: date
-                        nullable: true
-                      qualifier:
-                        type: string
-                        nullable: true
-                      scientificNameSource:
-                        type: string
-                        nullable: true
-                        enum: [COLPLUS, GNA]
-                      scientificNameDetails:
-                        type: object
-                        nullable: true
-                        properties:
-                          classificationPath:
-                            type: string
-                            nullable: true
-                            minLength: 0
-                            maxLength: 1000
-                          classificationRanks:
-                            type: string
-                            nullable: true
-                            minLength: 0
-                            maxLength: 1000
-                          sourceUrl:
-                            type: string
-                            format: uri
-                            nullable: true
-                          labelHtml:
-                            type: string
-                            nullable: true
-                          recordedOn:
-                            type: string
-                            format: date
-                            nullable: true
-                          currentName:
-                            type: string
-                            nullable: true
-                            minLength: 0
-                            maxLength: 250
-                          isSynonym:
-                            type: boolean
-                            nullable: true
-                      isPrimary:
-                        type: boolean
-                        nullable: true
-                        description: whether or not it the primary determination
-                      isFiledAs:
-                        type: boolean
-                        nullable: true
-                        description: whether or not it the determination is filed as
-                      managedAttributes:
-                        type: object
-                        nullable: true
-                        description: The manage attribute, with key and value pair
-                        additionalProperties:
-                          type: string
-                lifeStage:
-                  type: string
-                  nullable: true
-                sex:
-                  type: string
-                  nullable: true
-                substrate:
-                  type: string
-                  nullable: true
-                remarks:
-                  type: string
-                  nullable: true
-                  minLength: 0
-                  maxLength: 1000
+              description: text for material sample's preparation method
             hostOrganism:
               type: object
               nullable: true
@@ -662,4 +536,23 @@ components:
                         format: uuid
                         description: Unique identifier project for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-
+            organism:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        type: string
+                        example: organism
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier project for the resource
+                        example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
