@@ -387,24 +387,16 @@ components:
               nullable: false
               description: whether or not the material sample name constraint is enforced
             organism:
-              type: object
+              type: array
               nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [organism]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier organism for the resource
-                        example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: organisms's child id
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
         relationships:
           type: object
           nullable: true
