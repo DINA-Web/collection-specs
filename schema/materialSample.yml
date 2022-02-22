@@ -201,7 +201,6 @@ components:
             materialSampleType:
               type: string
               enum: [WHOLE_ORGANISM, ORGANISM_PART, MIXED_ORGANISMS, MOLECULAR_SAMPLE]
-              nullable: true
               description: Type of the material sample
             createdBy:
               type: string      
