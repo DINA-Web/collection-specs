@@ -431,7 +431,7 @@ components:
                   scientificNameSource:
                     type: string
                     nullable: true
-                    enum: [COLPLUS, GNA]
+                    enum: [CUSTOM, COLPLUS, GNA]
                   scientificNameDetails:
                     type: object
                     nullable: true
