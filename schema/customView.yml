@@ -1,30 +1,25 @@
 openapi: 3.0.0
 servers:
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+  - description: DINA - AAFC
+    url: https://virtserver.dina-aafc.com/AAFC/1.0.0
 info:
-  description: Material Sample Type schema
+  description: Custom View schema
   version: "1.0.0"
-  title: material sample type schema
+  title: Custom View schema
   contact:
     email: you@your-company.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /v1/material-sample-type:
+  /v1/custom-view:
     get:
       tags:
-        - Material Sample Type
-      summary: Get material sample type
-      operationId: getMaterialSampleTypes
-      description: By passing in query string, user can get available material sample types authorised
+        - Custom View
+      summary: Get Custom View
+      operationId: getCustomViews
+      description: By passing in query string, user can get Custom View authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the material sample types
-          schema:
-            type: string
         - in: query
           name: sort
           description: optional sort order string, such as descending, denoted by "-"
@@ -46,43 +41,43 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: material sample types satifying the query restrictions
+          description: Custom View satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/MaterialSampleType'                
+                  $ref: '#/components/schemas/CustomView'
         '404':
-          description: material sample type not found
+          description: Custom View not found
     post:
       tags:
-        - Material Sample Type
-      summary: Add material sample type
-      operationId: addMaterialSampleType
-      description: Adds a material sample type
+        - Custom View
+      summary: Add Custom View
+      operationId: addCustomView
+      description: Adds a Custom View
       responses:
         '201':
-          description: material sample type created
+          description: Custom View created
         '422':
           description: Data integrity violation          
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/NewMaterialSampleType'
-        description: MaterialSampleType to add
-  /v1/material-sample-type/{Id}:
+              $ref: '#/components/schemas/NewCustomView'
+        description: Custom View to add
+  /v1/custom-view/{Id}:
     get:
       tags:
-        - Material Sample Type
-      summary: Find material sample type by ID
-      description: Returns a single material sample type
-      operationId: getMaterialSampleTypeById
+        - Custom View
+      summary: Find custom view by ID
+      description: Returns a single custom view
+      operationId: getCustomViewById
       parameters:
         - name: Id
           in: path
-          description: ID of material sample type to return
+          description: ID of the custom view to return
           required: true
           schema:
             type: string
@@ -93,60 +88,60 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/MaterialSampleType'
+                $ref: '#/components/schemas/CustomView'
         '400':
           description: Not a valid uuid                
         '404':
-          description: MaterialSampleType not found          
+          description: Custom View not found
     patch:
       tags:
-        - Material Sample Type
-      summary: Update material sample type
-      operationId: updateMaterialSampleType
-      description: update a material sample type
+        - Custom View
+      summary: Update Custom View
+      operationId: updateCustomView
+      description: Update a Custom View
       parameters:
         - name: Id
           in: path
-          description: material sample type id to patch
+          description: Custom View id to patch
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: material sample type updated
+          description: Custom View updated
         '400':
           description: invalid input, object invalid
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/MaterialSampleType'
-        description: material sample type to add
+              $ref: '#/components/schemas/CustomView'
+        description: Custom View to add
     delete:
       tags:
-        - Material Sample Type
-      summary: Delete material sample type
-      operationId: deleteMaterialSampleType
-      description: delete a material sample type
+        - Custom View
+      summary: Delete Custom View
+      operationId: deleteCustomView
+      description: delete a Custom View
       parameters:
         - name: Id
           in: path
-          description: material sample type id to delete
+          description: Custom View id to delete
           required: true
           schema:
             type: string
             format: uuid            
       responses:
         '200':
-          description: material sample type marked as deleted
+          description: Custom View deleted
         '400':
           description: Not a valid uuid          
         '404':
-          description: material sample type not found       
+          description: Custom View not found
 components:
   schemas:
-    MaterialSampleType:
+    CustomView:
       type: object
       required:
         - data
@@ -162,9 +157,9 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonMaterialSampleType'
+            - $ref: '#/components/schemas/CommonCustomView'
 
-    NewMaterialSampleType:
+    NewCustomView:
       type: object
       required:
         - data
@@ -172,30 +167,40 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonMaterialSampleType'
+            - $ref: '#/components/schemas/CommonCustomView'
 
-    CommonMaterialSampleType:
+    CommonCustomView:
       type: object
       required:
         - type
         - attributes       
-      properties:            
+      properties:
         type:
-          enum: [material-sample-type]      
+          enum: [custom-view]
           description: The type of data being returned.
         attributes:
           type: object
           properties:
             name:
               type: string
-              description: The name of the material sample type
+              description: The name of the custom view
+            group:
+              type: string
+              description: The group in which the custom view belongs to
+            restrictToCreatedBy:
+              type: boolean
+              description: Is the custom view restricted to the user represented by createdBY
+            viewConfiguration:
+              type: object
+              description: Configuration object of the custom view
             createdBy:
               type: string      
               readOnly: true
-              description: authenticated user who create the material sample type
+              description: authenticated user who create the custom view
             createdOn:              
               type: string
               format: date-time                            
               readOnly: true
-              description: date and time when the material sample type was created in ISO format
+              description: date and time when the custom view was created in ISO format
               example: 1985-04-12T23:20:50.52Z
+

@@ -181,11 +181,15 @@ components:
         - attributes       
       properties:            
         type:
-          enum: [material-sample]      
+          enum: [material-sample]
           description: The type of data being returned.
         attributes:
           type: object
           properties:
+            version:
+              type: number
+              readOnly: true
+              description: Provides optimistic locking to prevent update data from being overridden by another transaction.
             dwcCatalogNumber:
               type: string
               nullable: true
@@ -194,6 +198,10 @@ components:
               type: string
               nullable: true
               description: Name of the material sample
+            materialSampleType:
+              type: string
+              enum: [WHOLE_ORGANISM, ORGANISM_PART, MIXED_ORGANISMS, MOLECULAR_SAMPLE]
+              description: Type of the material sample
             createdBy:
               type: string      
               readOnly: true
@@ -310,25 +318,7 @@ components:
             preparationMethod:
               type: string
               nullable: true
-              description: text for material sample's preparation method      
-            organism:
-              type: object
-              nullable: true
-              properties:
-                lifeStage:
-                  type: string
-                  nullable: true
-                sex:
-                  type: string
-                  nullable: true
-                substrate:
-                  type: string
-                  nullable: true
-                remarks:
-                  type: string
-                  nullable: true
-                  minLength: 0
-                  maxLength: 1000
+              description: text for material sample's preparation method
             hostOrganism:
               type: object
               nullable: true
@@ -620,23 +610,6 @@ components:
                         format: uuid
                         description: Unique identifier of the preparation attachment for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            materialSampleType:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [material-sample-type]
-                    id:
-                      type: string
-                      format: uuid
-                      description: Unique identifier of the material sample type for the resource
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             projects:
               type: object
               nullable: true
@@ -657,4 +630,22 @@ components:
                         format: uuid
                         description: Unique identifier project for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-
+            organism:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        enum: [organism]
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier organism for the resource
+                        example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
