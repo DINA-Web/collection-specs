@@ -229,6 +229,31 @@ components:
               description: Other catalog numbers
               items:
                 type: string
+            preparationMethod:
+              type: string
+              nullable: true
+              description: A noun representing the process used in preparing the material sample (the how).
+              example: dissection
+            preservationType:
+              type: string
+              nullable: true
+              description: Description of the preservation type of the material sample.
+              example: Freeze-Dry
+            preparationFixative:
+              type: string
+              nullable: true
+              description: Solution that was applied to or in which the material sample is preserved.
+              example: EtOH 95%
+            preparationMaterials:
+              type: string
+              nullable: true
+              description: Additional, typically inert physical environments or objects in which or on which the organism in a material sample is stored. It does not express the state of the organism nor the fixatives used but rather the materials that allow the organism to be presented.
+              example: glass vial
+            preparationSubstrate:
+              type: string
+              nullable: true
+              description: Material on which the organism in the material sample is presented or grows.
+              example: agar
             preparationDate:
               type: string
               format: date
@@ -315,10 +340,6 @@ components:
               type: string
               nullable: true
               description: text description of reason why the material sample is not publicly releasable
-            preparationMethod:
-              type: string
-              nullable: true
-              description: text for material sample's preparation method
             hostOrganism:
               type: object
               nullable: true
