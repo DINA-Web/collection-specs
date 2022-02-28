@@ -204,7 +204,7 @@ components:
             isTarget:
               type: boolean
               nullable: false
-              description: There can be 0 or 1 target organism for each material sample.
+              description: There can be 0 or 1 target organism for each material sample. The check is applied when the relationship between the material-sample and the organism is establied.
             lifeStage:
               type: string
               nullable: true
