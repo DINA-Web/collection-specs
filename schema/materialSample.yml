@@ -295,6 +295,11 @@ components:
               type: boolean
               nullable: true
               default: false
+            restrictionRemarks:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 1000
             restrictionFieldsExtension:
               type: array
               nullable: true
@@ -476,26 +481,6 @@ components:
                         format: uuid
                         description: user's id which this scheduled action is assigned to
                         example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            hierarchy:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
-                    description: Identifier of the hierarchical object as UUID
-                  name:
-                    type: string
-                    nullable: true
-                  rank:
-                    type: number
-                    nullable: true
-                  type:
-                    type: string
-                    nullable: true
             allowDuplicateName:
               type: boolean
               nullable: false
@@ -656,3 +641,22 @@ components:
                         format: uuid
                         description: Unique identifier organism for the resource
                         example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
+            hierarchy:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        enum: [hierarchy]
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier hierarchy for the resource
+                        example: 66d8c75d-484f-4dab-9f49-bc45d88921c9
