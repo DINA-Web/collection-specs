@@ -216,6 +216,10 @@ components:
               nullable: true
               minLength: 0
               maxLength: 1000
+            isTarget:
+              type: boolean
+              default: false
+              nullable: true
             determination:
               type: array
               nullable: true
