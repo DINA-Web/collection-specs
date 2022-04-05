@@ -498,9 +498,6 @@ components:
                   rank:
                     type: number
                     nullable: true
-                  type:
-                    type: string
-                    nullable: true
             allowDuplicateName:
               type: boolean
               nullable: false
