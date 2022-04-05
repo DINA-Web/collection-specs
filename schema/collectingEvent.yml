@@ -336,7 +336,7 @@ components:
               type: object
               nullable: true
               properties:
-                sourceURL:
+                sourceUrl:
                   type: string
                   nullable: true
                   format: url
@@ -352,7 +352,7 @@ components:
                   type: array
                   items:
                     $ref: '#/components/schemas/SourceAdministrativeLevel'
-                stateProvice:
+                stateProvince:
                   $ref: '#/components/schemas/SourceAdministrativeLevel'
                 country:
                   type: object
@@ -366,6 +366,11 @@ components:
                     name:
                       nullable: true
                       type: string
+                recordedOn:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: The date the geographic place name source detail record was recorded on.
             tags:
               type: array
               nullable: true
