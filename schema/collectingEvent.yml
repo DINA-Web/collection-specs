@@ -368,9 +368,9 @@ components:
                       type: string
                 recordedOn:
                   type: string
-                  format: date
+                  format: date-time
                   nullable: true
-                  description: The date the geographic place name source detail record was recorded on.
+                  description: The date and time the geographic place name source detail record was recorded on.
             tags:
               type: array
               nullable: true
