@@ -392,9 +392,6 @@ components:
                   barcode:
                     type: string
                     description: barcode for the material sample
-                  filedAs:
-                    type: string
-                    nullable: true
                   preparationMethod:
                     type: string
                     nullable: true
