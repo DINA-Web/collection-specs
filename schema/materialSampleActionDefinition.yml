@@ -212,22 +212,23 @@ components:
               type: object
               properties:
                 COLLECTING_EVENT:
-                  type: object
-                  properties:
-                    allowNew:
-                      type: boolean
-                    allowExisting:
-                      type: boolean
-                    templateFields:
-                      type: object
-                      additionalProperties:
-                        type: object
-                        properties:
-                          enabled:
-                            type: boolean
-                          defaultValue:
-                            type: string
+                  $ref: '#/components/schemas/FormTemplates'
                 MATERIAL_SAMPLE:
-                  $ref: '#/components/schemas/CommonMaterialSampleActionDefinition/properties/attributes/properties/formTemplates/properties/COLLECTING_EVENT'
+                  $ref: '#/components/schemas/FormTemplates'
 
-
+    FormTemplates:
+      type: object
+      properties:
+        allowNew:
+          type: boolean
+        allowExisting:
+          type: boolean
+        templateFields:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              enabled:
+                type: boolean
+              defaultValue:
+                type: string

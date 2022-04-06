@@ -291,6 +291,41 @@ components:
               nullable: true
               minLength: 0
               maxLength: 1000
+            isRestricted:
+              type: boolean
+              nullable: true
+              default: false
+            restrictionRemarks:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 1000
+            restrictionFieldsExtension:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  extKey:
+                    type: string
+                    nullable: true
+                    description: Used along with the extVersion to find the extension.
+                    example: cfia_ppc
+                  extVersion:
+                    type: string
+                    nullable: true
+                    description: Used along with the extKey to find the extension.
+                    example: 2022-02
+                  extTerm:
+                    type: string
+                    nullable: true
+                    description: The specific term used from the extension.
+                    example: level
+                  value:
+                    type: string
+                    nullable: true
+                    description: The extension value being stored on the material sample. Some terms will check for accepted values.
+                    example: Level 1 (PPC-1)
             materialSampleChildren:
               type: array
               nullable: true
@@ -306,6 +341,62 @@ components:
                     type: string
                     nullable: true
                     description: Name of the material sample
+                  group:
+                    type: string
+                    description: The group in which the material sample belongs to
+                  createdBy:
+                    type: string      
+                    readOnly: true
+                    description: authenticated user who create the material sample
+                  createdOn:              
+                    type: string
+                    format: date-time                            
+                    readOnly: true
+                    description: date and time when the material sample was created in ISO format
+                    example: 1985-04-12T23:20:50.52Z
+                  dwcCatalogNumber:
+                    type: string
+                    nullable: true
+                    description: An identifier (preferably unique) for the record within the data set or collection.
+                  dwcOtherCatalogNumbers:
+                    type: array
+                    nullable: true
+                    description: Other catalog numbers
+                    items:
+                      type: string
+                  preparationDate:
+                    type: string
+                    format: date
+                    nullable: true
+                    description: The date on which the material sample was prepared.
+                  managedAttributes:
+                    type: object
+                    description: The manage attribute, with key and value pair
+                    additionalProperties:
+                      type: string
+                  preparationRemarks:
+                    type: string
+                    nullable: true
+                    description: Remarks on the preparation of the material sample
+                    minLength: 0
+                    maxLength: 1000
+                  dwcDegreeOfEstablishment:
+                    type: string
+                    nullable: true
+                    description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
+                    minLength: 0
+                    maxLength: 1000
+                  host:
+                    type: string
+                    nullable: true
+                  barcode:
+                    type: string
+                    description: barcode for the material sample
+                  preparationMethod:
+                    type: string
+                    nullable: true
+                    description: A noun representing the process used in preparing the material sample (the how).
+                    example: dissection
             associations:
               type: array
               nullable: true
@@ -403,9 +494,6 @@ components:
                     nullable: true
                   rank:
                     type: number
-                    nullable: true
-                  type:
-                    type: string
                     nullable: true
             allowDuplicateName:
               type: boolean
