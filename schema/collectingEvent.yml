@@ -317,7 +317,7 @@ components:
               description: The original textual description of the place.
             managedAttributes:
               type: object
-              description: The manage attribute, with key and value pair
+              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
               additionalProperties:
                 type: string
             publiclyReleasable:
