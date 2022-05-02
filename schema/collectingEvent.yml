@@ -438,7 +438,11 @@ components:
                   dwcGeoreferenceVerificationStatus:
                     type: string
                     nullable: true
-                    enum: [GEOREFERENCING_NOT_POSSIBLE]
+                    enum: [null, GEOREFERENCING_NOT_POSSIBLE]
+            eventGeom:
+              type: object
+              nullable: true
+              description: Coordinates expressed as geojson
             extensionValues:
               type: array
               nullable: true
