@@ -439,10 +439,15 @@ components:
                     type: string
                     nullable: true
                     enum: [null, GEOREFERENCING_NOT_POSSIBLE]
+                  createdOn:
+                    type: string
+                    format: date-time
+                    readOnly: true
             eventGeom:
               type: object
               nullable: true
-              description: Coordinates expressed as geojson
+              readOnly: true
+              description: Coordinates expressed as geojson (read-only, calculated from lat/long on primary geoReferenceAssertion)
             extensionValues:
               type: array
               nullable: true
