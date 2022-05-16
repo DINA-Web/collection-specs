@@ -291,15 +291,6 @@ components:
               nullable: true
               minLength: 0
               maxLength: 1000
-            isRestricted:
-              type: boolean
-              nullable: true
-              default: false
-            restrictionRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
             restrictionFieldsExtension:
               type: array
               nullable: true
@@ -326,6 +317,15 @@ components:
                     nullable: true
                     description: The extension value being stored on the material sample. Some terms will check for accepted values.
                     example: Level 1 (PPC-1)
+            restrictionRemarks:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 1000
+            isRestricted:
+              type: boolean
+              nullable: false
+              description: whether or not the material sample is considered restricted
             materialSampleChildren:
               type: array
               nullable: true
@@ -499,33 +499,6 @@ components:
               type: boolean
               nullable: false
               description: whether or not the material sample name constraint is enforced
-            restrictionFieldsExtension:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  extKey:
-                    type: string
-                    nullable: true
-                  extVersion:
-                    type: string
-                    nullable: true
-                  extTerm:
-                    type: string
-                    nullable: true
-                  value:
-                    type: string
-                    nullable: true
-            restrictionRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            isRestricted:
-              type: boolean
-              nullable: false
-              description: whether or not the material sample is considered restricted
         relationships:
           type: object
           nullable: true
