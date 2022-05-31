@@ -67,3 +67,7 @@ paths:
     $ref: 'organism.yml#/paths/~1v1~1organism'
   /v1/organism/{Id}:
     $ref: 'organism.yml#/paths/~1v1~1organism~1{Id}'
+  /v1/protocol:
+    $ref: 'protocol.yml#/paths/~1v1~1protocol'
+  /v1/protocol/{Id}:
+    $ref: 'protocol.yml#/paths/~1v1~1protocol~1{Id}'
