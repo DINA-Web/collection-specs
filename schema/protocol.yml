@@ -202,10 +202,6 @@ components:
             group:
               type: string
               description: The group in which the protocol belongs to
-            attachments:
-              type: list-array
-              format: uuid[]
-              description: list of identifiers for attachment files related to this protocol
             multilingualDescription:
               type: object
               nullable: true
