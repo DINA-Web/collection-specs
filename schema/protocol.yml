@@ -72,7 +72,7 @@ paths:
             schema:
               $ref: '#/components/schemas/NewProtocol'
         description: Protocol to add
-  /v1/preparation-type/{Id}:
+  /v1/protocol/{Id}:
     get:
       tags:
         - Protocol
@@ -222,3 +222,24 @@ components:
                       desc:
                         type: string
                         description: the description
+        relationships:
+          attachments:
+            type: object
+            nullable: true
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type: 
+                      type: string
+                      example: metadata
+                    id:
+                      type: string
+                      format: uuid
+                      description: Unique identifier metadata for the resource
+                      example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
