@@ -198,12 +198,11 @@ components:
               example: 1985-04-12T23:20:50.52Z
             group:
               type: string
-              nullable: true
               minLength: 0
               maxLength: 50
             isTarget:
               type: boolean
-              nullable: false
+              nullable: true
               description: There can be 0 or 1 target organism for each material sample. The check is applied when the relationship between the material-sample and the organism is establied.
             lifeStage:
               type: string
