@@ -599,12 +599,12 @@ components:
                         format: uuid
                         description: Unique identifier metadata for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            preparationAttachment:
+            preparationProtocol:
               type: object
               nullable: true
               properties:
                 data:
-                  type: array
+                  type: object
                   items:
                     type: object
                     required:
@@ -612,12 +612,11 @@ components:
                       - id
                     properties:
                       type: 
-                        type: string
-                        example: metadata
+                        enum: [protocol]
                       id:
                         type: string
                         format: uuid
-                        description: Unique identifier of the preparation attachment for the resource
+                        description: Unique identifier of the protocol
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
             projects:
               type: object
