@@ -291,7 +291,9 @@ components:
               description: habitat name
             substrate:
               type: string
-              nullable: true                
+              nullable: true
+              minimum: 0
+              maximum: 255
               description: surface on which an organism lives
             remarks:
               type: string
