@@ -235,16 +235,20 @@ components:
               type: string
               nullable: true
               description: The original description of the depth below the local surface.
+            dwcFieldNumber:
+              type: string
+              nullable: true
+              description: An identifier given to the event in the field at the time of collecting one or more samples. Often serves as a link between field notes and the Event.
+            dwcRecordNumber:
+              type: string
+              nullable: true
+              description: An identifier given to the Occurrence, by the collector, at the time it was recorded. Often serves as a link between field notes and an Occurrence record, such as a specimen collector’s number.
             dwcOtherRecordNumbers:
               type: array
               nullable: true
               items:
                 type: string
                 description: Other identifiers given to the collecting-event at the time it was recorded
-            dwcRecordNumber:
-              type: string
-              nullable: true
-              description: An identifier given to the collecting-event at the time it was recorded.
             dwcCountry:
               type: string 
               nullable: true
