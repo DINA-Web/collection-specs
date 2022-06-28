@@ -208,7 +208,7 @@ components:
             gridLayoutDefinition:
               type: object
               nullable: true
-              description: Optional definition of storage type's grid layout (when possible)
+              description: Optional definition of storage type's grid layout (when applicable)
               properties:
                 numberOfRows:
                   type: integer
