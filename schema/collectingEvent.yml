@@ -243,12 +243,12 @@ components:
               type: string
               nullable: true
               description: An identifier given to the Occurrence, by the collector, at the time it was recorded. Often serves as a link between field notes and an Occurrence record, such as a specimen collector’s number.
-            dwcOtherRecordNumbers:
+            otherRecordNumbers:
               type: array
               nullable: true
               items:
                 type: string
-                description: Other identifiers given to the collecting-event at the time it was recorded
+                description: Additional dwcRecordNumber
             dwcCountry:
               type: string 
               nullable: true
