@@ -205,7 +205,7 @@ components:
             isInseperable:
               type: boolean
               description:  Indicates that the content can't be separated without doing a new preparation
-            gridLayout:
+            gridLayoutDefinition:
               type: object
               nullable: true
               description: Optional definition of storage type's grid layout (when possible)
