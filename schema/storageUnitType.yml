@@ -205,4 +205,17 @@ components:
             isInseperable:
               type: boolean
               description:  Indicates that the content can't be separated without doing a new preparation
-
+            gridLayout:
+              type: object
+              nullable: true
+              description: Optional definition of storage type's grid layout (when possible)
+              properties:
+                numberOfRows:
+                  type: integer
+                  minimum: 1
+                numberOfColumns:
+                  type: integer
+                  minimum: 1
+                fillDirection:
+                  type: string
+                  enum: [BY_ROW, BY_COLUMN]
