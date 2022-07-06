@@ -43,6 +43,10 @@ paths:
     $ref: 'preparationType.yml#/paths/~1v1~1preparation-type'
   /v1/preparation-type/{Id}:
     $ref: 'preparationType.yml#/paths/~1v1~1preparation-type~1{Id}'
+  /v1/preparation-method:
+    $ref: 'preparationMethod.yml#/paths/~1v1~1preparation-method'
+  /v1/preparation-method/{Id}:
+    $ref: 'preparationMethod.yml#/paths/~1v1~1preparation-method~1{Id}'
   /v1/institution:
     $ref: 'institution.yml#/paths/~1v1~1institution'
   /v1/institution/{Id}:
