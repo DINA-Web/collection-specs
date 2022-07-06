@@ -3,22 +3,22 @@ servers:
   - description: DINA - AAFC
     url: https://virtserver.dina-aafc.com/AAFC/1.0.0
 info:
-  description: Custom View schema
+  description: Form Template schema
   version: "1.0.0"
-  title: Custom View schema
+  title: Form Template schema
   contact:
     email: you@your-company.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /v1/custom-view:
+  /v1/form-template:
     get:
       tags:
-        - Custom View
-      summary: Get Custom View
-      operationId: getCustomViews
-      description: By passing in query string, user can get Custom View authorised
+        - Form Template
+      summary: Get Form Template
+      operationId: getFormTemplates
+      description: By passing in query string, user can get Form Template authorized
       parameters:
         - in: query
           name: sort
@@ -41,43 +41,43 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: Custom View satifying the query restrictions
+          description: Form Template satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/CustomView'
+                  $ref: '#/components/schemas/FormTemplate'
         '404':
-          description: Custom View not found
+          description: Form Template not found
     post:
       tags:
-        - Custom View
-      summary: Add Custom View
-      operationId: addCustomView
-      description: Adds a Custom View
+        - Form Template
+      summary: AddForm Template
+      operationId: addFormTemplate
+      description: Adds a Form Template
       responses:
         '201':
-          description: Custom View created
+          description: Form Template created
         '422':
           description: Data integrity violation          
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/NewCustomView'
-        description: Custom View to add
-  /v1/custom-view/{Id}:
+              $ref: '#/components/schemas/NewFormTemplate'
+        description: Form Template to add
+  /v1/form-template/{Id}:
     get:
       tags:
-        - Custom View
-      summary: Find custom view by ID
-      description: Returns a single custom view
-      operationId: getCustomViewById
+        - Form Template
+      summary: Find Form Template by ID
+      description: Returns a single Form Template
+      operationId: geFormTemplateById
       parameters:
         - name: Id
           in: path
-          description: ID of the custom view to return
+          description: ID of the Form Template to return
           required: true
           schema:
             type: string
@@ -88,60 +88,60 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/CustomView'
+                $ref: '#/components/schemas/FormTemplate'
         '400':
           description: Not a valid uuid                
         '404':
-          description: Custom View not found
+          description: Form Template not found
     patch:
       tags:
-        - Custom View
-      summary: Update Custom View
-      operationId: updateCustomView
-      description: Update a Custom View
+        - Form Template
+      summary: Update Form Template
+      operationId: updateFormTemplate
+      description: Update a Form Template
       parameters:
         - name: Id
           in: path
-          description: Custom View id to patch
+          description: Form Template id to patch
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: Custom View updated
+          description: Form Template updated
         '400':
           description: invalid input, object invalid
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/CustomView'
-        description: Custom View to add
+              $ref: '#/components/schemas/FormTemplate'
+        description: Form Template to add
     delete:
       tags:
-        - Custom View
-      summary: Delete Custom View
-      operationId: deleteCustomView
-      description: delete a Custom View
+        - Form Template
+      summary: Delete Form Template
+      operationId: deleteFormTemplate
+      description: delete a Form Template
       parameters:
         - name: Id
           in: path
-          description: Custom View id to delete
+          description: Form Template id to delete
           required: true
           schema:
             type: string
             format: uuid            
       responses:
         '200':
-          description: Custom View deleted
+          description: Form Template deleted
         '400':
           description: Not a valid uuid          
         '404':
-          description: Custom View not found
+          description: Form Template not found
 components:
   schemas:
-    CustomView:
+    FormTemplate:
       type: object
       required:
         - data
@@ -157,9 +157,9 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonCustomView'
+            - $ref: '#/components/schemas/CommonFormTemplate'
 
-    NewCustomView:
+    NewFormTemplate:
       type: object
       required:
         - data
@@ -167,40 +167,40 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonCustomView'
+            - $ref: '#/components/schemas/CommonFormTemplate'
 
-    CommonCustomView:
+    CommonFormTemplate:
       type: object
       required:
         - type
         - attributes       
       properties:
         type:
-          enum: [custom-view]
+          enum: [form-template]
           description: The type of data being returned.
         attributes:
           type: object
           properties:
             name:
               type: string
-              description: The name of the custom view
+              description: The name of the Form Template
             group:
               type: string
-              description: The group in which the custom view belongs to
+              description: The group in which the Form Template belongs to
             restrictToCreatedBy:
               type: boolean
-              description: Is the custom view restricted to the user represented by createdBY
+              description: Is the Form Template restricted to the user represented by createdBY
             viewConfiguration:
               type: object
-              description: Configuration object of the custom view
+              description: Configuration object of the Form Template
             createdBy:
               type: string      
               readOnly: true
-              description: authenticated user who create the custom view
+              description: authenticated user who create the Form Template
             createdOn:              
               type: string
               format: date-time                            
               readOnly: true
-              description: date and time when the custom view was created in ISO format
+              description: date and time when the Form Template was created in ISO format
               example: 1985-04-12T23:20:50.52Z
 
