@@ -63,10 +63,10 @@ paths:
     $ref: 'project.yml#/paths/~1v1~1project'
   /v1/project/{Id}:
     $ref: 'project.yml#/paths/~1v1~1project~1{Id}'
-  /v1/custom-view:
-    $ref: 'customView.yml#/paths/~1v1~1custom-view'
-  /v1/custom-view/{Id}:
-    $ref: 'customView.yml#/paths/~1v1~1custom-view~1{Id}'
+  /v1/form-template:
+    $ref: 'formTemplate.yml#/paths/~1v1~1form-template'
+  /v1/form-template/{Id}:
+    $ref: 'formTemplate.yml#/paths/~1v1~1form-template~1{Id}'
   /v1/organism:
     $ref: 'organism.yml#/paths/~1v1~1organism'
   /v1/organism/{Id}:
