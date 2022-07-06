@@ -64,9 +64,9 @@ paths:
   /v1/project/{Id}:
     $ref: 'project.yml#/paths/~1v1~1project~1{Id}'
   /v1/form-template:
-    $ref: 'formTempalte.yml#/paths/~1v1~1form-template'
+    $ref: 'formTemplate.yml#/paths/~1v1~1form-template'
   /v1/form-template/{Id}:
-    $ref: 'formTempalte.yml#/paths/~1v1~1form-template~1{Id}'
+    $ref: 'formTemplate.yml#/paths/~1v1~1form-template~1{Id}'
   /v1/organism:
     $ref: 'organism.yml#/paths/~1v1~1organism'
   /v1/organism/{Id}:
