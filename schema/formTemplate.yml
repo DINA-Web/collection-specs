@@ -193,6 +193,12 @@ components:
             viewConfiguration:
               type: object
               description: Configuration object of the Form Template
+            components:
+              type: array
+              items:
+                type: object
+              nullable: true
+              description: List of components of the FormTemplate
             createdBy:
               type: string      
               readOnly: true
