@@ -31,14 +31,6 @@ paths:
     $ref: 'materialSample.yml#/paths/~1v1~1material-sample'
   /v1/material-sample/{Id}:
     $ref: 'materialSample.yml#/paths/~1v1~1material-sample~1{Id}'
-  /v1/material-sample-action-definition:
-    $ref: 'materialSampleActionDefinition.yml#/paths/~1v1~1material-sample-action-definition'
-  /v1/material-sample-action-definition/{Id}:
-    $ref: 'materialSampleActionDefinition.yml#/paths/~1v1~1material-sample-action-definition~1{Id}'
-  /v1/material-sample-action-run:
-    $ref: 'materialSampleActionRun.yml#/paths/~1v1~1material-sample-action-run'
-  /v1/material-sample-action-run/{Id}:
-    $ref: 'materialSampleActionRun.yml#/paths/~1v1~1material-sample-action-run~1{Id}'
   /v1/preparation-type:
     $ref: 'preparationType.yml#/paths/~1v1~1preparation-type'
   /v1/preparation-type/{Id}:
