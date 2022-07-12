@@ -229,11 +229,6 @@ components:
               description: Other catalog numbers
               items:
                 type: string
-            preparationMethod:
-              type: string
-              nullable: true
-              description: A noun representing the process used in preparing the material sample (the how).
-              example: dissection
             preservationType:
               type: string
               nullable: true
@@ -544,6 +539,25 @@ components:
                       type: string
                       format: uuid
                       description: materialSample's preparationType id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            preparationMethod:
+              type: object
+              nullable: true
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [preparation-method]
+                    id:
+                      type: string
+                      format: uuid
+                      description: materialSample's preparationMethod id
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             parentMaterialSample:
               type: object
