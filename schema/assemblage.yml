@@ -202,6 +202,11 @@ components:
             group:
               type: string
               description: The group in which the assemblage belongs to
+            managedAttributes:
+              type: object
+              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
+              additionalProperties:
+                type: string
             multilingualDescription:
               type: object
               nullable: true
