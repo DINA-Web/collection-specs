@@ -207,6 +207,22 @@ components:
               description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
               additionalProperties:
                 type: string
+            multilingualTitle:
+              type: object
+              nullable: true
+              properties:
+                titles:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      title:
+                        type: string
+                        description: the description
             multilingualDescription:
               type: object
               nullable: true
