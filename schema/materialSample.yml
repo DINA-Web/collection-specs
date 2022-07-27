@@ -647,12 +647,30 @@ components:
                       - id
                     properties:
                       type: 
-                        type: string
-                        example: project
+                        enum: [project]
                       id:
                         type: string
                         format: uuid
-                        description: Unique identifier project for the resource
+                        description: Unique identifier a the project
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            assemblages:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        enum: [assemblage]
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier of an assemblage for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
             organism:
               type: object
