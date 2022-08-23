@@ -492,9 +492,9 @@ components:
                   rank:
                     type: number
                     nullable: true
-                  targetOrganismPrimaryDetermination:
+                  organismPrimaryDetermination:
                     type: object
-                    description: summary of the primary determination of the target organism
+                    description: summary of the primary determination of the target organism or all organisms if there is no target
             allowDuplicateName:
               type: boolean
               nullable: false
