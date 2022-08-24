@@ -493,7 +493,7 @@ components:
                     type: number
                     nullable: true
                   organismPrimaryDetermination:
-                    type: object
+                    type: array
                     description: summary of the primary determination of the target organism or all organisms if there is no target
             allowDuplicateName:
               type: boolean
