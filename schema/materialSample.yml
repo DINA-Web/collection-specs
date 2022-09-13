@@ -266,9 +266,6 @@ components:
               description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
               minLength: 0
               maxLength: 1000
-            host:
-              type: string
-              nullable: true
             materialSampleState:
               type: string
               nullable: true
