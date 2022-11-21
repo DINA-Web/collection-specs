@@ -581,18 +581,20 @@ components:
               nullable: true
               properties:
                 data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [person]
-                    id:
-                      type: string
-                      format: uuid
-                      description: person who prepared the material sample
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type:
+                        enum: [person]
+                      id:
+                        type: string
+                        format: uuid
+                        description: person who prepared the material sample
+                        example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             attachment:
               type: object
               nullable: true
