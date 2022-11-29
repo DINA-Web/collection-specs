@@ -621,19 +621,17 @@ components:
               properties:
                 data:
                   type: object
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [protocol]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the protocol
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type: 
+                      enum: [protocol]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Unique identifier of the protocol
+                      example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
             projects:
               type: object
               nullable: true
