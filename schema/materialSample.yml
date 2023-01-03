@@ -475,6 +475,7 @@ components:
             hierarchy:
               type: array
               nullable: true
+              readOnly: true
               items:
                 type: object
                 properties:
@@ -689,3 +690,20 @@ components:
                         format: uuid
                         description: Unique identifier organism for the resource
                         example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
+            storageUnit:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [storage-unit]
+                    id:
+                      type: string
+                      format: uuid
+                      description: Unique identifier of the storage-unit
+                      example: c0915662-0bfb-4d17-96a8-39c8bd3f0731
