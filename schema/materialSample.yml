@@ -283,7 +283,7 @@ components:
               nullable: true
               minLength: 0
               maxLength: 1000
-            restrictionFieldsExtension:
+            extFieldKey:
               type: array
               nullable: true
               items:
@@ -299,10 +299,10 @@ components:
                     nullable: true
                     description: Used along with the extKey to find the extension.
                     example: 2022-02
-                  extTerm:
+                  extFieldKey:
                     type: string
                     nullable: true
-                    description: The specific term used from the extension.
+                    description: The specific key of the field used from the extension.
                     example: level
                   value:
                     type: string
