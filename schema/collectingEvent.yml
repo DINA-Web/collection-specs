@@ -466,7 +466,7 @@ components:
                   extVersion:
                     type: string
                     nullable: true
-                  extTerm:
+                  extFieldKey:
                     type: string
                     nullable: true
                   value:
