@@ -459,11 +459,11 @@ components:
               properties:
                 extKey:
                 type: object
-                  additionalProperties:
-                    type: object
-                    properties:
-                      extKey:
-                        type: string
+                additionalProperties:
+                  type: object
+                  properties:
+                    extKey:
+                      type: string
         relationships:
           type: object
           nullable: true
