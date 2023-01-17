@@ -294,11 +294,6 @@ components:
                     nullable: true
                     description: Used along with the extVersion to find the extension.
                     example: cfia_ppc
-                  extVersion:
-                    type: string
-                    nullable: true
-                    description: Used along with the extKey to find the extension.
-                    example: 2022-02
                   extFieldKey:
                     type: string
                     nullable: true
