@@ -461,8 +461,6 @@ components:
                 properties:
                   extKey:
                     type: string
-                  value:
-                    type: string
         relationships:
           type: object
           nullable: true
