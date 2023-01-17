@@ -456,12 +456,10 @@ components:
               description: Coordinates expressed as geojson (read-only, calculated from lat/long on primary geoReferenceAssertion)
             extensionValues:
               type: object
-              properties:
-                extKey:
-                  type: object
-                  properties:
-                    extFieldKey:
-                      type: string
+              additionalProperties:
+                type: object
+                additionalProperties:
+                    type: string
         relationships:
           type: object
           nullable: true
