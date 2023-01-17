@@ -455,23 +455,14 @@ components:
               readOnly: true
               description: Coordinates expressed as geojson (read-only, calculated from lat/long on primary geoReferenceAssertion)
             extensionValues:
-              type: array
-              nullable: true
-              items:
+              type: object
+              additionalProperties:
                 type: object
                 properties:
                   extKey:
                     type: string
-                    nullable: true
-                  extVersion:
-                    type: string
-                    nullable: true
-                  extFieldKey:
-                    type: string
-                    nullable: true
                   value:
                     type: string
-                    nullable: true
         relationships:
           type: object
           nullable: true
