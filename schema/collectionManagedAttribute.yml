@@ -180,81 +180,77 @@ components:
         - type
         - attributes       
       properties:       
-        data:
+        type:
+          enum: [managed-attribute]
+        attributes:
           type: object
           required:
-            - id
-            - type
-            - attributes
+            - name
+            - vocabularyElementType
           properties:
-            id:
+            name:
               type: string
-              format: uuid
-              example: d290f1ee-6c54-4b01-90e6-d701748f0851
-            type:
-              enum: [managed-attribute]      
-            attributes:
+              description: name of the managed attribute
+              example: 
+                collectionView
+            key:
+              type: string
+              description: key of the managed attribute
+              example: 
+                collection_view
+            vocabularyElementType:
+              description: type of the managed attribute          
+              enum: [
+                  STRING,
+                  INTEGER,
+                  DATE,
+                  BOOL
+              ]
+            managedAttributeComponent:
+              description: component of the managed attribute
+              enum: [
+                COLLECTING_EVENT,
+                MATERIAL_SAMPLE,
+                DETERMINATION,
+                ASSEMBLAGE
+              ]
+            acceptedValues:
+              type: array
+              description: accepted values of the named attribute (if any)      
+              items: 
+                oneOf:
+                  - type: string
+                  - type: integer
+              example: 
+                - dorsal
+                - 1      
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the collection managed attribute
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the collection managed attribute was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              description: The group in which the collection managed attribute belongs to
+            multilingualDescription:
               type: object
-              required:
-                - name
-                - managedAttributeType
+              nullable: true
               properties:
-                name:
-                  type: string
-                  description: name of the managed attribute
-                  example: 
-                    collectionView
-                key:
-                  type: string
-                  description: key of the managed attribute
-                  example: 
-                    collection_view
-                managedAttributeType:
-                  description: type of the managed attribute          
-                  enum: [
-                     STRING,
-                     INTEGER]
-                managedAttributeComponent:
-                  description: component of the managed attribute
-                  enum: [
-                    COLLECTING_EVENT,
-                    MATERIAL_SAMPLE,
-                    DETERMINATION
-                  ]
-                acceptedValues:
+                descriptions:
                   type: array
-                  description: accepted values of the named attribute (if any)      
-                  items: 
-                    oneOf:
-                      - type: string
-                      - type: integer
-                  example: 
-                    - dorsal
-                    - 1      
-                createdBy:
-                  type: string      
-                  readOnly: true
-                  description: authenticated user who create the collection managed attribute
-                createdOn:              
-                  type: string
-                  format: date-time                            
-                  readOnly: true
-                  description: date and time when the collection managed attribute was created in ISO format
-                  example: 1985-04-12T23:20:50.52Z
-                multilingualDescription:
-                  type: object
                   nullable: true
-                  properties:
-                    descriptions:
-                      type: array
-                      nullable: true
-                      items:
-                        type: object
-                        properties:
-                          lang:
-                            type: string
-                            description: language of the description
-                          desc:
-                            type: string
-                            description: the description
-              
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      desc:
+                        type: string
+                        description: the description
+          
