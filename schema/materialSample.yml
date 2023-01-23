@@ -283,27 +283,20 @@ components:
               nullable: true
               minLength: 0
               maxLength: 1000
-            restrictionFieldsExtension:
-              type: array
-              nullable: true
-              items:
+            extensionValues:
+              type: object
+              description: Values of material-sample related field extension.
+              additionalProperties:
                 type: object
-                properties:
-                  extKey:
+                additionalProperties:
                     type: string
-                    nullable: true
-                    description: Used along with the extVersion to find the extension.
-                    example: cfia_ppc
-                  extFieldKey:
+            restrictionFieldsExtension:
+              type: object
+              description: Values of restriction related field extension.
+              additionalProperties:
+                type: object
+                additionalProperties:
                     type: string
-                    nullable: true
-                    description: The specific key of the field used from the extension.
-                    example: level
-                  value:
-                    type: string
-                    nullable: true
-                    description: The extension value being stored on the material sample. Some terms will check for accepted values.
-                    example: Level 1 (PPC-1)
             restrictionRemarks:
               type: string
               nullable: true
