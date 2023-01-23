@@ -386,6 +386,10 @@ components:
                     nullable: true
                     description: A noun representing the process used in preparing the material sample (the how).
                     example: dissection
+                  ordinal:
+                    type: number
+                    readOnly: true
+                    description: The ordinal number of the entry in the list of materialSampleChildren based on order of creation.
             associations:
               type: array
               nullable: true
