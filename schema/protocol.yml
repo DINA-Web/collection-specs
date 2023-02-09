@@ -218,6 +218,35 @@ components:
                       desc:
                         type: string
                         description: the description
+            protocolData:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    nullable: false
+                  vocabularyBased:
+                    type: boolean
+                    nullable: false
+                  protocolDataElement:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        elementType:
+                          type: string
+                          nullable: false
+                        value:
+                          type: string
+                          nullable: false
+                        vocabularyBased:
+                          type: boolean
+                          nullable: false
+                        unit:
+                          type: string
+                          nullable: true
         relationships:
           type: object
           nullable: true
