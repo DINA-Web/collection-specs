@@ -223,6 +223,11 @@ components:
               description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
               additionalProperties:
                 type: string
+            preparationManagedAttributes:
+              type: object
+              description: Manage attributes about the preparation, map of key/value pair. Patch Strategy is SET so the entire preparationManagedAttributes needs to be rebmit on PATCH/PUT.
+              additionalProperties:
+                type: string
             dwcOtherCatalogNumbers:
               type: array
               nullable: true
