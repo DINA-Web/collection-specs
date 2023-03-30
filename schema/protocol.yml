@@ -189,6 +189,9 @@ components:
             name:
               type: string
               description: The name of the protocol
+            protocolType:
+              type: string
+              description: Type of the protocol. Should match vocabulary.
             createdBy:
               type: string      
               readOnly: true
@@ -227,6 +230,7 @@ components:
                   key:
                     type: string
                     nullable: false
+                    description: Should match vocabulary when is vocabularyBased
                   vocabularyBased:
                     type: boolean
                     nullable: false
