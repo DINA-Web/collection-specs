@@ -143,8 +143,7 @@ paths:
         '400':
           description: Not a valid uuid          
         '404':
-          description: storage unit not found  
-#Need to finish everything before components
+          description: storage unit not found
 components:
   schemas:
     StorageUnit:
@@ -217,7 +216,7 @@ components:
               properties:
                 data:
                   type:
-                    enum: [parent-storage-unit]
+                    enum: [storage-unit]
                   id:
                     type: string
                     format: uuid
