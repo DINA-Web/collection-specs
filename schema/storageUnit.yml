@@ -215,23 +215,33 @@ components:
                 - data
               properties:
                 data:
-                  type:
-                    enum: [storage-unit]
-                  id:
-                    type: string
-                    format: uuid
-                    description: storageUnit's parentStorageUnit id
-                    example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [storage-unit]
+                    id:
+                      type: string
+                      format: uuid
+                      description: storageUnit's parentStorageUnit id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             storageUnitType:
               type: object
               required:
                 - data
               properties:
                 data:
-                  type:
-                    enum: [storage-unit-type]
-                  id:
-                    type: string
-                    format: uuid
-                    description: storageUnit's storageUnitType id
-                    example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [storage-unit-type]
+                    id:
+                      type: string
+                      format: uuid
+                      description: storageUnit's type id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
