@@ -74,4 +74,4 @@ paths:
   /v1/storageUnit:
     $ref: 'storageUnit.yml#/paths/~1v1~1storage-unit'
   /v1/storageUnit/{Id}:
-    $ref: 'storageUnit.yml#/paths/~1v1~1storageUnit~1{Id}'
+    $ref: 'storageUnit.yml#/paths/~1v1~1storage-unit~1{Id}'
