@@ -466,6 +466,7 @@ components:
           properties:
             protocol:
               type: object
+              nullable: true
               properties:
                 data:
                   type: object
