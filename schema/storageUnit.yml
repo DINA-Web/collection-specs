@@ -205,6 +205,32 @@ components:
             barcode:
               type: string
               description: Text representation originating from scanning with a barcode gun
+            storageUnitChildren:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                    description: Identifier of the storageUnitChildren object as a UUID
+                  id:
+                    type: string
+                    format: uuid
+                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                  createdOn:
+                    type: string
+                    format: date-time
+                    readOnly: true
+                  createdBy:
+                    type: string
+                    readOnly: true
+                  group:
+                    type: string
+                  name:
+                    type: string
         relationships:
           type: object
           nullable: true
