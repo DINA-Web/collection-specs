@@ -517,6 +517,24 @@ components:
                       format: uuid
                       description: materialSample's collectingEvent id
                       example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+            collection:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [collection]
+                    id:
+                      type: string
+                      format: uuid
+                      description: materialSample's collection id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c            
             preparationType:
               type: object
               nullable: true
