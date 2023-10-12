@@ -203,9 +203,14 @@ components:
               enum: [
                   STRING,
                   INTEGER,
+                  DECIMAL,
                   DATE,
                   BOOL
               ]
+            unit:
+              type: string
+              description: The unit of the managed attribute. Usually only used for INTEGER or DECIMAL vocabularyElementType.
+              example: cm
             managedAttributeComponent:
               description: component of the managed attribute
               enum: [
