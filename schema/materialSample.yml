@@ -225,7 +225,7 @@ components:
                 type: string
             preparationManagedAttributes:
               type: object
-              description: Manage attributes about the preparation, map of key/value pair. Patch Strategy is SET so the entire preparationManagedAttributes needs to be rebmit on PATCH/PUT.
+              description: Manage attributes about the preparation, map of key/value pair. Patch Strategy is SET so the entire preparationManagedAttributes needs to be resubmitted on PATCH/PUT.
               additionalProperties:
                 type: string
             dwcOtherCatalogNumbers:
@@ -290,14 +290,14 @@ components:
               maxLength: 1000
             extensionValues:
               type: object
-              description: Values of material-sample related field extension.
+              description: Values of material-sample related field extension. Format is {"extensionKey": {"fieldKey":"fieldValue"}}. Patch Strategy is SET so the entire extensionValues needs to be resubmitted on PATCH/PUT.
               additionalProperties:
                 type: object
                 additionalProperties:
                     type: string
             restrictionFieldsExtension:
               type: object
-              description: Values of restriction related field extension.
+              description: Values of restriction related field extension. Format is {"extensionKey": {"fieldKey":"fieldValue"}}. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT.
               additionalProperties:
                 type: object
                 additionalProperties:
