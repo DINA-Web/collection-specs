@@ -204,6 +204,11 @@ components:
               type: boolean
               nullable: true
               description: Optionally, there can be 0 or 1 target organism for each material-sample. The check is applied when the relationship between the material-sample and the organism is established.
+            managedAttributes:
+              type: object
+              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
+              additionalProperties:
+                type: string
             lifeStage:
               type: string
               nullable: true
