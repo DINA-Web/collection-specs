@@ -390,6 +390,16 @@ components:
                     nullable: true
                     description: A noun representing the process used in preparing the material sample (the how).
                     example: dissection
+                  wellRow:
+                    type: string
+                    nullable: true
+                    description: The row location in the storage unit. Using a letter, starting at A.
+                    example: A
+                  wellColumn:
+                    type: number
+                    nullable: true
+                    description: The column location in the storage unit. Using a number, starting at 1.
+                    example: 7
                   ordinal:
                     type: number
                     readOnly: true
