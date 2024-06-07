@@ -1,0 +1,231 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Represents the coordinates (row/column) of an object in a storageUnit.
+  version: "1.0.0"
+  title: Storage Unit Coordinates schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/storage-unit:
+    get:
+      tags:
+        - Storage Unit Coordinates
+      summary: Get storage unit coordinates
+      operationId: getStorageUnitCoordinates
+      description: By passing in query string, user can get available storage unit coordinates authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the storage unit coordinates
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: storage unit coordinates satisfying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/StorageUnitCoordinates'
+        '404':
+          description: storage unit coordinates not found
+    post:
+      tags:
+        - Storage Unit Coordinates
+      summary: Add storage unit coordinates
+      operationId: addStorageUnitCoordinates
+      description: Adds a storage unit coordinates
+      responses:
+        '201':
+          description: storage unit coordinates created
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewStorageUnitCoordinates'
+        description: StorageUnitCoordinates to add
+  /v1/storage-unit/{Id}:
+    get:
+      tags:
+        - Storage Unit Coordinates
+      summary: Find storage unit by ID
+      description: Returns a single storage unit coordinates
+      operationId: getStorageUnitCoordinatesById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of storage unit coordinates to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/StorageUnitCoordinates'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: StorageUnitCoordinates not found
+    patch:
+      tags:
+        - Storage Unit Coordinates
+      summary: Update storage unit coordinates
+      operationId: updateStorageUnitCoordinates
+      description: update a storage unit coordinates
+      parameters:
+        - name: Id
+          in: path
+          description: storage unit coordinates id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: storage unit coordinates updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/StorageUnitCoordinates'
+        description: storage unit coordinates to add
+    delete:
+      tags:
+        - Storage Unit Coordinates
+      summary: Delete storage unit coordinates
+      operationId: deleteStorageUnitCoordinates
+      description: delete a storage unit coordinates
+      parameters:
+        - name: Id
+          in: path
+          description: storage unit coordinates id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: storage unit coordinates deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: storage unit coordinates not found
+components:
+  schemas:
+    StorageUnitCoordinates:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitCoordinates'
+
+    NewStorageUnitCoordinates:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitCoordinates'
+
+    CommonStorageUnitCoordinates:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [storage-unit-coordinates]
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            wellRow:
+              type: string
+              nullable: true
+              description: The row location in the storage unit. Using a letter, starting at A.
+              example: A
+            wellColumn:
+              type: number
+              nullable: true
+              description: The column location in the storage unit. Using a number, starting at 1.
+              example: 7
+            createdOn:
+              type: string
+              format: date-time
+              readOnly: true
+              description: date and time when the storage unit was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            createdBy:
+              type: string
+              readOnly: true
+              description: authenticated user who create the storage unit coordinates
+        relationships:
+          type: object
+          nullable: false
+          properties:
+            storageUnit:
+              type: object
+              description: The storageUnit is used to validate the coordinates (row/column) and the group for authorization.
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [storage-unit]
+                    id:
+                      type: string
+                      format: uuid
+                      description: storageUnit's type id
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
