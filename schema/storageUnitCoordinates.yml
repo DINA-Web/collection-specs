@@ -188,12 +188,10 @@ components:
           properties:
             wellRow:
               type: string
-              nullable: true
               description: The row location in the storage unit. Using a letter, starting at A.
               example: A
             wellColumn:
               type: number
-              nullable: true
               description: The column location in the storage unit. Using a number, starting at 1.
               example: 7
             createdOn:
