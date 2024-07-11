@@ -194,6 +194,10 @@ components:
               type: number
               description: The column location in the storage unit. Using a number, starting at 1.
               example: 7
+            cellNumber:
+              type: integer
+              description: The calculated cell number based on the storage-unit-type dimension
+              readOnly: true
             createdOn:
               type: string
               format: date-time
