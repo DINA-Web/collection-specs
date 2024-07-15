@@ -5,14 +5,14 @@ servers:
 info:
   description: Represents the coordinates (row/column) of an object in a storageUnit.
   version: "1.0.0"
-  title: Storage Unit Coordinates schema
+  title: Storage Unit Usage schema
   contact:
     email: you@your-company.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /v1/storage-unit-coordinates:
+  /v1/storage-unit-usage:
     get:
       tags:
         - Storage Unit Coordinates
@@ -72,7 +72,7 @@ paths:
             schema:
               $ref: '#/components/schemas/NewStorageUnitCoordinates'
         description: StorageUnitCoordinates to add
-  /v1/storage-unit-coordinates/{Id}:
+  /v1/storage-unit-usage/{Id}:
     get:
       tags:
         - Storage Unit Coordinates
