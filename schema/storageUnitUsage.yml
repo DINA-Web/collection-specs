@@ -186,6 +186,10 @@ components:
         attributes:
           type: object
           properties:
+            usageType:
+              type: string
+              description: The type of the resource using the storage-unit-usage
+              example: material-sample
             wellRow:
               type: string
               description: The row location in the storage unit. Using a letter, starting at A.
@@ -197,6 +201,10 @@ components:
             cellNumber:
               type: integer
               description: The calculated cell number based on the storage-unit-type dimension
+              readOnly: true
+            storageUnitName:
+              type: string
+              description: The calculated storageUnitName
               readOnly: true
             createdOn:
               type: string
