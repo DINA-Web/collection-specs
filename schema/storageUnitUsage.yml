@@ -3,7 +3,7 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
 info:
-  description: Represents the coordinates (row/column) of an object in a storageUnit.
+  description: Represents the usage of an object in a storageUnit. May include coordinates (row/column).
   version: "1.0.0"
   title: Storage Unit Usage schema
   contact:
@@ -15,14 +15,14 @@ paths:
   /v1/storage-unit-usage:
     get:
       tags:
-        - Storage Unit Coordinates
-      summary: Get storage unit coordinates
-      operationId: getStorageUnitCoordinates
-      description: By passing in query string, user can get available storage unit coordinates authorised
+        - Storage Unit Usage
+      summary: Get storage unit usage
+      operationId: getStorageUnitUsage
+      description: By passing in query string, user can get available storage unit usage authorised
       parameters:
         - in: query
           name: filter[rsql]
-          description: pass an optional search string for looking up the storage unit coordinates
+          description: pass an optional search string for looking up the storage unit usage
           schema:
             type: string
         - in: query
@@ -46,43 +46,43 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: storage unit coordinates satisfying the query restrictions
+          description: storage unit usage satisfying the query restrictions
           content:
             application/vnd.api+json:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/StorageUnitCoordinates'
+                  $ref: '#/components/schemas/StorageUnitUsage'
         '404':
-          description: storage unit coordinates not found
+          description: storage unit usage not found
     post:
       tags:
-        - Storage Unit Coordinates
-      summary: Add storage unit coordinates
-      operationId: addStorageUnitCoordinates
-      description: Adds a storage unit coordinates
+        - Storage Unit Usage
+      summary: Add storage unit usage
+      operationId: addStorageUnitUsage
+      description: Adds a storage unit usage
       responses:
         '201':
-          description: storage unit coordinates created
+          description: storage unit usage created
         '422':
           description: Data integrity violation          
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/NewStorageUnitCoordinates'
-        description: StorageUnitCoordinates to add
+              $ref: '#/components/schemas/NewStorageUnitUsage'
+        description: StorageUnitUsage to add
   /v1/storage-unit-usage/{Id}:
     get:
       tags:
-        - Storage Unit Coordinates
+        - Storage Unit Usage
       summary: Find storage unit by ID
-      description: Returns a single storage unit coordinates
-      operationId: getStorageUnitCoordinatesById
+      description: Returns a single storage unit usage
+      operationId: getStorageUnitUsageById
       parameters:
         - name: Id
           in: path
-          description: ID of storage unit coordinates to return
+          description: ID of storage unit usage to return
           required: true
           schema:
             type: string
@@ -93,60 +93,60 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/StorageUnitCoordinates'
+                $ref: '#/components/schemas/StorageUnitUsage'
         '400':
           description: Not a valid uuid                
         '404':
-          description: StorageUnitCoordinates not found
+          description: StorageUnitUsage not found
     patch:
       tags:
-        - Storage Unit Coordinates
-      summary: Update storage unit coordinates
-      operationId: updateStorageUnitCoordinates
-      description: update a storage unit coordinates
+        - Storage Unit Usage
+      summary: Update storage unit usage
+      operationId: updateStorageUnitUsage
+      description: update a storage unit usage
       parameters:
         - name: Id
           in: path
-          description: storage unit coordinates id to patch
+          description: storage unit usage id to patch
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: storage unit coordinates updated
+          description: storage unit usage updated
         '400':
           description: invalid input, object invalid
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/StorageUnitCoordinates'
-        description: storage unit coordinates to add
+              $ref: '#/components/schemas/StorageUnitUsage'
+        description: storage unit usage to add
     delete:
       tags:
-        - Storage Unit Coordinates
-      summary: Delete storage unit coordinates
-      operationId: deleteStorageUnitCoordinates
-      description: delete a storage unit coordinates
+        - Storage Unit Usage
+      summary: Delete storage unit usage
+      operationId: deleteStorageUnitUsage
+      description: delete a storage unit usage
       parameters:
         - name: Id
           in: path
-          description: storage unit coordinates id to delete
+          description: storage unit usage id to delete
           required: true
           schema:
             type: string
             format: uuid            
       responses:
         '200':
-          description: storage unit coordinates deleted
+          description: storage unit usage deleted
         '400':
           description: Not a valid uuid          
         '404':
-          description: storage unit coordinates not found
+          description: storage unit usage not found
 components:
   schemas:
-    StorageUnitCoordinates:
+    StorageUnitUsage:
       type: object
       required:
         - data
@@ -162,9 +162,9 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnitCoordinates'
+            - $ref: '#/components/schemas/CommonStorageUnitUsage'
 
-    NewStorageUnitCoordinates:
+    NewStorageUnitUsage:
       type: object
       required:
         - data
@@ -172,16 +172,16 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnitCoordinates'
+            - $ref: '#/components/schemas/CommonStorageUnitUsage'
 
-    CommonStorageUnitCoordinates:
+    CommonStorageUnitUsage:
       type: object
       required:
         - type
         - attributes       
       properties:            
         type:
-          enum: [storage-unit-coordinates]
+          enum: [storage-unit-usage]
           description: The type of data being returned.
         attributes:
           type: object
@@ -207,7 +207,7 @@ components:
             createdBy:
               type: string
               readOnly: true
-              description: authenticated user who create the storage unit coordinates
+              description: authenticated user who create the storage unit usage
         relationships:
           type: object
           nullable: false
