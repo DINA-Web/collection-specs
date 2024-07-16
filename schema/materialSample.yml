@@ -715,7 +715,7 @@ components:
                         format: uuid
                         description: Unique identifier organism for the resource
                         example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
-            storageUnit:
+            storageUnitUsage:
               type: object
               nullable: true
               properties:
@@ -726,26 +726,9 @@ components:
                     - id
                   properties:
                     type:
-                      enum: [storage-unit]
+                      enum: [ storage-unit-usage ]
                     id:
                       type: string
                       format: uuid
-                      description: Unique identifier of the storage-unit
-                      example: c0915662-0bfb-4d17-96a8-39c8bd3f0731
-            storageUnitCoordinates:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [ storage-unit-coordinates ]
-                    id:
-                      type: string
-                      format: uuid
-                      description: Unique identifier of the storage-unit-coordinates
+                      description: Unique identifier of the storage-unit-usage
                       example: c0915662-0bfb-4d17-96a8-39c8bd3f0731
