@@ -186,7 +186,13 @@ components:
         attributes:
           type: object
           properties:
-            createdOn:              
+            name:
+              type: string
+              description: The name of the storage unit
+            isGeneric:
+              type: boolean
+              description: Is the storage unit representing a generic instance of the storage unit type?
+            createdOn:
               type: string
               format: date-time                            
               readOnly: true
@@ -199,9 +205,6 @@ components:
             group:
               type: string
               description: The group in which the storage unit belongs
-            name:
-              type: string
-              description: The name of the storage unit
             barcode:
               type: string
               description: Text representation originating from scanning with a barcode gun
