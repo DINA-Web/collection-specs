@@ -67,11 +67,11 @@ paths:
     $ref: 'protocol.yml#/paths/~1v1~1protocol'
   /v1/protocol/{Id}:
     $ref: 'protocol.yml#/paths/~1v1~1protocol~1{Id}'
-  /v1/storageUnit:
+  /v1/storage-unit:
     $ref: 'storageUnit.yml#/paths/~1v1~1storage-unit'
-  /v1/storageUnit/{Id}:
+  /v1/storage-unit/{Id}:
     $ref: 'storageUnit.yml#/paths/~1v1~1storage-unit~1{Id}'
-  /v1/storageUnitCoordinates:
+  /v1/storage-unit-usage:
     $ref: 'storageUnitUsage.yml#/paths/~1v1~1storage-unit-usage'
-  /v1/storageUnitCoordinates/{Id}:
+  /v1/storage-unit-usage/{Id}:
     $ref: 'storageUnitUsage.yml#/paths/~1v1~1storage-unit-usage~1{Id}'
