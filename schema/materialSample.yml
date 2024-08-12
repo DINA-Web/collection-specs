@@ -194,10 +194,17 @@ components:
               type: string
               nullable: true
               description: An identifier (preferably unique) for the record within the data set or collection.
+              example: 18
             materialSampleName: 
               type: string
               nullable: true
-              description: Name of the material sample
+              description: Name of the material sample that is used as global, human readable, primary identifier. The collection code is recommended as prefix.
+              example: XYZ-18
+            identifiers: 
+              type: object
+              description: Other identifiers map. Key/value pair where the key is the type of identifier. Patch Strategy is SET so the entire identifiers needs to be rebmit on PATCH/PUT.
+              additionalProperties:
+                type: string
             materialSampleType:
               type: string
               enum: [WHOLE_ORGANISM, ORGANISM_PART, MIXED_ORGANISMS, MOLECULAR_SAMPLE]
