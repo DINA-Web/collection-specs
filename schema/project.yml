@@ -232,6 +232,12 @@ components:
                       desc:
                         type: string
                         description: the description
+            extensionValues:
+              type: object
+              additionalProperties:
+                type: object
+                additionalProperties:
+                    type: string
         relationships:
           type: object
           nullable: true
