@@ -324,6 +324,10 @@ components:
               type: boolean
               nullable: false
               description: whether or not the material sample is considered restricted
+            isBaseForSplitByType:
+              type: boolean
+              nullable: true
+              description: Whether or not the material sample will be used as a basename for split of material-sample of the same type
             materialSampleChildren:
               type: array
               nullable: true
