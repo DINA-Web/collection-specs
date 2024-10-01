@@ -512,6 +512,10 @@ components:
               type: string
               readOnly: true
               description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the primary determination of the target organism. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
+            effectiveScientificName:
+              type: string
+              readOnly: true
+              description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the first determination found in the hierachy. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
             allowDuplicateName:
               type: boolean
               nullable: false
