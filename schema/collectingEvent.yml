@@ -379,6 +379,7 @@ components:
                   description: The date and time the geographic place name source detail record was recorded on.
             geographicThesaurus:
               type: object
+              description: Pointer to an external geographic thesaurus where concepts are geographically organized in a hierarchichy. As opposed to geographicPlaceNameSourceDetail, levels are in free-form and not attached to concepts.
               nullable: true
               properties:
                 source:
@@ -394,6 +395,8 @@ components:
                 additionalParents:
                   type: array
                   nullable: true
+                  items:
+                    type: string
             tags:
               type: array
               nullable: true
