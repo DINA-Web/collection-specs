@@ -337,7 +337,7 @@ components:
             geographicPlaceNameSource:
               type: string
               nullable: true
-              enum: [OSM]    
+              enum: [OSM]
             geographicPlaceNameSourceDetail:
               type: object
               nullable: true
@@ -377,6 +377,23 @@ components:
                   format: date-time
                   nullable: true
                   description: The date and time the geographic place name source detail record was recorded on.
+            geographicThesaurus:
+              type: object
+                nullable: true
+                properties:
+                  source:
+                    enum: [TGN]
+                    description: Source of the geographic thesaurus
+                  subjectId:
+                    type: string
+                  preferredTerm:
+                    type: string
+                  preferredParent:
+                    type: string
+                    nullable: true
+                  additionalParents:
+                    type: array
+                    nullable: true
             tags:
               type: array
               nullable: true
