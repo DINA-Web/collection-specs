@@ -224,6 +224,12 @@ components:
               nullable: true
               minLength: 0
               maxLength: 1000
+            dwcVernacularName:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 100
+              description: A common or vernacular name. https://dwc.tdwg.org/list/#dwc_vernacularName
             determination:
               type: array
               nullable: true
