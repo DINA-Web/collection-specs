@@ -239,12 +239,14 @@ components:
                 properties:
                   agent:
                     type: string
+                    format: uuid
                     description: agent uuid (external relationship)
                   roles:
                     type: array
                     description: role(s) of the agent within the project
                     items:
                       type: string
+                      example: project_leader
                   remarks:
                     type: string
             extensionValues:
