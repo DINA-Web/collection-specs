@@ -249,6 +249,7 @@ components:
                       example: project_leader
                   remarks:
                     type: string
+                    nullable: true
             extensionValues:
               type: object
               additionalProperties:
