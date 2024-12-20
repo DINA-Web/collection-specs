@@ -232,6 +232,21 @@ components:
                       desc:
                         type: string
                         description: the description
+            contributors:
+              type: array
+              items:
+                type: object
+                properties:
+                  agent:
+                    type: string
+                    description: agent uuid (external relationship)
+                  roles:
+                    type: array
+                    description: role(s) of the agent within the project
+                    items:
+                      type: string
+                  remarks:
+                    type: string
             extensionValues:
               type: object
               additionalProperties:
