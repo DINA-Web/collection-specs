@@ -508,6 +508,11 @@ components:
                     type: array
                     description: summary of the primary determination of the target organism or all organisms if there is no target
                     nullable: true
+            targetOrganismPrimaryClassification:
+              type: object
+              readOnly: true
+              nullable: true
+              description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
             targetOrganismPrimaryScientificName:
               type: string
               readOnly: true
