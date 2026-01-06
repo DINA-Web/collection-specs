@@ -215,7 +215,7 @@ components:
             geographicContext:
               type: string
               nullable: true
-              description: the status of the expedition
+              description: Geographic context of the expedition, e.g., which country or region where crossed during the expedition.
             multilingualDescription:
               type: object
               nullable: true
@@ -232,17 +232,6 @@ components:
                       desc:
                         type: string
                         description: the description
-            identifiers:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  type:
-                    enum: [WIKIDATA]
-                  uri:
-                    type: string
-                    format: uri
         relationships:
           type: object
           nullable: true
