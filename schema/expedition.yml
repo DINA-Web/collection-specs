@@ -1,0 +1,259 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Expedition schema
+  version: "1.0.0"
+  title: Expedition schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/expedition:
+    get:
+      tags:
+        - Expedition
+      summary: Get expedition
+      operationId: getExpeditions
+      description: By passing in query string, user can get available expeditions authorised
+      parameters:
+        - in: query
+          name: filter[rsql]
+          description: pass an optional search string for looking up the expeditions
+          schema:
+            type: string
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: expeditions satisfying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expedition'
+        '404':
+          description: expedition not found
+    post:
+      tags:
+        - Expedition
+      summary: Add expedition
+      operationId: addExpedition
+      description: Adds a expedition
+      responses:
+        '201':
+          description: expedition created
+        '422':
+          description: Data integrity violation
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewExpedition'
+        description: Expedition to add
+  /v1/expedition/{Id}:
+    get:
+      tags:
+        - Expedition
+      summary: Find expedition by ID
+      description: Returns a single expedition
+      operationId: getExpeditionById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of expedition to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Expedition'
+        '400':
+          description: Not a valid uuid
+        '404':
+          description: Expedition not found
+    patch:
+      tags:
+        - Expedition
+      summary: Update expedition
+      operationId: updateExpedition
+      description: update a expedition
+      parameters:
+        - name: Id
+          in: path
+          description: expedition id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: expedition updated
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/Expedition'
+        description: expedition to add
+    delete:
+      tags:
+        - Expedition
+      summary: Delete expedition
+      operationId: deleteExpedition
+      description: delete a expedition
+      parameters:
+        - name: Id
+          in: path
+          description: expedition id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: expedition marked as deleted
+        '400':
+          description: Not a valid uuid
+        '404':
+          description: expedition not found
+components:
+  schemas:
+    Expedition:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonExpedition'
+
+    NewExpedition:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonExpedition'
+
+    CommonExpedition:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [expedition]
+          description: The type of data being returned.
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the expedition
+            createdBy:
+              type: string
+              readOnly: true
+              description: authenticated user who create the expedition
+            createdOn:
+              type: string
+              format: date-time
+              readOnly: true
+              description: date and time when the expedition was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            group:
+              type: string
+              description: The group in which the expedition belongs to
+            startDate:
+              type: string
+              format: date
+              nullable: true
+              description: The start date of the expedition
+            endDate:
+              type: string
+              format: date
+              nullable: true
+              description: The end date of the expedition
+            geographicContext:
+              type: string
+              nullable: true
+              description: Geographic context of the expedition, e.g., which country or region where crossed during the expedition.
+            multilingualDescription:
+              type: object
+              nullable: true
+              properties:
+                descriptions:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      desc:
+                        type: string
+                        description: the description
+        relationships:
+          type: object
+          nullable: true
+          properties:
+            participants:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type:
+                        type: string
+                        example: person
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique agent identifier for the resource
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+

@@ -542,6 +542,24 @@ components:
                         format: uuid
                         description: Unique identifier metadata for the resource
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            expedition:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [expedition]
+                    id:
+                      type: string
+                      format: uuid
+                      description: the expedition this event is part of
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
     SourceAdministrativeLevel:
       type: object
       nullable: true
