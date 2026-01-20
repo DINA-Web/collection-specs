@@ -8,12 +8,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: '18'
+          node-version: '22'
       - name: building using redoc-cli
         run: |
-          npx redoc-cli bundle schema/natural-history-collection-api.yml -o redoc/index.html
+          npx @redocly/cli build-docs schema/natural-history-collection-api.yml --output redoc/index.html
           
       - name: Deploy GitHub Pages (only on master branch)
         if: ${{ github.ref == 'refs/heads/master' }}
