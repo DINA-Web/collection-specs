@@ -1,0 +1,314 @@
+# Common query parameters for all DINA APIs
+# Reference this file using: $ref: './components/common-parameters.yml#/FiqlFilter'
+
+FiqlFilter:
+  name: fiql
+  in: query
+  required: false
+  description: |
+    **FIQL (Feed Item Query Language) filter for querying resources.**
+    
+    FIQL provides a URI-friendly syntax for expressing filters. This parameter is supported
+    across all DINA collection APIs for consistent querying.
+    <details>
+    <summary><strong>Comparison Operators</strong></summary>
+    
+    | Operator | Syntax | Description | Example |
+    |----------|--------|-------------|---------|
+    | Equal | `==` | Exact match | `catalogNumber==ABC123` |
+    | Not Equal | `!=` | Does not match | `status!=archived` |
+    | Greater Than | `=gt=` | Numeric/date comparison | `year=gt=2020` |
+    | Greater or Equal | `=ge=` | Inclusive comparison | `count=ge=10` |
+    | Less Than | `=lt=` | Numeric/date comparison | `year=lt=2025` |
+    | Less or Equal | `=le=` | Inclusive comparison | `count=le=100` |
+    | In | `=in=()` | Value in list | `status=in=(active,pending)` |
+    | Out | `=out=()` | Value not in list | `type=out=(draft,archived)` |
+    </details>
+    
+    <details>
+    <summary><strong>Logical Operators</strong></summary>
+    
+    | Operator | Syntax | Description | Example |
+    |----------|--------|-------------|---------|
+    | AND | `;` | Both conditions must be true | `name==John;age=gt=25` |
+    | OR | `,` | Either condition can be true | `status==active,status==pending` |
+    | Grouping | `()` | Group conditions | `(field1==a,field1==b);field2==c` |
+    
+    </details>
+    
+    <details>
+    <summary><strong>Wildcards</strong></summary>
+    
+    - `*` - Matches zero or more characters
+    - `?` - Matches exactly one character
+    
+    **Examples:**
+    - `name==John*` - Starts with "John"
+    - `name==*Smith` - Ends with "Smith"
+    - `name==*John*` - Contains "John"
+    - `code==A?C` - A, any single character, then C
+    
+    </details>
+    
+    <details>
+    <summary><strong>Query Examples</strong></summary>
+    
+    
+    ### Simple Queries
+    ```
+    catalogNumber==ABC123
+    scientificName==Quercus robur
+    collectionYear==2023
+    ```
+    
+    ### Wildcard Searches
+    ```
+    scientificName==*Quercus*
+    commonName==*oak*
+    locality==*Canada*
+    ```
+    
+    ### Numeric Comparisons
+    ```
+    collectionYear=gt=2020
+    specimenCount=ge=10
+    latitude=lt=45.5
+    ```
+    
+    ### Date Ranges
+    ```
+    collectedDate=ge=2020-01-01;collectedDate=le=2024-12-31
+    modifiedDate=gt=2024-01-01
+    ```
+    
+    ### Multiple Values
+    ```
+    status=in=(active,pending,review)
+    collectionCode=in=(BOTANY,ZOOLOGY,GEOLOGY)
+    preparationType=out=(deleted,archived)
+    ```
+    
+    ### Combined Conditions (AND)
+    ```
+    scientificName==*Quercus*;collectionYear=gt=2020
+    status==active;preparationType==mounted;collectionYear=ge=2023
+    ```
+    
+    ### Combined Conditions (OR)
+    ```
+    status==active,status==pending
+    scientificName==*Quercus robur*,scientificName==*Quercus petraea*
+    ```
+    
+    ### Complex Queries with Grouping
+    ```
+    (scientificName==*Quercus*,commonName==*oak*);collectionYear=gt=2020
+    (status==active,status==pending);preparationType!=digital;collectionYear=ge=2023
+    ```
+    
+    </details>
+    
+    <details><summary><strong>Important Notes</strong></summary>
+    
+    1. **URL Encoding**: Special characters must be URL-encoded in actual requests
+       - Space: `%20`
+       - `;` (AND): `%3B`
+       - `,` (OR): `%2C`
+    
+    2. **Case Sensitivity**: 
+       - Field names are case-sensitive
+       - String values are typically case-insensitive (implementation-dependent)
+    
+    3. **Performance**: Leading wildcards (`*term`) may impact query performance
+    
+    4. **Field Support**: Not all fields support all operators. See endpoint-specific documentation.
+    
+    </details>
+    
+    [Complete FIQL Documentation](https://dina-web.github.io/collection-specs/docs/fiql-reference)
+    
+  schema:
+    type: string
+
+# Simple Search Filter - Key-value based filtering
+# Format: filter[field.subfield][OPERATOR]=value
+SimpleSearchFilter:
+  name: filter
+  in: query
+  required: false
+  style: deepObject
+  explode: true
+  description: |
+    **Simple search filter using key-value pairs with nested properties.**
+    
+    Filter results by specifying field paths and comparison operators.
+    
+    
+    
+    <details>
+    <summary><strong>Filter Syntax</strong></summary>
+    
+    ```
+    filter[fieldName][OPERATOR]=value
+    filter[parent.child][OPERATOR]=value
+    filter[parent.child.grandchild][OPERATOR]=value
+    ```
+    
+    </details>
+    
+    <details>
+    <summary><strong>Supported Operators</strong></summary>
+    
+    | Operator | Description | Example |
+    |----------|-------------|---------|
+    | `EQ` | Equal to | `filter[status][EQ]=active` |
+    | `NEQ` | Not equal to | `filter[status][NEQ]=archived` |
+    | `GT` | Greater than | `filter[year][GT]=2020` |
+    | `GTE` | Greater than or equal | `filter[year][GTE]=2020` |
+    | `LT` | Less than | `filter[year][LT]=2025` |
+    | `LTE` | Less than or equal | `filter[year][LTE]=2024` |
+    | `IN` | In list (comma-separated) | `filter[status][IN]=active,pending` |
+    | `LIKE` | Pattern match (use % for wildcard) | `filter[name][LIKE]=%oak%` |
+    | `ILIKE` | Case-insensitive pattern match | `filter[name][ILIKE]=%OAK%` |
+    | `IS_NULL` | Is null | `filter[deletedDate][IS_NULL]=true` |
+    | `NOT_NULL` | Is not null | `filter[deletedDate][NOT_NULL]=true` |
+    
+    </details>
+    
+    
+    <details>
+    <summary><strong>Examples</strong></summary>
+    
+    ### Simple Equality
+    ```
+    filter[catalogNumber][EQ]=ABC123
+    filter[status][EQ]=active
+    ```
+    
+    ### Nested Properties
+    ```
+    filter[storageUnitType.uuid][EQ]=0193bc05-5d49-7b99-89ea-7c97d2dcd7bd
+    filter[collection.code][EQ]=BOTANY
+    filter[determination.scientificName][LIKE]=%Quercus%
+    ```
+    
+    ### Numeric Comparisons
+    ```
+    filter[collectionYear][GTE]=2020
+    filter[specimenCount][LT]=100
+    filter[latitude][GT]=45.5
+    ```
+    
+    ### Multiple Values (IN operator)
+    ```
+    filter[status][IN]=active,pending,review
+    filter[collectionCode][IN]=BOTANY,ZOOLOGY
+    ```
+    
+    ### Pattern Matching
+    ```
+    filter[scientificName][LIKE]=%Quercus%
+    filter[locality][ILIKE]=%canada%
+    ```
+    
+    ### Null Checks
+    ```
+    filter[deletedDate][IS_NULL]=true
+    filter[verifiedBy][NOT_NULL]=true
+    ```
+    
+    ### Multiple Filters (AND logic)
+    ```
+    filter[status][EQ]=active&filter[collectionYear][GTE]=2020
+    filter[storageUnitType.uuid][EQ]=abc123&filter[preparationType][EQ]=mounted
+    ```
+    
+    </details>
+
+    <details>
+    
+    <summary><strong>Nested Property Paths</strong></summary>
+    
+    Use dot notation to filter on nested/related objects:
+    
+    ```
+    filter[relationship.property][OPERATOR]=value
+    ```
+    
+    ### Common Nested Paths
+    
+    | Path | Description | Example |
+    |------|-------------|---------|
+    | `storageUnitType.uuid` | Storage unit type ID | `filter[storageUnitType.uuid][EQ]=abc-123` |
+    | `storageUnitType.name` | Storage unit type name | `filter[storageUnitType.name][LIKE]=%freezer%` |
+    | `collection.code` | Collection code | `filter[collection.code][EQ]=BOTANY` |
+    | `collection.name` | Collection name | `filter[collection.name][LIKE]=%herbarium%` |
+    | `determination.scientificName` | Determined name | `filter[determination.scientificName][EQ]=Quercus robur` |
+    | `collectingEvent.locality` | Collection locality | `filter[collectingEvent.locality][LIKE]=%Canada%` |
+    
+    </details>
+
+    <details>
+    <summary><strong>Important Notes</strong></summary>
+    
+    1. **Multiple Filters**: Use `&` to combine multiple filters (AND logic)
+    2. **URL Encoding**: Special characters must be URL-encoded
+       - Space: `%20`
+       - `%` wildcard: `%25` (for LIKE patterns)
+    3. **Case Sensitivity**: Field names are case-sensitive
+    4. **Operator Format**: Operators must be in UPPERCASE
+    5. **Wildcards**: Use `%` for wildcards in LIKE/ILIKE patterns
+    
+    </details>
+    
+    <details>
+    <summary><strong>URL-Encoded Examples</strong></summary>
+    
+    ```
+    # Before encoding:
+    filter[storageUnitType.uuid][EQ]=0193bc05-5d49-7b99-89ea-7c97d2dcd7bd
+    
+    # After encoding:
+    filter%5BstorageUnitType.uuid%5D%5BEQ%5D=0193bc05-5d49-7b99-89ea-7c97d2dcd7bd
+    ```
+    
+    ```
+    # Before encoding:
+    filter[scientificName][LIKE]=%Quercus%
+    
+    # After encoding:
+    filter%5BscientificName%5D%5BLIKE%5D=%25Quercus%25
+    ```
+    </details>
+    
+  schema:
+    type: object
+    additionalProperties:
+      type: object
+      additionalProperties:
+        type: string
+
+Sort:
+  in: query
+  name: sort
+  description: optional sort order string, such as descending, denoted by "-"
+  schema:
+    type: string
+
+PageOffset:
+  in: query
+  name: page[offset]
+  description: number of records to skip when paging
+  schema:
+    type: integer
+    format: int32
+
+PageLimit:
+  in: query
+  name: page[limit]
+  description: maximum number of records to return when paging
+  schema:
+    type: integer
+    format: int32
+    minimum: 0
+    maximum: 50
