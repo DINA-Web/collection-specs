@@ -312,3 +312,134 @@ PageLimit:
     format: int32
     minimum: 0
     maximum: 50
+
+GeoReferenceAssertions:
+  type: array
+  nullable: true
+  items:
+    type: object
+    properties:
+      dwcDecimalLatitude:
+        type: number
+        nullable: true
+        description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
+      dwcDecimalLongitude:
+        type: number
+        nullable: true
+        description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
+      dwcCoordinateUncertaintyInMeters:
+        type: number
+        nullable: true
+        description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+      dwcGeoreferencedDate:
+        type: string
+        format: date
+        nullable: true
+        description: The date on which the Location was georeferenced.
+      georeferencedBy:
+        type: array
+        nullable: true
+        description: A list of uuid who determined the georeference for the location.
+        items:
+          type: string
+          format: uuid
+      literalGeoreferencedBy:
+        type: string
+        nullable: true
+        description: A name of a person, group or organization who determined the georeference for the location.
+      dwcGeoreferenceProtocol:
+        type: string
+        nullable: true
+        description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
+      dwcGeoreferenceSources:
+        type: string
+        nullable: true
+        description: A map, gazetteer, or other resource used to georeference the Location.
+      dwcGeoreferenceRemarks:
+        type: string
+        nullable: true
+        description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
+        minLength: 0
+        maxLength: 1000
+      dwcGeodeticDatum:
+        type: string
+        nullable: true
+        description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
+      isPrimary:
+        type: boolean
+        description: specify whether or not the georeference assertion is the primary of the colecting-event
+      dwcGeoreferenceVerificationStatus:
+        type: string
+        nullable: true
+        enum: [null, GEOREFERENCING_NOT_POSSIBLE]
+      createdOn:
+        type: string
+        format: date-time
+        readOnly: true
+
+ResponseMeta:
+  type: object
+  properties:
+    moduleVersion:
+      type: number
+      readOnly: true
+      description: API module version number.
+
+PermissionsMeta:
+      type: object
+      description: |
+        Metadata containing authorization and permissions information.
+        
+        The `permissions` array indicates which operations the authenticated user 
+        is authorized to perform on this resource. Only enabled permissions are 
+        included in the array. An empty array means no permissions are granted.
+        
+        Examples:
+        - `["create", "update", "delete"]` - Full access
+        - `["update"]` - Can only update
+        - `[]` - Read-only access
+      properties:
+        permissionsProvider:
+          type: string
+          readOnly: true
+          example: GroupAuthorizationService
+          description: The authorization service that determined these permissions
+        permissions:
+          type: array
+          readOnly: true
+          minItems: 0
+          maxItems: 3
+          items:
+            type: string
+            enum: [create, update, delete]
+          example: ["create", "update", "delete"]
+          uniqueItems: true
+          description: |
+            Array of enabled permission operations. Possible values:
+            - `create` - Authorization to create new collecting events
+            - `update` - Authorization to modify this collecting event
+            - `delete` - Authorization to delete this collecting event
+            
+            If a permission is present in the array, it is enabled.
+            If a permission is absent from the array, it is disabled.
+
+Attachment:
+  type: object
+  nullable: true
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+        required:
+          - type
+          - id
+        properties:
+          type: 
+            type: string
+            example: metadata
+          id:
+            type: string
+            format: uuid
+            description: Unique identifier metadata for the resource
+            example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f

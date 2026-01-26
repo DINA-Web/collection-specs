@@ -144,6 +144,8 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonCollectingEvent'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     NewCollectingEvent:
       type: object
@@ -154,6 +156,8 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/CommonCollectingEvent'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     CommonCollectingEvent:
       type: object
@@ -184,6 +188,11 @@ components:
             group:
               type: string
               description: The group in which the collecting event belongs to
+            collectorGroupUUid:
+              type: string
+              format: uuid
+              nullable: true
+              description: The group uuid of the collector
             dwcVerbatimCoordinates:
               type: string
               nullable: true
@@ -270,6 +279,24 @@ components:
               multipleOf: 0.01
               nullable: true
               description: Maximum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
+            expedition:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      enum: [expedition]
+                    id:
+                      type: string
+                      format: uuid
+                      description: the expedition this event is part of
+                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
             habitat:
               type: string
               nullable: true
@@ -294,6 +321,8 @@ components:
               type: string
               nullable: true
               description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
+            srcAdminLevels:
+              $ref: '#/components/schemas/SourceAdministrativeLevel'
             endEventDateTime:
               type: string
               nullable: true
@@ -302,11 +331,18 @@ components:
               type: string
               nullable: true
               description: The original textual description of the place.
+            dwcMunicipality:
+              type: string
+              nullable: true
+              description: The name of the city, town, village, or other third-level political division in which the Location occurs.
             managedAttributes:
               type: object
               description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
               additionalProperties:
                 type: string
+            managedAttributeValues:
+              type: object
+              description: The manage attribute values, map of key/value pair. Patch Strategy is SET so the entire managedAttributeValues needs to be rebmit on PATCH/PUT.
             publiclyReleasable:
               type: boolean
               nullable: true
@@ -388,68 +424,7 @@ components:
               type: string
               nullable: true
             geoReferenceAssertions:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  dwcDecimalLatitude:
-                    type: number
-                    nullable: true
-                    description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
-                  dwcDecimalLongitude:
-                    type: number
-                    nullable: true
-                    description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
-                  dwcCoordinateUncertaintyInMeters:
-                    type: number
-                    nullable: true
-                    description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
-                  dwcGeoreferencedDate:
-                    type: string
-                    format: date
-                    nullable: true
-                    description: The date on which the Location was georeferenced.
-                  georeferencedBy:
-                    type: array
-                    nullable: true
-                    description: A list of uuid who determined the georeference for the location.
-                    items:
-                      type: string
-                      format: uuid
-                  literalGeoreferencedBy:
-                    type: string
-                    nullable: true
-                    description: A name of a person, group or organization who determined the georeference for the location.
-                  dwcGeoreferenceProtocol:
-                    type: string
-                    nullable: true
-                    description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
-                  dwcGeoreferenceSources:
-                    type: string
-                    nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
-                  dwcGeoreferenceRemarks:
-                    type: string
-                    nullable: true
-                    description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
-                    minLength: 0
-                    maxLength: 1000
-                  dwcGeodeticDatum:
-                    type: string
-                    nullable: true
-                    description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
-                  isPrimary:
-                    type: boolean
-                    description: specify whether or not the georeference assertion is the primary of the colecting-event
-                  dwcGeoreferenceVerificationStatus:
-                    type: string
-                    nullable: true
-                    enum: [null, GEOREFERENCING_NOT_POSSIBLE]
-                  createdOn:
-                    type: string
-                    format: date-time
-                    readOnly: true
+              $ref: '../components/common-parameters.yml#/GeoReferenceAssertions'
             eventGeom:
               type: object
               nullable: true
@@ -484,8 +459,11 @@ components:
                         format: uuid
                         description: Unique identifier of the protocol
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            attachment:
+              $ref: '../components/common-parameters.yml#/Attachment'
             collectors:
               type: object
+              nullable: true
               properties:
                 data:
                   type: array
@@ -502,45 +480,9 @@ components:
                         type: string
                         format: uuid
                         description: Unique identifier of the collector
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            attachment:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        type: string
-                        example: metadata
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier metadata for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            expedition:
-              type: object
-              required:
-                - data
-              properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [expedition]
-                    id:
-                      type: string
-                      format: uuid
-                      description: the expedition this event is part of
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f 
+        meta:
+              $ref: '../components/common-parameters.yml#/PermissionsMeta'
     SourceAdministrativeLevel:
       type: object
       nullable: true
@@ -555,4 +497,4 @@ components:
             type: string
             description:  "on OSM it's usually the place_type (https://wiki.openstreetmap.org/wiki/Key:place) with a fallback on class:type"
           name:
-            type: string    
+            type: string   
