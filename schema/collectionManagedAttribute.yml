@@ -144,6 +144,8 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonCollectionManagedAttribute'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     NewCollectionManagedAttribute:
       type: object
@@ -154,7 +156,8 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/CommonCollectionManagedAttribute'
-
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
     CommonCollectionManagedAttribute:
       type: object
       required:
