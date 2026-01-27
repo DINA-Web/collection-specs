@@ -144,6 +144,8 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonCollection'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     NewCollection:
       type: object
@@ -154,7 +156,9 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/CommonCollection'
-
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          
     CommonCollection:
       type: object
       required:
@@ -209,6 +213,7 @@ components:
             identifiers:
               type: array
               nullable: true
+              description: external identifiers for the collection
               items:
                 type: object
                 properties:

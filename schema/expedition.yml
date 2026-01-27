@@ -84,7 +84,7 @@ paths:
         - Expedition
       summary: Update expedition
       operationId: updateExpedition
-      description: update a expedition
+      description: update an expedition
       parameters:
         - name: Id
           in: path
@@ -144,6 +144,8 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonExpedition'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     NewExpedition:
       type: object
@@ -154,6 +156,8 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/CommonExpedition'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     CommonExpedition:
       type: object
@@ -213,6 +217,9 @@ components:
                       desc:
                         type: string
                         description: the description
+            meta:
+              $ref: '../components/common-parameters.yml#/PermissionsMeta'
+              
         relationships:
           type: object
           nullable: true

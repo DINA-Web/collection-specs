@@ -416,9 +416,9 @@ PermissionsMeta:
           uniqueItems: true
           description: |
             Array of enabled permission operations. Possible values:
-            - `create` - Authorization to create new collecting events
-            - `update` - Authorization to modify this collecting event
-            - `delete` - Authorization to delete this collecting event
+            - `create` - Authorization to create new resources
+            - `update` - Authorization to modify this resource
+            - `delete` - Authorization to delete this resource
             
             If a permission is present in the array, it is enabled.
             If a permission is absent from the array, it is disabled.

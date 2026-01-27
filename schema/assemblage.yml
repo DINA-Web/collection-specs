@@ -144,7 +144,8 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonAssemblage'
-
+        meta:
+          $ref: '../components/common-schemas.yml#/ResponseMeta'
     NewAssemblage:
       type: object
       required:
@@ -154,6 +155,8 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/CommonAssemblage'
+        meta:
+          $ref: '../components/common-schemas.yml#/ResponseMeta'
 
     CommonAssemblage:
       type: object
@@ -180,12 +183,12 @@ components:
               readOnly: true
               description: date and time when the assemblage was created in ISO format
               example: 1985-04-12T23:20:50.52Z
-            group:
+            group: 
               type: string
               description: The group in which the assemblage belongs to
             managedAttributes:
               type: object
-              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
+              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT.
               additionalProperties:
                 type: string
             multilingualTitle:
@@ -225,22 +228,4 @@ components:
           nullable: true
           properties:
             attachment:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        type: string
-                        example: metadata
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier metadata for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+              $ref: '../components/common-parameters.yml#/Attachment'
