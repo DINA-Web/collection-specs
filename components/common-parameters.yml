@@ -443,3 +443,56 @@ Attachment:
             format: uuid
             description: Unique identifier metadata for the resource
             example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+
+BadRequest:
+  type: object
+  required:
+    - errors
+  properties:
+    errors:
+      type: array
+      items:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "400 BAD_REQUEST"
+          code:
+            type: string
+            example: "400"
+          title:
+            type: string
+            example: "Bad Request"
+          detail:
+            type: string
+            example: "Invalid UUID string: 019c0576-3ba6-7b64-b45"
+
+UnprocessableEntity:
+  type: object
+  required:
+    - errors
+  properties:
+    errors:
+      type: array
+      items:      
+        type: object
+        properties:
+          status:
+            type: string
+            example: "422 UNPROCESSABLE_ENTITY"
+          code:
+            type: string
+            example: "422"
+          title:
+            type: string
+            example: "Constraint violation"
+          detail:
+            type: string
+            example: "name must not be blank"
+          source:
+            type: object
+            properties:
+              pointer:
+                type: string
+                example: "name"
+

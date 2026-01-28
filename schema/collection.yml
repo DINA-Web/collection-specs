@@ -33,9 +33,25 @@ paths:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Collection'                
+                  $ref: '#/components/schemas/CollectionResponse'                
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'                
         '404':
           description: collection not found
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionNotFound'        
+        '410':
+          description: collection deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionDeleted'
     post:
       tags:
         - Collection
@@ -45,6 +61,10 @@ paths:
       responses:
         '201':
           description: collection created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionResponse'
         '422':
           description: Data integrity violation          
       requestBody:
@@ -74,11 +94,26 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/Collection'
+                $ref: '#/components/schemas/CollectionResponse'
         '400':
-          description: Not a valid uuid                
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'                
         '404':
-          description: Collection not found          
+          description: collection not found
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionNotFound'        
+        '410':
+          description: collection deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionDeleted'
+
     patch:
       tags:
         - Collection
@@ -96,8 +131,29 @@ paths:
       responses:
         '200':
           description: collection updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request         
+          content:
+              application/vnd.api+json:
+                schema:          
+                  $ref: '../components/common-parameters.yml#/BadRequest'
+        '410':
+          description: collection deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionDeleted'
+        '422':
+          description: unprocessable entity  
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/UnprocessableEntity'       
+          
       requestBody:
         content:
           application/vnd.api+json:
@@ -119,12 +175,26 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: collection marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
-          description: collection not found       
+          description: collection not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionNotFound'   
+        '410':
+          description: collection deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectionDeleted'
 components:
   schemas:
     Collection:
@@ -144,8 +214,49 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonCollection'
-        meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    CollectionNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "404"
+              title:
+                type: string
+                example: "Not Found"
+              detail:
+                type: string
+                example: "CollectionDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    CollectionDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=collection/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                example: "410 GONE"
+              title:
+                type: string
+                example: "Gone"
+              detail:
+                type: string
+                example: "CollectionDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section"
 
     NewCollection:
       type: object
@@ -154,6 +265,24 @@ components:
       properties:
         data:
           type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonCollection'
+
+    CollectionResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonCollection'
         meta:
@@ -222,6 +351,9 @@ components:
                   uri:
                     type: string
                     format: uri
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
         relationships:
           type: object
           nullable: true

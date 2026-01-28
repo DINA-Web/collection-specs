@@ -33,9 +33,25 @@ paths:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/MaterialSample'                
+                  $ref: '#/components/schemas/MaterialSampleResponse'                
+        '400':
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
-          description: material sample not found
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+        '410':
+          description: material sample deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleDeleted'
     post:
       tags:
         - Material Sample
@@ -45,6 +61,10 @@ paths:
       responses:
         '201':
           description: material sample created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleResponseWithLink'
         '422':
           description: Data integrity violation          
       requestBody:
@@ -74,11 +94,25 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/MaterialSample'
+                $ref: '#/components/schemas/MaterialSampleResponse'               
         '400':
-          description: Not a valid uuid                
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
-          description: MaterialSample not found          
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+        '410':
+          description: material sample deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleDeleted'          
     patch:
       tags:
         - Material Sample
@@ -96,8 +130,28 @@ paths:
       responses:
         '200':
           description: material sample updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
+        '404':
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+        '410':
+          description: material sample deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleDeleted' 
       requestBody:
         content:
           application/vnd.api+json:
@@ -119,12 +173,26 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: material sample marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
-          description: material sample not found       
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+        '410':
+          description: material sample deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleDeleted'        
 components:
   schemas:
     MaterialSample:
@@ -155,6 +223,103 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonMaterialSample'
 
+    MaterialSampleResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSample'
+          meta:
+            $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    MaterialSampleResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSample'
+          links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: http://dina-dev2.biodiversity.agr.gc.ca:443/${dina.apiPrefix}/material-sample/019c0600-b7dd-75db-8601-86c57232b36f"
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+          meta:
+            $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    MaterialSampleNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "404"
+              title:
+                type: string
+                example: "Not Found"
+              detail:
+                type: string
+                example: "MaterialSampleDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    MaterialSampleDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=material-sample/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                example: "410 GONE"
+              title:
+                type: string
+                example: "Gone"
+              detail:
+                type: string
+                example: "MaterialSampleDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
+
     CommonMaterialSample:
       type: object
       required:
@@ -171,11 +336,30 @@ components:
               type: number
               readOnly: true
               description: Provides optimistic locking to prevent update data from being overridden by another transaction.
+            group:
+              type: string
+              description: The group in which the material sample belongs to
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: date and time when the material sample was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+            createdBy:
+              type: string      
+              readOnly: true
+              description: authenticated user who create the material sample
             dwcCatalogNumber:
               type: string
               nullable: true
               description: An identifier (preferably unique) for the record within the data set or collection.
               example: 18
+            dwcOtherCatalogNumbers:
+              type: array
+              nullable: true
+              description: Other catalog numbers
+              items:
+                type: string
             materialSampleName: 
               type: string
               nullable: true
@@ -190,38 +374,11 @@ components:
               type: string
               enum: [WHOLE_ORGANISM, ORGANISM_PART, MIXED_ORGANISMS, MOLECULAR_SAMPLE]
               description: Type of the material sample
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the material sample
-            createdOn:              
+            preparationDate:
               type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the material sample was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            barcode:
-              type: string
-              description: barcode for the material sample
-            group:
-              type: string
-              description: The group in which the material sample belongs to
-            managedAttributes:
-              type: object
-              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
-              additionalProperties:
-                type: string
-            preparationManagedAttributes:
-              type: object
-              description: Manage attributes about the preparation, map of key/value pair. Patch Strategy is SET so the entire preparationManagedAttributes needs to be resubmitted on PATCH/PUT.
-              additionalProperties:
-                type: string
-            dwcOtherCatalogNumbers:
-              type: array
+              format: date
               nullable: true
-              description: Other catalog numbers
-              items:
-                type: string
+              description: The date on which the material sample was prepared.
             preservationType:
               type: string
               nullable: true
@@ -242,11 +399,23 @@ components:
               nullable: true
               description: Material on which the organism in the material sample is presented or grows.
               example: agar
-            preparationDate:
-              type: string
-              format: date
-              nullable: true
-              description: The date on which the material sample was prepared.
+            managedAttributes:
+              type: object
+              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
+              additionalProperties:
+                type: string
+            preparationManagedAttributes:
+              type: object
+              description: Manage attributes about the preparation, map of key/value pair. Patch Strategy is SET so the entire preparationManagedAttributes needs to be resubmitted on PATCH/PUT.
+              additionalProperties:
+                type: string
+            extensionValues:
+              type: object
+              description: "Values of material-sample related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire extensionValues needs to be resubmitted on PATCH/PUT."
+              additionalProperties:
+                type: object
+                additionalProperties:
+                    type: string
             preparationRemarks:
               type: string
               nullable: true
@@ -259,56 +428,28 @@ components:
               description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
               minLength: 0
               maxLength: 1000
-            materialSampleState:
-              type: string
+            hierarchy:
+              type: array
               nullable: true
-            stateChangedOn:
-              type: string
-              format: date
-              nullable: true
-            stateChangeRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            materialSampleRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            sourceSet:
-              type: string
-              description: "Used to group a set of records that were created together. From an import, migration or split."
-              nullable: true
-              minLength: 0
-              maxLength: 50
-            extensionValues:
-              type: object
-              description: "Values of material-sample related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire extensionValues needs to be resubmitted on PATCH/PUT."
-              additionalProperties:
+              readOnly: true
+              items:
                 type: object
-                additionalProperties:
+                properties:
+                  uuid:
                     type: string
-            restrictionFieldsExtension:
-              type: object
-              description: "Values of restriction related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT."
-              additionalProperties:
-                type: object
-                additionalProperties:
+                    format: uuid
+                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                    description: Identifier of the hierarchical object as UUID
+                  name:
                     type: string
-            restrictionRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            isRestricted:
-              type: boolean
-              nullable: false
-              description: whether or not the material sample is considered restricted
-            isBaseForSplitByType:
-              type: boolean
-              nullable: true
-              description: Whether or not the material sample will be used as a basename for split of material-sample of the same type
+                    nullable: true
+                  rank:
+                    type: number
+                    nullable: true
+                  organismPrimaryDetermination:
+                    type: array
+                    description: summary of the primary determination of the target organism or all organisms if there is no target
+                    nullable: true
             materialSampleChildren:
               type: array
               nullable: true
@@ -378,32 +519,22 @@ components:
                     type: number
                     readOnly: true
                     description: The ordinal number of the entry in the list of materialSampleChildren based on order of creation.
-            associations:
-              type: array
+            targetOrganismPrimaryScientificName:
+              type: string
+              readOnly: true
+              description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the primary determination of the target organism. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
+            targetOrganismPrimaryClassification:
+              type: object
+              readOnly: true
               nullable: true
-              items:
-                type: object
-                properties:
-                  associatedSample:
-                    type: string
-                    format: uuid
-                    description: materialSample's associated id
-                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-                  remarks:
-                    type: string
-                    description: remarks of the association
-                    minLength: 0
-                    maxLength: 1000
-                  associationType:
-                    type: string
-                    nullable: true
-                    description: type of association
-            tags:
-              type: array
-              nullable: true
-              description: tags for the material sample
-              items:
-                type: string 
+              description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
+            effectiveScientificName:
+              type: string
+              readOnly: true
+              description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the first determination found in the hierachy. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
+            barcode:
+              type: string
+              description: barcode for the material sample
             publiclyReleasable:
               type: boolean
               nullable: true
@@ -412,6 +543,29 @@ components:
               type: string
               nullable: true
               description: text description of reason why the material sample is not publicly releasable
+            tags:
+              type: array
+              nullable: true
+              description: tags for the material sample
+              items:
+                type: string 
+            materialSampleState:
+              type: string
+              nullable: true
+            materialSampleRemarks:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 1000
+            stateChangedOn:
+              type: string
+              format: date
+              nullable: true
+            stateChangeRemarks:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 1000
             hostOrganism:
               type: object
               nullable: true
@@ -459,48 +613,61 @@ components:
                         format: uuid
                         description: user's id which this scheduled action is assigned to
                         example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            hierarchy:
-              type: array
-              nullable: true
-              readOnly: true
-              items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
-                    description: Identifier of the hierarchical object as UUID
-                  name:
-                    type: string
-                    nullable: true
-                  rank:
-                    type: number
-                    nullable: true
-                  organismPrimaryDetermination:
-                    type: array
-                    description: summary of the primary determination of the target organism or all organisms if there is no target
-                    nullable: true
-            targetOrganismPrimaryClassification:
-              type: object
-              readOnly: true
-              nullable: true
-              description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
-            targetOrganismPrimaryScientificName:
-              type: string
-              readOnly: true
-              description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the primary determination of the target organism. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
-            effectiveScientificName:
-              type: string
-              readOnly: true
-              description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the first determination found in the hierachy. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
             allowDuplicateName:
               type: boolean
               nullable: false
               description: whether or not the material sample name constraint is enforced
+            restrictionFieldsExtension:
+              type: object
+              description: "Values of restriction related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT."
+              additionalProperties:
+                type: object
+                additionalProperties:
+                    type: string
+            isRestricted:
+              type: boolean
+              nullable: false
+              description: whether or not the material sample is considered restricted
+            restrictionRemarks:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 1000
+            sourceSet:
+              type: string
+              description: "Used to group a set of records that were created together. From an import, migration or split."
+              nullable: true
+              minLength: 0
+              maxLength: 50
+            isBaseForSplitByType:
+              type: boolean
+              nullable: true
+              description: Whether or not the material sample will be used as a basename for split of material-sample of the same type
+            associations:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  associatedSample:
+                    type: string
+                    format: uuid
+                    description: materialSample's associated id
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+                  remarks:
+                    type: string
+                    description: remarks of the association
+                    minLength: 0
+                    maxLength: 1000
+                  associationType:
+                    type: string
+                    nullable: true
+                    description: type of association     
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
         relationships:
           type: object
-          nullable: true
+          nullable:
           properties:
             collectingEvent:
               type: object

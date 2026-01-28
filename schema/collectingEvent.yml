@@ -33,9 +33,25 @@ paths:
               schema:
                 type: array
                 items: 
-                  $ref: '#/components/schemas/CollectingEvent'                
+                  $ref: '#/components/schemas/CollectingEventResponse'                
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
-          description: collecting event not found
+          description: collecting event not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventNotFound'
+        '410':
+          description: collecting event deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventDeleted'
     post:
       tags:
         - Collecting Event
@@ -45,8 +61,17 @@ paths:
       responses:
         '201':
           description: collecting event created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventResponse'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity  
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/UnprocessableEntity'       
+          
       requestBody:
         content:
           application/vnd.api+json:
@@ -74,11 +99,25 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/CollectingEvent'
+                $ref: '#/components/schemas/CollectingEventResponse'
         '400':
-          description: Not a valid uuid                
+          description: bad request        
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'        
         '404':
           description: CollectingEvent not found          
+          content:
+              application/vnd.api+json:
+                schema:          
+                  $ref: '#/components/schemas/CollectingEventNotFound'
+        '410':
+          description: collecting event deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventDeleted'
     patch:
       tags:
         - Collecting Event
@@ -96,8 +135,22 @@ paths:
       responses:
         '200':
           description: collecting event updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
+        '410':
+          description: collecting event deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventDeleted'
       requestBody:
         content:
           application/vnd.api+json:
@@ -119,14 +172,46 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: collecting event marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
           description: collecting event not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventNotFound'
+        '410':
+          description: collecting event deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventDeleted'
 components:
   schemas:
+    CollectingEventResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonCollectingEvent'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+    
     CollectingEvent:
       type: object
       required:
@@ -144,8 +229,6 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonCollectingEvent'
-        meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     NewCollectingEvent:
       type: object
@@ -156,8 +239,49 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/CommonCollectingEvent'
-        meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    CollectingEventNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "404"
+              title:
+                type: string
+                example: "Not Found"
+              detail:
+                type: string
+                example: "CollectingEventDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    CollectingEventDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=collecting-event/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                example: "410 GONE"
+              title:
+                type: string
+                example: "Gone"
+              detail:
+                type: string
+                example: "CollectingEventDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section"
 
     CommonCollectingEvent:
       type: object
@@ -436,6 +560,8 @@ components:
                 type: object
                 additionalProperties:
                     type: string
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
         relationships:
           type: object
           nullable: true
@@ -481,8 +607,6 @@ components:
                         format: uuid
                         description: Unique identifier of the collector
                         example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f 
-        meta:
-              $ref: '../components/common-parameters.yml#/PermissionsMeta'
     SourceAdministrativeLevel:
       type: object
       nullable: true
