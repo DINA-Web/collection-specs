@@ -25,11 +25,25 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/CollectionGeneratorResponse'
+                $ref: '#/components/schemas/CollectionGeneratorResponseWithLink'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
           description: Collection or Collection Sequence could not be found.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CollectionGeneratorNotFound'
         '422':
-          description: Data integrity violation
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -109,3 +123,84 @@ components:
                     highReservedID:
                       type: number
                       description: Highest number reserved in the sequence. Comparing this number to the lowReservedID will indicate all the ids reserved for this request.
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    CollectionGeneratorResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - type
+            - attributes
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9
+              description: The UUID of the collection to generate a sequence of ids for.
+            type:
+              enum: [collection-sequence-generator]      
+              description: The type of data being returned.
+            attributes:
+              type: object
+              properties:
+                amount:
+                  type: number
+                  minimum: 1
+                  default: 1
+                  description: The amount of ids that were reserved.
+                group:
+                  type: string
+                  description: The name of the group used for the collection.
+                result:
+                  type: object
+                  required:
+                    - lowReservedID
+                    - highReservedID
+                  properties:
+                    lowReservedID:
+                      type: number
+                      description: Lowest number reserved in the sequence.
+                    highReservedID:
+                      type: number
+                      description: Highest number reserved in the sequence. Comparing this number to the lowReservedID will indicate all the ids reserved for this request.
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: http://dina-dev2.biodiversity.agr.gc.ca:443/${dina.apiPrefix}/collection-sequence-generator/981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    CollectionGeneratorNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "CollectionSequenceGeneratorDto with ID 981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9 Not Found"

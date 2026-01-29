@@ -31,9 +31,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/MaterialSampleResponse'                
+                $ref: '#/components/schemas/MaterialSampleResponseList'                
         '400':
           description: bad request         
           content:
@@ -66,7 +64,11 @@ paths:
               schema:          
                 $ref: '#/components/schemas/MaterialSampleResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -240,8 +242,30 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonMaterialSample'
-          meta:
-            $ref: '../components/common-parameters.yml#/ResponseMeta'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    MaterialSampleResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonMaterialSample'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     MaterialSampleResponseWithLink:
       type: object
@@ -286,9 +310,11 @@ components:
             properties:
               status:
                 type: string
+                enum: ["404"]
                 example: "404"
               title:
                 type: string
+                enum: ["Not Found"]
                 example: "Not Found"
               detail:
                 type: string
@@ -311,9 +337,11 @@ components:
                     example: "/audit-snapshot?filter[instanceId]=material-sample/019c0570-214e-7a7b-a22e-60225dc69fee"
               status:
                 type: string
+                enum: ["410 GONE"]
                 example: "410 GONE"
               title:
                 type: string
+                enum: ["Gone"]
                 example: "Gone"
               detail:
                 type: string
@@ -667,7 +695,7 @@ components:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
         relationships:
           type: object
-          nullable:
+          nullable: true
           properties:
             collectingEvent:
               type: object

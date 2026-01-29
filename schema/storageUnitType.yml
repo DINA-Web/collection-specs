@@ -31,11 +31,25 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/StorageUnitType'                
+                $ref: '#/components/schemas/StorageUnitTypeResponseList'
+        '400':
+          description: Bad Request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
           description: storage unit type not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeNotFound'
+        '410':
+          description: Storage unit type deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeDeleted'
     post:
       tags:
         - Storage Unit Type
@@ -45,8 +59,16 @@ paths:
       responses:
         '201':
           description: storage unit type created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: Data integrity violation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -73,12 +95,26 @@ paths:
           description: successful operation
           content:
             application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/StorageUnitType'
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeResponse'
         '400':
-          description: Not a valid uuid                
+          description: Not a valid uuid
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
-          description: StorageUnitType not found          
+          description: StorageUnitType not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeNotFound'
+        '410':
+          description: Storage unit type deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeDeleted'          
     patch:
       tags:
         - Storage Unit Type
@@ -96,8 +132,28 @@ paths:
       responses:
         '200':
           description: storage unit type updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeResponse'
         '400':
           description: invalid input, object invalid
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/BadRequest'
+        '410':
+          description: Storage unit type deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeDeleted'
+        '422':
+          description: Data integrity violation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -119,14 +175,152 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: storage unit type marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: Not a valid uuid
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-parameters.yml#/BadRequest'
         '404':
-          description: storage unit type not found       
+          description: storage unit type not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeNotFound'
+        '410':
+          description: Storage unit type deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitTypeDeleted'       
 components:
   schemas:
+    StorageUnitTypeResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitType'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    StorageUnitTypeResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonStorageUnitType'
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    StorageUnitTypeResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitType'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              example: /storage-unit-type/d290f1ee-6c54-4b01-90e6-d701748f0851
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
+
+    StorageUnitTypeNotFound:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "Storage unit type with ID {id} not found"
+
+    StorageUnitTypeDeleted:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "StorageUnitTypeDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section."
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    example: "/audit-snapshot?filter[instanceId]=storage-unit-type/{id}"
+
     StorageUnitType:
       type: object
       required:
