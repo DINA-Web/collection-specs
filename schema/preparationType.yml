@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonPreparationType'
+            - $ref: '#/components/schemas/CommonPreparationTypeResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonPreparationType'
+              - $ref: '#/components/schemas/CommonPreparationTypeResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonPreparationType'
+            - $ref: '#/components/schemas/CommonPreparationTypeResponse'
         links:
             type: object
             properties:
@@ -357,38 +357,55 @@ components:
           enum: [preparation-type]      
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the preparation type
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the preparation type
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the preparation type was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the preparation type belongs to
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
+          $ref: '#/components/schemas/CommonPreparationTypeAttributes'
+
+      CommonPreparationTypeResponse:
+        type: object
+        required:
+          - type
+          - attributes       
+        properties:            
+          type:
+            enum: [preparation-type]      
+            description: The type of data being returned.
+          attributes:
+            $ref: '#/components/schemas/CommonPreparationTypeAttributes'
+          meta:
+            $ref: '../components/common-parameters.yml#/PermissionsMeta'
+
+      CommonPreparationTypeAttributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the preparation type
+          createdBy:
+            type: string      
+            readOnly: true
+            description: authenticated user who create the preparation type
+          createdOn:              
+            type: string
+            format: date-time                            
+            readOnly: true
+            description: date and time when the preparation type was created in ISO format
+            example: 1985-04-12T23:20:50.52Z
+          group:
+            type: string
+            description: The group in which the preparation type belongs to
+          multilingualDescription:
+            type: object
+            nullable: true
+            properties:
+              descriptions:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    lang:
+                      type: string
+                      description: language of the description
+                    desc:
+                      type: string
+                      description: the description
 

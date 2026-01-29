@@ -214,7 +214,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonExpedition'
+            - $ref: '#/components/schemas/CommonExpeditionResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -236,7 +236,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonExpedition'
+              - $ref: '#/components/schemas/CommonExpeditionResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -256,7 +256,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonExpedition'
+            - $ref: '#/components/schemas/CommonExpeditionResponse'
         links:
             type: object
             properties:
@@ -348,7 +348,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonExpedition'
 
-    CommonExpedition:
+    CommonExpeditionResponse:
       type: object
       required:
         - type
@@ -358,79 +358,97 @@ components:
           enum: [expedition]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the expedition
-            createdBy:
-              type: string
-              readOnly: true
-              description: authenticated user who create the expedition
-            createdOn:
-              type: string
-              format: date-time
-              readOnly: true
-              description: date and time when the expedition was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the expedition belongs to
-            startDate:
-              type: string
-              format: date
-              nullable: true
-              description: The start date of the expedition
-            endDate:
-              type: string
-              format: date
-              nullable: true
-              description: The end date of the expedition
-            geographicContext:
-              type: string
-              nullable: true
-              description: Geographic context of the expedition, e.g., which country or region where crossed during the expedition.
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
-            meta:
-              $ref: '../components/common-parameters.yml#/PermissionsMeta'
-              
+          $ref: '#/components/schemas/ExpeditionAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
         relationships:
-          type: object
-          nullable: true
-          properties:
-            participants:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        type: string
-                        example: person
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique agent identifier for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+          $ref: '#/components/schemas/ExpeditionRelationships'
+      
+      CommonExpedition:
+        type: object
+        required:
+          - type
+          - attributes
+        properties:
+          type:
+            enum: [expedition]
+            description: The type of data being returned.
+          attributes:
+            $ref: '#/components/schemas/ExpeditionAttributes'
+          relationships:
+            $ref: '#/components/schemas/ExpeditionRelationships'
 
+      ExpeditionAttributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the expedition
+          createdBy:
+            type: string
+            readOnly: true
+            description: authenticated user who create the expedition
+          createdOn:
+            type: string
+            format: date-time
+            readOnly: true
+            description: date and time when the expedition was created in ISO format
+            example: 1985-04-12T23:20:50.52Z
+          group:
+            type: string
+            description: The group in which the expedition belongs to
+          startDate:
+            type: string
+            format: date
+            nullable: true
+            description: The start date of the expedition
+          endDate:
+            type: string
+            format: date
+            nullable: true
+            description: The end date of the expedition
+          geographicContext:
+            type: string
+            nullable: true
+            description: Geographic context of the expedition, e.g., which country or region where crossed during the expedition.
+          multilingualDescription:
+            type: object
+            nullable: true
+            properties:
+              descriptions:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    lang:
+                      type: string
+                      description: language of the description
+                    desc:
+                      type: string
+                      description: the description
+
+    ExpeditionRelationships:
+        type: object
+        nullable: true
+        properties:
+          participants:
+            type: object
+            nullable: true
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      type: string
+                      example: person
+                    id:
+                      type: string
+                      format: uuid
+                      description: Unique agent identifier for the resource
+                      example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f

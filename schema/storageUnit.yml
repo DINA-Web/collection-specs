@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnit'
+            - $ref: '#/components/schemas/CommonStorageUnitResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonStorageUnit'
+              - $ref: '#/components/schemas/CommonStorageUnitResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnit'
+            - $ref: '#/components/schemas/CommonStorageUnitResponse'
         links:
             type: object
             properties:
@@ -357,93 +357,115 @@ components:
           enum: [storage-unit]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the storage unit
-            isGeneric:
-              type: boolean
-              description: Is the storage unit representing a generic instance of the storage unit type?
-            createdOn:
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the storage unit was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the storage unit
-            group:
-              type: string
-              description: The group in which the storage unit belongs
-            barcode:
-              type: string
-              description: Text representation originating from scanning with a barcode gun
-            storageUnitChildren:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
-                    description: Identifier of the storageUnitChildren object as a UUID
-                  id:
-                    type: string
-                    format: uuid
-                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
-                  createdOn:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                  createdBy:
-                    type: string
-                    readOnly: true
-                  group:
-                    type: string
-                  name:
-                    type: string
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
         relationships:
-          type: object
+          $ref: '#/components/schemas/CommonStorageUnitRelationships'
+    
+    CommonStorageUnitResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [storage-unit]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/CommonStorageUnitRelationships'
+
+    CommonStorageUnitAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the storage unit
+        isGeneric:
+          type: boolean
+          description: Is the storage unit representing a generic instance of the storage unit type?
+        createdOn:
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the storage unit was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the storage unit
+        group:
+          type: string
+          description: The group in which the storage unit belongs
+        barcode:
+          type: string
+          description: Text representation originating from scanning with a barcode gun
+        storageUnitChildren:
+          type: array
           nullable: true
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the storageUnitChildren object as a UUID
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              createdOn:
+                type: string
+                format: date-time
+                readOnly: true
+              createdBy:
+                type: string
+                readOnly: true
+              group:
+                type: string
+              name:
+                type: string
+
+    CommonStorageUnitRelationships:
+      type: object
+      nullable: true
+      properties:
+        parentStorageUnit:
+          type: object
+          required:
+            - data
           properties:
-            parentStorageUnit:
+            data:
               type: object
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnit's parentStorageUnit id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            storageUnitType:
+                type:
+                  enum: [storage-unit]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnit's parentStorageUnit id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        storageUnitType:
+          type: object
+          required:
+            - data
+          properties:
+            data:
               type: object
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit-type]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnit's type id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                type:
+                  enum: [storage-unit-type]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnit's type id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c

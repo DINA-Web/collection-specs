@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonProject'
+            - $ref: '#/components/schemas/CommonProjectResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonProject'
+              - $ref: '#/components/schemas/CommonProjectResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonProject'
+            - $ref: '#/components/schemas/CommonProjectResponse'
         links:
             type: object
             properties:
@@ -357,100 +357,122 @@ components:
           enum: [project]      
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the project
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the project
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the project was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the project belongs to
-            startDate:
-              type: string
-              format: date
-              nullable: true
-              description: The start date of the project
-            endDate:
-              type: string
-              format: date
-              nullable: true
-              description: The end date of the project
-            status:
-              type: string
-              nullable: true
-              description: the status of the project
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
-            contributors:
-              type: array
-              items:
-                type: object
-                properties:
-                  agent:
-                    type: string
-                    format: uuid
-                    description: agent uuid (external relationship)
-                  roles:
-                    type: array
-                    description: role(s) of the agent within the project
-                    items:
+          $ref: '#/components/schemas/CommonProjectAttributes'
+        relationships:
+          $ref: '#/components/schemas/CommonProjectRelationships'
+
+    CommonProjectResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [project]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonProjectAttributes'
+        meta: 
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/CommonProjectRelationships'
+
+      CommonProjectAttributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: The name of the project
+          createdBy:
+            type: string      
+            readOnly: true
+            description: authenticated user who create the project
+          createdOn:              
+            type: string
+            format: date-time                            
+            readOnly: true
+            description: date and time when the project was created in ISO format
+            example: 1985-04-12T23:20:50.52Z
+          group:
+            type: string
+            description: The group in which the project belongs to
+          startDate:
+            type: string
+            format: date
+            nullable: true
+            description: The start date of the project
+          endDate:
+            type: string
+            format: date
+            nullable: true
+            description: The end date of the project
+          status:
+            type: string
+            nullable: true
+            description: the status of the project
+          multilingualDescription:
+            type: object
+            nullable: true
+            properties:
+              descriptions:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    lang:
                       type: string
-                      example: project_leader
-                  remarks:
+                      description: language of the description
+                    desc:
+                      type: string
+                      description: the description
+          contributors:
+            type: array
+            items:
+              type: object
+              properties:
+                agent:
+                  type: string
+                  format: uuid
+                  description: agent uuid (external relationship)
+                roles:
+                  type: array
+                  description: role(s) of the agent within the project
+                  items:
                     type: string
-                    nullable: true
-            extensionValues:
+                    example: project_leader
+                remarks:
+                  type: string
+                  nullable: true
+          extensionValues:
+            type: object
+            additionalProperties:
               type: object
               additionalProperties:
-                type: object
-                additionalProperties:
-                    type: string
-        relationships:
-          type: object
-          nullable: true
-          properties:
-            attachment:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        type: string
-                        example: metadata
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier metadata for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+                  type: string
+        
+      CommonProjectRelationships:
+        type: object
+        nullable: true
+        properties:
+          attachment:
+            type: object
+            nullable: true
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type: 
+                      type: string
+                      example: metadata
+                    id:
+                      type: string
+                      format: uuid
+                      description: Unique identifier metadata for the resource
+                      example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
 

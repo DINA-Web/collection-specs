@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonInstitution'
+            - $ref: '#/components/schemas/CommonInstitutionResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonInstitution'
+              - $ref: '#/components/schemas/CommonInstitutionResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonInstitution'
+            - $ref: '#/components/schemas/CommonInstitutionResponse'
         links:
             type: object
             properties:
@@ -357,61 +357,78 @@ components:
           enum: [institution]      
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonInstitutionAttributes'
+
+    CommonInstitutionResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [institution]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonInstitutionAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+
+    CommonInstitutionAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the institution
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the institution
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the institution was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        multilingualDescription:
           type: object
+          nullable: true
           properties:
-            name:
-              type: string
-              description: The name of the institution
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the institution
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the institution was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
-            webpage:
-              type: string
-              format: uri
-              nullable: true
-              description: The webpage of the institution
-            address:
-              type: string   
-              nullable: true   
-              description: The physical address of the institution
-            remarks:              
-              type: string
-              nullable: true
-              description: remarks regarding the institution
-              minLength: 0
-              maxLength: 1000
-            identifiers:
+            descriptions:
               type: array
               nullable: true
               items:
                 type: object
                 properties:
-                  type:
-                    enum: [GRSCICOLL]
-                  uri:
+                  lang:
                     type: string
-                    format: uri
+                    description: language of the description
+                  desc:
+                    type: string
+                    description: the description
+        webpage:
+          type: string
+          format: uri
+          nullable: true
+          description: The webpage of the institution
+        address:
+          type: string   
+          nullable: true   
+          description: The physical address of the institution
+        remarks:              
+          type: string
+          nullable: true
+          description: remarks regarding the institution
+          minLength: 0
+          maxLength: 1000
+        identifiers:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              type:
+                enum: [GRSCICOLL]
+              uri:
+                type: string
+                format: uri
 

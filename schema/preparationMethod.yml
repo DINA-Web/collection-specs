@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonPreparationMethod'
+            - $ref: '#/components/schemas/CommonPreparationMethodResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonPreparationMethod'
+              - $ref: '#/components/schemas/CommonPreparationMethodResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonPreparationMethod'
+            - $ref: '#/components/schemas/CommonPreparationMethodResponse'
         links:
             type: object
             properties:
@@ -357,37 +357,54 @@ components:
           enum: [preparation-method]
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonPreparationMethodAttributes'
+    
+    CommonPreparationMethodResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [preparation-method]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonPreparationMethodAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+
+    CommonPreparationMethodAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the preparation method
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the preparation method
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the preparation method was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group:
+          type: string
+          description: The group in which the preparation method belongs to
+        multilingualDescription:
           type: object
+          nullable: true
           properties:
-            name:
-              type: string
-              description: The name of the preparation method
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the preparation method
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the preparation method was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the preparation method belongs to
-            multilingualDescription:
-              type: object
+            descriptions:
+              type: array
               nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
+              items:
+                type: object
+                properties:
+                  lang:
+                    type: string
+                    description: language of the description
+                  desc:
+                    type: string
+                    description: the description

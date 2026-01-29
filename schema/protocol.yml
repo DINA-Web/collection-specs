@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonProtocol'
+            - $ref: '#/components/schemas/CommonProtocolResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonProtocol'
+              - $ref: '#/components/schemas/CommonProtocolResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonProtocol'
+            - $ref: '#/components/schemas/CommonProtocolResponse'
         links:
             type: object
             properties:
@@ -357,93 +357,114 @@ components:
           enum: [protocol]      
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonProtocolAttributes'
+        relationships:
+          $ref: '#/components/schemas/CommonProtocolRelationships'
+
+    CommonProtocolResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [protocol]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonProtocolAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/CommonProtocolRelationships'
+
+    CommonProtocolAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the protocol
+        protocolType:
+          type: string
+          description: Type of the protocol. Should match vocabulary.
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the protocol
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the protocol was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group:
+          type: string
+          description: The group in which the protocol belongs to
+        multilingualDescription:
           type: object
+          nullable: true
           properties:
-            name:
-              type: string
-              description: The name of the protocol
-            protocolType:
-              type: string
-              description: Type of the protocol. Should match vocabulary.
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the protocol
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the protocol was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the protocol belongs to
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
-            protocolData:
+            descriptions:
               type: array
               nullable: true
               items:
                 type: object
                 properties:
-                  key:
+                  lang:
                     type: string
-                    nullable: false
-                    description: Should match vocabulary when is vocabularyBased
-                  vocabularyBased:
-                    type: boolean
-                    nullable: false
-                  protocolDataElement:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        elementType:
-                          type: string
-                          nullable: false
-                        value:
-                          type: string
-                          nullable: false
-                        vocabularyBased:
-                          type: boolean
-                          nullable: false
-                        unit:
-                          type: string
-                          nullable: true
-        relationships:
+                    description: language of the description
+                  desc:
+                    type: string
+                    description: the description
+        protocolData:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                nullable: false
+                description: Should match vocabulary when is vocabularyBased
+              vocabularyBased:
+                type: boolean
+                nullable: false
+              protocolDataElement:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    elementType:
+                      type: string
+                      nullable: false
+                    value:
+                      type: string
+                      nullable: false
+                    vocabularyBased:
+                      type: boolean
+                      nullable: false
+                    unit:
+                      type: string
+                      nullable: true
+    CommonProtocolRelationships:
+      type: object
+      nullable: true
+      properties:
+        attachments:
           type: object
           nullable: true
           properties:
-            attachments:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [metadata]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier metadata for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                properties:
+                  type: 
+                    enum: [metadata]
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier metadata for the resource
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f

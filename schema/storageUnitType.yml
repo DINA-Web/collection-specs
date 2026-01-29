@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnitType'
+            - $ref: '#/components/schemas/CommonStorageUnitTypeResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonStorageUnitType'
+              - $ref: '#/components/schemas/CommonStorageUnitTypeResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnitType'
+            - $ref: '#/components/schemas/CommonStorageUnitTypeResponse'
         links:
           type: object
           properties:
@@ -359,38 +359,55 @@ components:
           enum: [storage-unit-type]      
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonStorageUnitTypeAttributes'
+    
+    CommonStorageUnitTypeResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [storage-unit-type]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonStorageUnitTypeAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+
+    CommonStorageUnitTypeAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the storage unit type
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the storage unit type
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the storage unit type was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group:
+          type: string
+          description: The group in which the storage unit type belongs to
+        isInseperable:
+          type: boolean
+          description:  Indicates that the content can't be separated without doing a new preparation
+        gridLayoutDefinition:
           type: object
+          nullable: true
+          description: Optional definition of storage type's grid layout (when applicable)
           properties:
-            name:
+            numberOfRows:
+              type: integer
+              minimum: 1
+            numberOfColumns:
+              type: integer
+              minimum: 1
+            fillDirection:
               type: string
-              description: The name of the storage unit type
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the storage unit type
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the storage unit type was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the storage unit type belongs to
-            isInseperable:
-              type: boolean
-              description:  Indicates that the content can't be separated without doing a new preparation
-            gridLayoutDefinition:
-              type: object
-              nullable: true
-              description: Optional definition of storage type's grid layout (when applicable)
-              properties:
-                numberOfRows:
-                  type: integer
-                  minimum: 1
-                numberOfColumns:
-                  type: integer
-                  minimum: 1
-                fillDirection:
-                  type: string
-                  enum: [BY_ROW, BY_COLUMN]
+              enum: [BY_ROW, BY_COLUMN]

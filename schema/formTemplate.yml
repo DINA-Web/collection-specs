@@ -211,7 +211,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonFormTemplate'
+            - $ref: '#/components/schemas/CommonFormTemplateResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -233,7 +233,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonFormTemplate'
+              - $ref: '#/components/schemas/CommonFormTemplateResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -253,7 +253,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonFormTemplate'
+            - $ref: '#/components/schemas/CommonFormTemplateResponse'
         links:
             type: object
             properties:
@@ -355,34 +355,51 @@ components:
           enum: [form-template]
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonFormTemplateAttributes'
+
+    CommonFormTemplateResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:
+        type:
+          enum: [form-template]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonFormTemplateAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+
+    CommonFormTemplateAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the Form Template
+        group:
+          type: string
+          description: The group in which the Form Template belongs to
+        restrictToCreatedBy:
+          type: boolean
+          description: Is the Form Template restricted to the user represented by createdBY
+        viewConfiguration:
           type: object
-          properties:
-            name:
-              type: string
-              description: The name of the Form Template
-            group:
-              type: string
-              description: The group in which the Form Template belongs to
-            restrictToCreatedBy:
-              type: boolean
-              description: Is the Form Template restricted to the user represented by createdBY
-            viewConfiguration:
-              type: object
-              description: Configuration object of the Form Template
-            components:
-              type: array
-              items:
-                type: object
-              nullable: true
-              description: List of components of the FormTemplate
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the Form Template
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the Form Template was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
+          description: Configuration object of the Form Template
+        components:
+          type: array
+          items:
+            type: object
+          nullable: true
+          description: List of components of the FormTemplate
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the Form Template
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the Form Template was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
 

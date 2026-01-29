@@ -213,7 +213,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnitUsage'
+            - $ref: '#/components/schemas/CommonStorageUnitUsageResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -235,7 +235,7 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonStorageUnitUsage'
+              - $ref: '#/components/schemas/CommonStorageUnitUsageResponse'
         meta:
           $ref: '../components/common-parameters.yml#/ResponseMeta'
 
@@ -255,7 +255,7 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonStorageUnitUsage'
+            - $ref: '#/components/schemas/CommonStorageUnitUsageResponse'
         links:
           type: object
           properties:
@@ -359,77 +359,99 @@ components:
           enum: [storage-unit-usage]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            usageType:
-              type: string
-              description: The type of the resource using the storage-unit-usage
-              example: material-sample
-            wellRow:
-              type: string
-              description: The row location in the storage unit. Using a letter, starting at A.
-              example: A
-            wellColumn:
-              type: number
-              description: The column location in the storage unit. Using a number, starting at 1.
-              example: 7
-            cellNumber:
-              type: integer
-              description: The calculated cell number based on the storage-unit-type dimension
-              readOnly: true
-            storageUnitName:
-              type: string
-              description: The calculated storageUnitName
-              readOnly: true
-            createdOn:
-              type: string
-              format: date-time
-              readOnly: true
-              description: date and time when the storage unit was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            createdBy:
-              type: string
-              readOnly: true
-              description: authenticated user who create the storage unit usage
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
         relationships:
+          $ref: '#/components/schemas/CommonStorageUnitUsageRelationships'
+
+    CommonStorageUnitUsageResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [storage-unit-usage]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
+        meta:
+          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/CommonStorageUnitUsageRelationships'
+    
+    CommonStorageUnitAttributes:
+      type: object
+      properties:
+        usageType:
+          type: string
+          description: The type of the resource using the storage-unit-usage
+          example: material-sample
+        wellRow:
+          type: string
+          description: The row location in the storage unit. Using a letter, starting at A.
+          example: A
+        wellColumn:
+          type: number
+          description: The column location in the storage unit. Using a number, starting at 1.
+          example: 7
+        cellNumber:
+          type: integer
+          description: The calculated cell number based on the storage-unit-type dimension
+          readOnly: true
+        storageUnitName:
+          type: string
+          description: The calculated storageUnitName
+          readOnly: true
+        createdOn:
+          type: string
+          format: date-time
+          readOnly: true
+          description: date and time when the storage unit was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        createdBy:
+          type: string
+          readOnly: true
+          description: authenticated user who create the storage unit usage
+
+    CommonStorageUnitUsageRelationships:
+      type: object
+      nullable: false
+      properties:
+        storageUnit:
           type: object
-          nullable: false
+          description:  Used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnitType should not be used.
+          required:
+            - data
           properties:
-            storageUnit:
+            data:
               type: object
-              description:  Used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnitType should not be used.
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnit's id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            storageUnitType:
+                type:
+                  enum: [storage-unit]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnit's id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        storageUnitType:
+          type: object
+          description: Can be used if no specific storageUnit is used. Will be used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnit should not be used.
+          required:
+            - data
+          properties:
+            data:
               type: object
-              description: Can be used if no specific storageUnit is used. Will be used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnit should not be used.
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit-type]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnitType's id
-                      example: 01903c04-036f-7a54-9c44-3df6091fdcc6
+                type:
+                  enum: [storage-unit-type]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnitType's id
+                  example: 01903c04-036f-7a54-9c44-3df6091fdcc6
