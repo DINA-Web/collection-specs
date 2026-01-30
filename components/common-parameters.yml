@@ -385,6 +385,18 @@ ResponseMeta:
       readOnly: true
       description: API module version number.
 
+ResponseMetaWithResourceCount:
+  type: object
+  properties:
+    moduleVersion:
+      type: number
+      readOnly: true
+      description: API module version number.
+    totalResourceCount:
+      type: integer
+      readOnly: true
+      description: Total number of resources available for the given query (ignoring pagination).
+
 PermissionsMeta:
       type: object
       description: |

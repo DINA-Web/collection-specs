@@ -188,13 +188,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/ProjectNotFound'
-        '410':
-          description: project deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/ProjectDeleted'       
+                $ref: '#/components/schemas/ProjectNotFound'      
 components:
   schemas:
     ProjectResponse:
@@ -262,7 +256,7 @@ components:
               self:
                 type: string
                 format: url
-                example: http://dina-dev2.biodiversity.agr.gc.ca:443/${dina.apiPrefix}/project/019c0600-b7dd-75db-8601-86c57232b36f
+                example: ${dina.apiPrefix}/project/019c0600-b7dd-75db-8601-86c57232b36f
               meta:
                 type: object
                 properties:
@@ -379,6 +373,9 @@ components:
 
     CommonProjectAttributes:
       type: object
+      required:
+        - name
+        - group
       properties:
         name:
           type: string

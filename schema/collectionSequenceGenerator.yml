@@ -175,7 +175,7 @@ components:
               self:
                 type: string
                 format: url
-                example: http://dina-dev2.biodiversity.agr.gc.ca:443/${dina.apiPrefix}/collection-sequence-generator/981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9
+                example: ${dina.apiPrefix}/collection-sequence-generator/981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9
               meta:
                 type: object
                 properties:

@@ -188,13 +188,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/ProtocolNotFound'
-        '410':
-          description: protocol deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/ProtocolDeleted'       
+                $ref: '#/components/schemas/ProtocolNotFound'    
 components:
   schemas:
     ProtocolResponse:
@@ -262,7 +256,7 @@ components:
               self:
                 type: string
                 format: url
-                example: http://dina-dev2.biodiversity.agr.gc.ca:443/${dina.apiPrefix}/protocol/019c0600-b7dd-75db-8601-86c57232b36f
+                example: ${dina.apiPrefix}/protocol/019c0600-b7dd-75db-8601-86c57232b36f
               meta:
                 type: object
                 properties:

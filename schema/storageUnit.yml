@@ -189,12 +189,7 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/StorageUnitNotFound'
-        '410':
-          description: storage unit deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/StorageUnitDeleted'
+        
 components:
   schemas:
     StorageUnitResponse:
@@ -237,7 +232,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonStorageUnitResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-parameters.yml#/ResponseMetaWithResourceCount'
 
     StorageUnitResponseWithLink:
       type: object
@@ -262,7 +257,7 @@ components:
               self:
                 type: string
                 format: url
-                example: http://dina-dev2.biodiversity.agr.gc.ca:443/${dina.apiPrefix}/storage-unit/019c0600-b7dd-75db-8601-86c57232b36f
+                example: http://dina.local/${dina.apiPrefix}/storage-unit/019c0fac-43df-746b-826c-730f3e7d46ee
               meta:
                 type: object
                 properties:
@@ -379,6 +374,10 @@ components:
 
     CommonStorageUnitAttributes:
       type: object
+      required:
+        - name
+        - isGeneric
+        - group
       properties:
         name:
           type: string

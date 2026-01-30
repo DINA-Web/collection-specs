@@ -189,12 +189,7 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/StorageUnitTypeNotFound'
-        '410':
-          description: Storage unit type deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/StorageUnitTypeDeleted'       
+      
 components:
   schemas:
     StorageUnitTypeResponse:
@@ -237,7 +232,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonStorageUnitTypeResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-parameters.yml#/ResponseMetaWithResourceCount'
 
     StorageUnitTypeResponseWithLink:
       type: object

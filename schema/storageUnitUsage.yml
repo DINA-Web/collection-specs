@@ -189,12 +189,7 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/StorageUnitUsageNotFound'
-        '410':
-          description: Storage unit usage deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/StorageUnitUsageDeleted'
+        
 components:
   schemas:
     StorageUnitUsageResponse:
