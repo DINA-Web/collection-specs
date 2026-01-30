@@ -191,12 +191,7 @@ paths:
             application/vnd.api+json:
               schema:          
                 $ref: '#/components/schemas/CollectionNotFound'   
-        '410':
-          description: collection deleted
-          content:
-            application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/CollectionDeleted'
+
 components:
   schemas:
     Collection:

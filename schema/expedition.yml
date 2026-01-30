@@ -190,12 +190,6 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/ExpeditionNotFound'
-        '410':
-          description: expedition deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/ExpeditionDeleted'
 components:
   schemas:
     ExpeditionResponse:
@@ -263,7 +257,7 @@ components:
               self:
                 type: string
                 format: url
-                example: ${dina.apiPrefix}/expedition/019c0600-b7dd-75db-8601-86c57232b36f
+                example: ${dina.apiPrefix}/collection-method/019c0600-b7dd-75db-8601-86c57232b36f
               meta:
                 type: object
                 properties:

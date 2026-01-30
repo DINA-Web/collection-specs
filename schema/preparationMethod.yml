@@ -188,13 +188,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/PreparationMethodNotFound'
-        '410':
-          description: preparation method deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/PreparationMethodDeleted'       
+                $ref: '#/components/schemas/PreparationMethodNotFound'      
 components:
   schemas:
     PreparationMethodResponse:

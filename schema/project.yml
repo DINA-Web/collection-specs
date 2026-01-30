@@ -373,9 +373,6 @@ components:
 
     CommonProjectAttributes:
       type: object
-      required:
-        - name
-        - group
       properties:
         name:
           type: string

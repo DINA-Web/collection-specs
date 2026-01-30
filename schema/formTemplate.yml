@@ -187,12 +187,6 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/FormTemplateNotFound'
-        '410':
-          description: Form Template deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/FormTemplateDeleted'
 components:
   schemas:
     FormTemplateResponse:

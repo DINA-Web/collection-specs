@@ -189,12 +189,7 @@ paths:
             application/vnd.api+json:
               schema:          
                 $ref: '#/components/schemas/MaterialSampleNotFound'   
-        '410':
-          description: material sample deleted
-          content:
-            application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/MaterialSampleDeleted'        
+ 
 components:
   schemas:
     MaterialSample:

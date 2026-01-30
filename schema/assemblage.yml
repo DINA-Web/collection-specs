@@ -171,12 +171,7 @@ paths:
             application/vnd.api+json:
               schema:          
                 $ref: '#/components/schemas/AssemblageNotFound'
-        '410':
-          description: Assemblage deleted       
-          content:
-            application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/AssemblageDeleted'
+
 
 components:
   schemas:

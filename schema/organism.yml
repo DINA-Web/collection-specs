@@ -188,13 +188,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/OrganismNotFound'
-        '410':
-          description: organism deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/OrganismDeleted'       
+                $ref: '#/components/schemas/OrganismNotFound'    
 components:
   schemas:
     OrganismResponse:
@@ -379,7 +373,7 @@ components:
         createdBy:
           type: string      
           readOnly: true
-          description: authenticated user who create the organism
+          description: authenticated user who created the organism
         createdOn:              
           type: string
           format: date-time                            

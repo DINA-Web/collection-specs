@@ -189,12 +189,7 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/InstitutionNotFound'
-        '410':
-          description: institution deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/InstitutionDeleted'       
+                       
 components:
   schemas:
     InstitutionResponse:

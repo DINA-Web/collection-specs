@@ -184,12 +184,7 @@ paths:
             application/vnd.api+json:
               schema:          
                 $ref: '#/components/schemas/CollectingEventNotFound'
-        '410':
-          description: collecting event deleted
-          content:
-            application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/CollectingEventDeleted'
+
 components:
   schemas:
     CollectingEventResponse:
