@@ -284,21 +284,21 @@ components:
               description: Identifier of the object as UUID
           allOf:
             - $ref: '#/components/schemas/CommonMaterialSampleResponse'
-          links:
-            type: object
-            properties:
-              self:
-                type: string
-                format: url
-                example: ${dina.apiPrefix}/material-sample/019c0600-b7dd-75db-8601-86c57232b36f"
-              meta:
-                type: object
-                properties:
-                  isTemplated:
-                    type: boolean
-                    example: true
-          meta:
-            $ref: '../components/common-parameters.yml#/ResponseMeta'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              format: url
+              example: ${dina.apiPrefix}/material-sample/019c0600-b7dd-75db-8601-86c57232b36f"
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
+        meta:
+          $ref: '../components/common-parameters.yml#/ResponseMeta'
 
     MaterialSampleNotFound:
       type: object
