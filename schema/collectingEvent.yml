@@ -478,23 +478,8 @@ components:
           description: Maximum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
         expedition:
           nullable: true
-          type: object
-          required:
-            - data
-          properties:
-            data:
-              type: object
-              required:
-                - type
-                - id
-              properties:
-                type:
-                  enum: [expedition]
-                id:
-                  type: string
-                  format: uuid
-                  description: the expedition this event is part of
-                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+          allOf:
+            - $ref: '../components/common-parameters.yml#/ExpeditionRelationship'
         habitat:
           type: string
           nullable: true
@@ -520,7 +505,9 @@ components:
           nullable: true
           description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
         srcAdminLevels:
-          $ref: '#/components/schemas/SourceAdministrativeLevel'
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/SourceAdministrativeLevel'
         endEventDateTime:
           type: string
           nullable: true
@@ -543,6 +530,8 @@ components:
           nullable: true
           type: object
           description: The manage attribute values, map of key/value pair. Patch Strategy is SET so the entire managedAttributeValues needs to be rebmit on PATCH/PUT.
+          additionalProperties:
+            type: string
         publiclyReleasable:
           type: boolean
           nullable: true
@@ -569,14 +558,17 @@ components:
               nullable: true
               description: input a customGeographicPlace OR a selectedGeographicPlace but not both
             selectedGeographicPlace:
-              $ref: '#/components/schemas/SourceAdministrativeLevel'
+              allOf:
+                - $ref: '#/components/schemas/SourceAdministrativeLevel'
             higherGeographicPlaces:
               nullable: true
               type: array
               items:
-                $ref: '#/components/schemas/SourceAdministrativeLevel'
+                allOf:
+                  - $ref: '#/components/schemas/SourceAdministrativeLevel'
             stateProvince:
-              $ref: '#/components/schemas/SourceAdministrativeLevel'
+              allOf:
+                - $ref: '#/components/schemas/SourceAdministrativeLevel'
             country:
               type: object
               properties:
