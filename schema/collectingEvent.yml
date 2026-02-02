@@ -360,9 +360,13 @@ components:
           enum: [collecting-event]      
           description: The type of data being returned.
         attributes:
-          $ref: '#/components/schemas/CollectingEventAttributes'
+          allOf:
+            - $ref: '#/components/schemas/CollectingEventAttributes'
+          
         relationships:
-          $ref: '#/components/schemas/CollectingEventRelationships'
+          allOf:
+            - $ref: '#/components/schemas/CollectingEventRelationships'
+          
 
     CollectingEventAttributes:
       type: object
