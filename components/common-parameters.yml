@@ -313,75 +313,11 @@ PageLimit:
     minimum: 0
     maximum: 50
 
-GeoReferenceAssertions:
-  type: array
-  nullable: true
-  items:
-    type: object
-    properties:
-      dwcDecimalLatitude:
-        type: number
-        nullable: true
-        description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
-      dwcDecimalLongitude:
-        type: number
-        nullable: true
-        description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
-      dwcCoordinateUncertaintyInMeters:
-        type: number
-        nullable: true
-        description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
-      dwcGeoreferencedDate:
-        type: string
-        format: date
-        nullable: true
-        description: The date on which the Location was georeferenced.
-      georeferencedBy:
-        type: array
-        nullable: true
-        description: A list of uuid who determined the georeference for the location.
-        items:
-          type: string
-          format: uuid
-      literalGeoreferencedBy:
-        type: string
-        nullable: true
-        description: A name of a person, group or organization who determined the georeference for the location.
-      dwcGeoreferenceProtocol:
-        type: string
-        nullable: true
-        description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
-      dwcGeoreferenceSources:
-        type: string
-        nullable: true
-        description: A map, gazetteer, or other resource used to georeference the Location.
-      dwcGeoreferenceRemarks:
-        type: string
-        nullable: true
-        description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
-        minLength: 0
-        maxLength: 1000
-      dwcGeodeticDatum:
-        type: string
-        nullable: true
-        description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
-      isPrimary:
-        type: boolean
-        description: specify whether or not the georeference assertion is the primary of the colecting-event
-      dwcGeoreferenceVerificationStatus:
-        type: string
-        nullable: true
-        enum: [null, GEOREFERENCING_NOT_POSSIBLE]
-      createdOn:
-        type: string
-        format: date-time
-        readOnly: true
-
 ResponseMeta:
   type: object
   properties:
     moduleVersion:
-      type: number
+      type: string
       readOnly: true
       description: API module version number.
 
@@ -389,7 +325,7 @@ ResponseMetaWithResourceCount:
   type: object
   properties:
     moduleVersion:
-      type: number
+      type: string
       readOnly: true
       description: API module version number.
     totalResourceCount:
@@ -508,14 +444,4 @@ UnprocessableEntity:
                 type: string
                 example: "name"
 
-ExpeditionRelationship:
-  type: object
-  properties:
-    data:
-      type: object
-      properties:
-        type:
-          enum: [expedition]
-        id:
-          type: string
-          format: uuid
+  

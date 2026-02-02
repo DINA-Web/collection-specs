@@ -360,12 +360,9 @@ components:
           enum: [collecting-event]      
           description: The type of data being returned.
         attributes:
-          allOf:
-            - $ref: '#/components/schemas/CollectingEventAttributes'
-          
+          $ref: '#/components/schemas/CollectingEventAttributes'
         relationships:
-          allOf:
-            - $ref: '#/components/schemas/CollectingEventRelationships'
+            $ref: '#/components/schemas/CollectingEventRelationships'
           
 
     CollectingEventAttributes:
@@ -388,11 +385,6 @@ components:
         group:
           type: string
           description: The group in which the collecting event belongs to
-        collectorGroupUUid:
-          type: string
-          format: uuid
-          nullable: true
-          description: The group uuid of the collector
         dwcVerbatimCoordinates:
           type: string
           nullable: true
@@ -479,10 +471,6 @@ components:
           multipleOf: 0.01
           nullable: true
           description: Maximum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
-        expedition:
-          nullable: true
-          allOf:
-            - $ref: '../components/common-parameters.yml#/ExpeditionRelationship'
         habitat:
           type: string
           nullable: true
@@ -507,10 +495,6 @@ components:
           type: string
           nullable: true
           description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
-        srcAdminLevels:
-          nullable: true
-          allOf:
-            - $ref: '#/components/schemas/SourceAdministrativeLevel'
         endEventDateTime:
           type: string
           nullable: true
@@ -519,20 +503,10 @@ components:
           type: string
           nullable: true
           description: The original textual description of the place.
-        dwcMunicipality:
-          type: string
-          nullable: true
-          description: The name of the city, town, village, or other third-level political division in which the Location occurs.
         managedAttributes:
           type: object
           nullable: true
           description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
-          additionalProperties:
-            type: string
-        managedAttributeValues:
-          nullable: true
-          type: object
-          description: The manage attribute values, map of key/value pair. Patch Strategy is SET so the entire managedAttributeValues needs to be rebmit on PATCH/PUT.
           additionalProperties:
             type: string
         publiclyReleasable:
@@ -561,17 +535,14 @@ components:
               nullable: true
               description: input a customGeographicPlace OR a selectedGeographicPlace but not both
             selectedGeographicPlace:
-              allOf:
-                - $ref: '#/components/schemas/SourceAdministrativeLevel'
+              $ref: '#/components/schemas/SourceAdministrativeLevel'
             higherGeographicPlaces:
               nullable: true
               type: array
               items:
-                allOf:
-                  - $ref: '#/components/schemas/SourceAdministrativeLevel'
+                $ref: '#/components/schemas/SourceAdministrativeLevel'
             stateProvince:
-              allOf:
-                - $ref: '#/components/schemas/SourceAdministrativeLevel'
+              $ref: '#/components/schemas/SourceAdministrativeLevel'
             country:
               type: object
               properties:
@@ -619,7 +590,68 @@ components:
           type: string
           nullable: true
         geoReferenceAssertions:
-          $ref: '../components/common-parameters.yml#/GeoReferenceAssertions'
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              dwcDecimalLatitude:
+                type: number
+                nullable: true
+                description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
+              dwcDecimalLongitude:
+                type: number
+                nullable: true
+                description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
+              dwcCoordinateUncertaintyInMeters:
+                type: number
+                nullable: true
+                description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+              dwcGeoreferencedDate:
+                type: string
+                format: date
+                nullable: true
+                description: The date on which the Location was georeferenced.
+              georeferencedBy:
+                type: array
+                nullable: true
+                description: A list of uuid who determined the georeference for the location.
+                items:
+                  type: string
+                  format: uuid
+              literalGeoreferencedBy:
+                type: string
+                nullable: true
+                description: A name of a person, group or organization who determined the georeference for the location.
+              dwcGeoreferenceProtocol:
+                type: string
+                nullable: true
+                description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
+              dwcGeoreferenceSources:
+                type: string
+                nullable: true
+                description: A map, gazetteer, or other resource used to georeference the Location.
+              dwcGeoreferenceRemarks:
+                type: string
+                nullable: true
+                description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
+                minLength: 0
+                maxLength: 1000
+              dwcGeodeticDatum:
+                type: string
+                nullable: true
+                description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
+              isPrimary:
+                type: boolean
+                description: specify whether or not the georeference assertion is the primary of the colecting-event
+              dwcGeoreferenceVerificationStatus:
+                type: string
+                nullable: true
+                enum: [null, GEOREFERENCING_NOT_POSSIBLE]
+              createdOn:
+                type: string
+                format: date-time
+                readOnly: true
         eventGeom:
           type: object
           nullable: true
