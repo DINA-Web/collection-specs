@@ -477,6 +477,7 @@ components:
           nullable: true
           description: Maximum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
         expedition:
+          nullable: true
           type: object
           required:
             - data
@@ -534,10 +535,12 @@ components:
           description: The name of the city, town, village, or other third-level political division in which the Location occurs.
         managedAttributes:
           type: object
+          nullable: true
           description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
           additionalProperties:
             type: string
         managedAttributeValues:
+          nullable: true
           type: object
           description: The manage attribute values, map of key/value pair. Patch Strategy is SET so the entire managedAttributeValues needs to be rebmit on PATCH/PUT.
         publiclyReleasable:
@@ -682,6 +685,8 @@ components:
     SourceAdministrativeLevel:
       type: object
       nullable: true
+      required:
+        - id
       properties:
           id:
             type: string
