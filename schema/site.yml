@@ -194,13 +194,6 @@ components:
             group:
               type: string
               description: The group in which this site belongs to
-            descriptions:
-              type: object
-              description: Description of the site in multiple languages. Key is the language code (e.g., en, fr, es), value is the description text.
-              nullable: true
-              additionalProperties:
-                type: string
-                maxLength: 2000
             code:
               type: string
               minLength: 1
