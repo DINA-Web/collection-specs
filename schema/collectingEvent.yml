@@ -354,8 +354,7 @@ components:
     CommonCollectingEvent:
       type: object
       required:
-        - type
-        - attributes       
+        - type      
       properties:            
         type:
           enum: [collecting-event]      
@@ -476,6 +475,10 @@ components:
           multipleOf: 0.01
           nullable: true
           description: Maximum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
+        expedition:
+          nullable: true
+          allOf:
+            - $ref: '../components/common-parameters.yml#/ExpeditionRelationship'
         habitat:
           type: string
           nullable: true
@@ -673,8 +676,6 @@ components:
     SourceAdministrativeLevel:
       type: object
       nullable: true
-      required:
-        - id
       properties:
           id:
             type: string

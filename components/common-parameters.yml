@@ -510,14 +510,9 @@ UnprocessableEntity:
 
 ExpeditionRelationship:
   type: object
-  required:
-    - data
   properties:
     data:
       type: object
-      required:
-        - type
-        - id
       properties:
         type:
           enum: [expedition]
