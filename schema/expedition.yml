@@ -37,7 +37,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: expedition not found
           content:
@@ -74,7 +74,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       
   /v1/expedition/{Id}:
     get:
@@ -103,7 +103,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: expedition not found
           content:
@@ -142,7 +142,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '410':
           description: expedition deleted
           content:
@@ -154,7 +154,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -183,7 +183,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: expedition not found
           content:
@@ -210,7 +210,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonExpeditionResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     ExpeditionResponseList:
       type: object
@@ -232,7 +232,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonExpeditionResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
 
     ExpeditionResponseWithLink:
       type: object
@@ -265,7 +265,7 @@ components:
                     type: boolean
                     example: true
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     ExpeditionNotFound:
       type: object
@@ -354,7 +354,7 @@ components:
         attributes:
           $ref: '#/components/schemas/ExpeditionAttributes'
         meta:
-          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
         relationships:
           $ref: '#/components/schemas/ExpeditionRelationships'
       

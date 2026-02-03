@@ -35,7 +35,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Form Template not found
           content:
@@ -66,7 +66,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'          
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -100,7 +100,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Form Template not found
           content:
@@ -139,7 +139,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '410':
           description: Form Template deleted
           content:
@@ -151,7 +151,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -180,7 +180,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Form Template not found
           content:
@@ -207,7 +207,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonFormTemplateResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     FormTemplateResponseList:
       type: object
@@ -229,7 +229,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonFormTemplateResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
 
     FormTemplateResponseWithLink:
       type: object
@@ -262,7 +262,7 @@ components:
                     type: boolean
                     example: true
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     FormTemplateNotFound:
       type: object
@@ -363,7 +363,7 @@ components:
         attributes:
           $ref: '#/components/schemas/CommonFormTemplateAttributes'
         meta:
-          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
 
     CommonFormTemplateAttributes:
       type: object

@@ -37,7 +37,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: collecting event not found       
           content:
@@ -68,7 +68,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'       
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'       
           
       requestBody:
         content:
@@ -103,7 +103,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'        
+                $ref: '../components/common-responses.yml#/BadRequest'        
         '404':
           description: CollectingEvent not found          
           content:
@@ -142,7 +142,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '410':
           description: collecting event deleted
           content:
@@ -177,7 +177,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: collecting event not found       
           content:
@@ -203,7 +203,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonCollectingEventResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     CollectingEventResponseList:
       type: object
@@ -225,7 +225,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonCollectingEventResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
 
     CollectingEventResponseWithLink:
       type: object
@@ -258,7 +258,7 @@ components:
                     type: boolean
                     example: true
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
     
     CollectingEvent:
       type: object
@@ -347,7 +347,7 @@ components:
         attributes:
           $ref: '#/components/schemas/CollectingEventAttributes'
         meta:
-          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
         relationships:
           $ref: '#/components/schemas/CollectingEventRelationships'
         

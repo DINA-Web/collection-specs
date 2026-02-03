@@ -50,7 +50,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'       
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'       
       requestBody:
         content:
           application/vnd.api+json:
@@ -84,7 +84,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Assemblage not found       
           content:
@@ -123,7 +123,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '410':
           description: Assemblage deleted       
           content:
@@ -135,7 +135,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -164,7 +164,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Assemblage not found       
           content:
@@ -221,7 +221,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonAssemblageResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     AssemblageResponseList:
       type: object
@@ -243,7 +243,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonAssemblageResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
 
     AssemblageResponseWithLink:
       type: object
@@ -276,7 +276,7 @@ components:
                     type: boolean
                     example: true
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     AssemblageNotFound:
       type: object
@@ -335,7 +335,7 @@ components:
         attritbutes:
           $ref: '#/components/schemas/AssemblageAttributes'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
         relationships:
           $ref: '#/components/schemas/AssemblageRelationships'
 

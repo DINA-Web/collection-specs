@@ -37,7 +37,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: preparation method not found
           content:
@@ -68,7 +68,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'          
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -102,7 +102,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: preparation method not found
           content:
@@ -141,7 +141,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '410':
           description: preparation method deleted
           content:
@@ -153,7 +153,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -182,7 +182,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: preparation method not found
           content:
@@ -209,7 +209,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonPreparationMethodResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     PreparationMethodResponseList:
       type: object
@@ -231,7 +231,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonPreparationMethodResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
 
     PreparationMethodResponseWithLink:
       type: object
@@ -264,7 +264,7 @@ components:
                     type: boolean
                     example: true
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     PreparationMethodNotFound:
       type: object
@@ -365,7 +365,7 @@ components:
         attributes:
           $ref: '#/components/schemas/CommonPreparationMethodAttributes'
         meta:
-          $ref: '../components/common-parameters.yml#/PermissionsMeta'
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
 
     CommonPreparationMethodAttributes:
       type: object

@@ -37,7 +37,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'                
+                $ref: '../components/common-responses.yml#/BadRequest'                
         '404':
           description: collection not found
           content:
@@ -68,7 +68,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -102,7 +102,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'                
+                $ref: '../components/common-responses.yml#/BadRequest'                
         '404':
           description: collection not found
           content:
@@ -142,7 +142,7 @@ paths:
           content:
               application/vnd.api+json:
                 schema:          
-                  $ref: '../components/common-parameters.yml#/BadRequest'
+                  $ref: '../components/common-responses.yml#/BadRequest'
         '410':
           description: collection deleted
           content:
@@ -154,7 +154,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/UnprocessableEntity'       
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'       
           
       requestBody:
         content:
@@ -184,7 +184,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-parameters.yml#/BadRequest'
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: collection not found    
           content:
@@ -287,7 +287,7 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonCollectionResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
 
     CollectionResponseList:
       type: object
@@ -309,7 +309,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/CommonCollectionResponse'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
 
     CollectionResponseWithLink:
       type: object
@@ -342,7 +342,7 @@ components:
                     type: boolean
                     example: true
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
           
     CommonCollectionResponse:
       type: object
@@ -356,7 +356,7 @@ components:
         attributes:
           $ref: '#/components/schemas/CommonCollectionAttributes'
         meta:
-          $ref: '../components/common-parameters.yml#/ResponseMeta'
+          $ref: '../components/common-responses.yml#/ResponseMeta'
         relationships:
           $ref: '#/components/schemas/CommonCollectionRelationships'
 
