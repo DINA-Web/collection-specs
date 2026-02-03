@@ -10,7 +10,18 @@ FiqlFilter:
     
     FIQL provides a URI-friendly syntax for expressing filters. This parameter is supported
     across most DINA collection APIs for consistent querying. FIQL cannot be applied to nested fields.
+
     <details>
+    <summary><strong>FIQL Syntax</strong></summary>
+    
+    ```
+    fiql=filterExpression
+    ```
+    
+    </details>
+    
+    <details>
+
     <summary><strong>Comparison Operators</strong></summary>
     
     | Operator | Syntax | Description | Example |
@@ -22,7 +33,6 @@ FiqlFilter:
     | Less Than | `=lt=` | Numeric/date comparison | `year=lt=2025` |
     | Less or Equal | `=le=` | Inclusive comparison | `count=le=100` |
     | In | `=in=()` | Value in list | `status=in=(active,pending)` |
-    | Out | `=out=()` | Value not in list | `type=out=(draft,archived)` |
     </details>
     
     <details>
@@ -40,13 +50,11 @@ FiqlFilter:
     <summary><strong>Wildcards</strong></summary>
     
     - `*` - Matches zero or more characters
-    - `?` - Matches exactly one character
     
     **Examples:**
     - `name==John*` - Starts with "John"
     - `name==*Smith` - Ends with "Smith"
     - `name==*John*` - Contains "John"
-    - `code==A?C` - A, any single character, then C
     
     </details>
     
@@ -128,8 +136,6 @@ FiqlFilter:
   schema:
     type: string
 
-# Simple Search Filter - Key-value based filtering
-# Format: filter[field.subfield][OPERATOR]=value
 SimpleSearchFilter:
   name: filter
   in: query
@@ -160,8 +166,10 @@ SimpleSearchFilter:
     | `GT` | Greater than | `filter[age][GT]=18` |
     | `LT` | Less than | `filter[age][LT]=65` |
     | `IN` | In list (comma-separated) | `filter[status][IN]=active,pending` |
-    | `LIKE` | Pattern match (use % for wildcard) | `filter[name][LIKE]=%oak%` |
-    | `ILIKE` | Case-insensitive pattern match (use % for wildcard) | `filter[locality][ILIKE]=%canada%` |
+    | `LIKE` | Pattern match (use % or _ for wildcard) | `filter[name][LIKE]=%oak%` |
+    | `ILIKE` | Case-insensitive pattern match (use % or _ for wildcard) | `filter[locality][ILIKE]=%canada%` |
+    | `_` | Wildcard for exactly one character (use with LIKE or ILIKE) | `filter[name][LIKE]=o_k` |
+    | `%` | Wildcard for zero or more characters (use with LIKE or ILIKE) | `filter[name][LIKE]=%oak%` |
     
     </details>
     
@@ -193,18 +201,15 @@ SimpleSearchFilter:
     filter[status][IN]=active,pending,review
     filter[collectionCode][IN]=BOTANY,ZOOLOGY
     ```
-    
-    ### Pattern Matching
-    ```
-    filter[scientificName][LIKE]=%Quercus%
-    filter[locality][ILIKE]=%canada%
-    ```
 
-    ### Wildcard Searches
+    ### Pattern Matching with Wildcards
     ```
     filter[scientificName][LIKE]=%Quercus // matches any name ending with "Quercus"
     filter[scientificName][LIKE]=Quercus% // matches any name starting with "Quercus"
     filter[scientificName][LIKE]=Quercus% // matches any name containing "Quercus"
+
+    filter[scientificName][LIKE]=_uercus // matches any name with any single character followed by "uercus"
+    filter[scientificName][LIKE]=Querc_s // matches any name starting with "Querc" followed by any single character and "s"
     ```
     
     ### Multiple Filters (AND logic)
@@ -245,7 +250,7 @@ SimpleSearchFilter:
        - `%` wildcard: `%25` (for LIKE patterns)
     3. **Case Sensitivity**: Field names are case-sensitive
     4. **Operator Format**: Operators must be in UPPERCASE
-    5. **Wildcards**: Use `%` for wildcards in LIKE/ILIKE patterns
+    5. **Wildcards**: Use `%`and `_` for wildcards in LIKE/ILIKE patterns
     
     </details>
     

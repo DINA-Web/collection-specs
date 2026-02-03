@@ -825,25 +825,7 @@ components:
                     description: person who prepared the material sample
                     example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
         attachment:
-          type: object
-          nullable: true
-          properties:
-            data:
-              type: array
-              items:
-                type: object
-                required:
-                  - type
-                  - id
-                properties:
-                  type: 
-                    type: string
-                    example: metadata
-                  id:
-                    type: string
-                    format: uuid
-                    description: Unique identifier metadata for the resource
-                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+          $ref: '../components/common-parameters.yml#/Attachment'
         preparationProtocol:
           type: object
           nullable: true
