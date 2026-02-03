@@ -125,7 +125,6 @@ FiqlFilter:
     
     </details>
     
-    
   schema:
     type: string
 
@@ -142,15 +141,11 @@ SimpleSearchFilter:
     
     Filter results by specifying field paths and comparison operators.
     
-    
-    
     <details>
     <summary><strong>Filter Syntax</strong></summary>
     
     ```
     filter[fieldName][OPERATOR]=value
-    filter[parent.child][OPERATOR]=value
-    filter[parent.child.grandchild][OPERATOR]=value
     ```
     
     </details>
@@ -160,14 +155,15 @@ SimpleSearchFilter:
     
     | Operator | Description | Example |
     |----------|-------------|---------|
-    | `NE` | Not equal to | `filter[status][NE]=archived` |
+    | `NEQ` | Not equal to | `filter[status][NEQ]=archived` |
     | `EQ` | Equal to | `filter[status][EQ]=active` |
+    | `GT` | Greater than | `filter[age][GT]=18` |
+    | `LT` | Less than | `filter[age][LT]=65` |
     | `IN` | In list (comma-separated) | `filter[status][IN]=active,pending` |
     | `LIKE` | Pattern match (use % for wildcard) | `filter[name][LIKE]=%oak%` |
-    | `LIKE_IC` | Case-insensitive pattern match | `filter[locality][LIKE_IC]=%canada%` |
+    | `ILIKE` | Case-insensitive pattern match (use % for wildcard) | `filter[locality][ILIKE]=%canada%` |
     
     </details>
-    
     
     <details>
     <summary><strong>Examples</strong></summary>
@@ -203,11 +199,12 @@ SimpleSearchFilter:
     filter[scientificName][LIKE]=%Quercus%
     filter[locality][ILIKE]=%canada%
     ```
-    
-    ### Null Checks
+
+    ### Wildcard Searches
     ```
-    filter[deletedDate][IS_NULL]=true
-    filter[verifiedBy][NOT_NULL]=true
+    filter[scientificName][LIKE]=%Quercus // matches any name ending with "Quercus"
+    filter[scientificName][LIKE]=Quercus% // matches any name starting with "Quercus"
+    filter[scientificName][LIKE]=Quercus% // matches any name containing "Quercus"
     ```
     
     ### Multiple Filters (AND logic)
@@ -216,6 +213,12 @@ SimpleSearchFilter:
     filter[storageUnitType.uuid][EQ]=abc123&filter[preparationType][EQ]=mounted
     ```
     
+    ### OR Logic within a Single Filter
+    ```
+    filter[status][IN]=active,pending
+    filter[scientificName][LIKE]=%Quercus%,%Pinus%
+    ```
+
     </details>
 
     <details>
@@ -226,25 +229,17 @@ SimpleSearchFilter:
     
     ```
     filter[relationship.property][OPERATOR]=value
+    filter[parent.child][OPERATOR]=value
+    filter[parent.child.grandchild][OPERATOR]=value
     ```
-    
-    ### Common Nested Paths
-    
-    | Path | Description | Example |
-    |------|-------------|---------|
-    | `storageUnitType.uuid` | Storage unit type ID | `filter[storageUnitType.uuid][EQ]=abc-123` |
-    | `storageUnitType.name` | Storage unit type name | `filter[storageUnitType.name][LIKE]=%freezer%` |
-    | `collection.code` | Collection code | `filter[collection.code][EQ]=BOTANY` |
-    | `collection.name` | Collection name | `filter[collection.name][LIKE]=%herbarium%` |
-    | `determination.scientificName` | Determined name | `filter[determination.scientificName][EQ]=Quercus robur` |
-    | `collectingEvent.locality` | Collection locality | `filter[collectingEvent.locality][LIKE]=%Canada%` |
     
     </details>
 
     <details>
     <summary><strong>Important Notes</strong></summary>
     
-    1. **Multiple Filters**: Use `&` to combine multiple filters (AND logic)
+    1. **Multiple Filters**: Use `&` to combine multiple filters (AND logic) and use `,` for OR logic in the same filter
+        Note: OR logic cannot be applied across multiple filter parameters
     2. **URL Encoding**: Special characters must be URL-encoded
        - Space: `%20`
        - `%` wildcard: `%25` (for LIKE patterns)
