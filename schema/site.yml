@@ -186,9 +186,9 @@ components:
         attributes:
           type: object
           properties:
-            title:
+            name:
               type: string
-              description: The title of the site
+              description: The name of the site
               minLength: 1
               maxLength: 255
             group:
