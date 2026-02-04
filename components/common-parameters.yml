@@ -147,7 +147,9 @@ FiqlFilter:
 
     5. **Nested Fields**: FIQL cannot be applied to nested/related fields. Use the `filter` parameter for those cases.
 
-    6. Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match "John;Doe". 
+    6. **Wildcards**: use `*` for wildcards in string values.
+
+    7. Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match `John;Doe`. 
     
     </details>
     
@@ -207,7 +209,7 @@ SimpleSearchFilter:
     filter[scientificName][LIKE]=Querc_s // matches any name starting with "Querc" followed by any single character and "s"
     ```
 
-    Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match "John;Doe".
+    Use `\` to escape special characters within string values, e.g., `John\;Doe` to match `John;Doe`.
     
     </details>
 
@@ -289,7 +291,7 @@ SimpleSearchFilter:
     3. **Case Sensitivity**: Field names are case-sensitive
     4. **Operator Format**: Operators must be in UPPERCASE
     5. **Wildcards**: Use `%`and `_` for wildcards in LIKE/ILIKE patterns
-    6. Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match "John;Doe". 
+    6. Use `\` to escape special characters within string values, e.g., `John\;Doe` to match `John;Doe`. 
     
     </details>
   
