@@ -20,41 +20,36 @@ paths:
       operationId: getStorageUnit
       description: By passing in query string, user can get available storage unit authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the storage unit
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: storage unit satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/StorageUnit'                
+                $ref: '#/components/schemas/StorageUnitResponseList'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: storage unit not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitNotFound'
+        '410':
+          description: storage unit deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitDeleted'
     post:
       tags:
         - Storage Unit
@@ -64,8 +59,16 @@ paths:
       responses:
         '201':
           description: storage unit created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -92,12 +95,26 @@ paths:
           description: successful operation
           content:
             application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/StorageUnit'
+              schema:
+                $ref: '#/components/schemas/StorageUnitResponse'
         '400':
-          description: Not a valid uuid                
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: StorageUnit not found          
+          description: storage unit not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitNotFound'
+        '410':
+          description: storage unit deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitDeleted'          
     patch:
       tags:
         - Storage Unit
@@ -115,8 +132,28 @@ paths:
       responses:
         '200':
           description: storage unit updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: storage unit deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitDeleted'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,14 +175,145 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: storage unit marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: storage unit not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitNotFound'
+        
 components:
   schemas:
+    StorageUnitResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    StorageUnitResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonStorageUnitResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    StorageUnitResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitResponse'
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: http://dina.local/${dina.apiPrefix}/storage-unit/019c0fac-43df-746b-826c-730f3e7d46ee
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    StorageUnitNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "StorageUnitDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    StorageUnitDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=storage-unit/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "StorageUnitDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
     StorageUnit:
       type: object
       required:
@@ -184,93 +352,119 @@ components:
           enum: [storage-unit]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the storage unit
-            isGeneric:
-              type: boolean
-              description: Is the storage unit representing a generic instance of the storage unit type?
-            createdOn:
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the storage unit was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the storage unit
-            group:
-              type: string
-              description: The group in which the storage unit belongs
-            barcode:
-              type: string
-              description: Text representation originating from scanning with a barcode gun
-            storageUnitChildren:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
-                    description: Identifier of the storageUnitChildren object as a UUID
-                  id:
-                    type: string
-                    format: uuid
-                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
-                  createdOn:
-                    type: string
-                    format: date-time
-                    readOnly: true
-                  createdBy:
-                    type: string
-                    readOnly: true
-                  group:
-                    type: string
-                  name:
-                    type: string
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
         relationships:
-          type: object
+          $ref: '#/components/schemas/CommonStorageUnitRelationships'
+    
+    CommonStorageUnitResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [storage-unit]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/CommonStorageUnitRelationships'
+
+    CommonStorageUnitAttributes:
+      type: object
+      required:
+        - name
+        - isGeneric
+        - group
+      properties:
+        name:
+          type: string
+          description: The name of the storage unit
+        isGeneric:
+          type: boolean
+          description: Is the storage unit representing a generic instance of the storage unit type?
+        createdOn:
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the storage unit was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the storage unit
+        group:
+          type: string
+          description: The group in which the storage unit belongs
+        barcode:
+          type: string
+          description: Text representation originating from scanning with a barcode gun
+        storageUnitChildren:
+          type: array
           nullable: true
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the storageUnitChildren object as a UUID
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              createdOn:
+                type: string
+                format: date-time
+                readOnly: true
+              createdBy:
+                type: string
+                readOnly: true
+              group:
+                type: string
+              name:
+                type: string
+
+    CommonStorageUnitRelationships:
+      type: object
+      nullable: true
+      properties:
+        parentStorageUnit:
+          type: object
+          required:
+            - data
           properties:
-            parentStorageUnit:
+            data:
               type: object
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnit's parentStorageUnit id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            storageUnitType:
+                type:
+                  enum: [storage-unit]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnit's parentStorageUnit id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        storageUnitType:
+          type: object
+          required:
+            - data
+          properties:
+            data:
               type: object
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit-type]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnit's type id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                type:
+                  enum: [storage-unit-type]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnit's type id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c

@@ -20,41 +20,36 @@ paths:
       operationId: getStorageUnitUsage
       description: By passing in query string, user can get available storage unit usage authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the storage unit usage
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: storage unit usage satisfying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/StorageUnitUsage'
+                $ref: '#/components/schemas/StorageUnitUsageResponseList'
+        '400':
+          description: Bad Request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: storage unit usage not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageNotFound'
+        '410':
+          description: Storage unit usage deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageDeleted'
     post:
       tags:
         - Storage Unit Usage
@@ -64,8 +59,16 @@ paths:
       responses:
         '201':
           description: storage unit usage created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: Data integrity violation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -92,12 +95,26 @@ paths:
           description: successful operation
           content:
             application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/StorageUnitUsage'
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageResponse'
         '400':
-          description: Not a valid uuid                
+          description: Not a valid uuid
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: StorageUnitUsage not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageNotFound'
+        '410':
+          description: Storage unit usage deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageDeleted'
     patch:
       tags:
         - Storage Unit Usage
@@ -115,8 +132,28 @@ paths:
       responses:
         '200':
           description: storage unit usage updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageResponse'
         '400':
           description: invalid input, object invalid
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: Storage unit usage deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageDeleted'
+        '422':
+          description: Data integrity violation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,14 +175,147 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: storage unit usage deleted
         '400':
-          description: Not a valid uuid          
+          description: Not a valid uuid
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: storage unit usage not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StorageUnitUsageNotFound'
+        
 components:
   schemas:
+    StorageUnitUsageResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitUsageResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    StorageUnitUsageResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonStorageUnitUsageResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    StorageUnitUsageResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonStorageUnitUsageResponse'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              example: /storage-unit-usage/d290f1ee-6c54-4b01-90e6-d701748f0851
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    StorageUnitUsageNotFound:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "Storage unit usage with ID {id} not found"
+
+    StorageUnitUsageDeleted:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "StorageUnitUsageDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section."
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    example: "/audit-snapshot?filter[instanceId]=storage-unit-usage/{id}"
+
     StorageUnitUsage:
       type: object
       required:
@@ -184,77 +354,99 @@ components:
           enum: [storage-unit-usage]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            usageType:
-              type: string
-              description: The type of the resource using the storage-unit-usage
-              example: material-sample
-            wellRow:
-              type: string
-              description: The row location in the storage unit. Using a letter, starting at A.
-              example: A
-            wellColumn:
-              type: number
-              description: The column location in the storage unit. Using a number, starting at 1.
-              example: 7
-            cellNumber:
-              type: integer
-              description: The calculated cell number based on the storage-unit-type dimension
-              readOnly: true
-            storageUnitName:
-              type: string
-              description: The calculated storageUnitName
-              readOnly: true
-            createdOn:
-              type: string
-              format: date-time
-              readOnly: true
-              description: date and time when the storage unit was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            createdBy:
-              type: string
-              readOnly: true
-              description: authenticated user who create the storage unit usage
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
         relationships:
+          $ref: '#/components/schemas/CommonStorageUnitUsageRelationships'
+
+    CommonStorageUnitUsageResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [storage-unit-usage]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonStorageUnitAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/CommonStorageUnitUsageRelationships'
+    
+    CommonStorageUnitAttributes:
+      type: object
+      properties:
+        usageType:
+          type: string
+          description: The type of the resource using the storage-unit-usage
+          example: material-sample
+        wellRow:
+          type: string
+          description: The row location in the storage unit. Using a letter, starting at A.
+          example: A
+        wellColumn:
+          type: number
+          description: The column location in the storage unit. Using a number, starting at 1.
+          example: 7
+        cellNumber:
+          type: integer
+          description: The calculated cell number based on the storage-unit-type dimension
+          readOnly: true
+        storageUnitName:
+          type: string
+          description: The calculated storageUnitName
+          readOnly: true
+        createdOn:
+          type: string
+          format: date-time
+          readOnly: true
+          description: date and time when the storage unit was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        createdBy:
+          type: string
+          readOnly: true
+          description: authenticated user who create the storage unit usage
+
+    CommonStorageUnitUsageRelationships:
+      type: object
+      nullable: false
+      properties:
+        storageUnit:
           type: object
-          nullable: false
+          description:  Used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnitType should not be used.
+          required:
+            - data
           properties:
-            storageUnit:
+            data:
               type: object
-              description:  Used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnitType should not be used.
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnit's id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            storageUnitType:
+                type:
+                  enum: [storage-unit]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnit's id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        storageUnitType:
+          type: object
+          description: Can be used if no specific storageUnit is used. Will be used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnit should not be used.
+          required:
+            - data
+          properties:
+            data:
               type: object
-              description: Can be used if no specific storageUnit is used. Will be used, if available, to validate the coordinates (row/column) and the group for authorization. If set, storageUnit should not be used.
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [storage-unit-type]
-                    id:
-                      type: string
-                      format: uuid
-                      description: storageUnitType's id
-                      example: 01903c04-036f-7a54-9c44-3df6091fdcc6
+                type:
+                  enum: [storage-unit-type]
+                id:
+                  type: string
+                  format: uuid
+                  description: storageUnitType's id
+                  example: 01903c04-036f-7a54-9c44-3df6091fdcc6

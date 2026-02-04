@@ -20,36 +20,34 @@ paths:
       operationId: getFormTemplates
       description: By passing in query string, user can get Form Template authorized
       parameters:
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: Form Template satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/FormTemplate'
+                $ref: '#/components/schemas/FormTemplateResponseList'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Form Template not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateNotFound'
+        '410':
+          description: Form Template deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateDeleted'
     post:
       tags:
         - Form Template
@@ -59,8 +57,16 @@ paths:
       responses:
         '201':
           description: Form Template created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -87,12 +93,26 @@ paths:
           description: successful operation
           content:
             application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/FormTemplate'
+              schema:
+                $ref: '#/components/schemas/FormTemplateResponse'
         '400':
-          description: Not a valid uuid                
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Form Template not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateNotFound'
+        '410':
+          description: Form Template deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateDeleted'
     patch:
       tags:
         - Form Template
@@ -110,8 +130,28 @@ paths:
       responses:
         '200':
           description: Form Template updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: Form Template deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateDeleted'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -133,14 +173,144 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
-          description: Form Template deleted
+        '204':
+          description: Form Template marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Form Template not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FormTemplateNotFound'
 components:
   schemas:
+    FormTemplateResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonFormTemplateResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    FormTemplateResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonFormTemplateResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    FormTemplateResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonFormTemplateResponse'
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: ${dina.apiPrefix}/form-template/019c0600-b7dd-75db-8601-86c57232b36f
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    FormTemplateNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "FormTemplateDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    FormTemplateDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=form-template/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "FormTemplateDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
     FormTemplate:
       type: object
       required:
@@ -179,34 +349,51 @@ components:
           enum: [form-template]
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonFormTemplateAttributes'
+
+    CommonFormTemplateResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:
+        type:
+          enum: [form-template]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonFormTemplateAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+
+    CommonFormTemplateAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the Form Template
+        group:
+          type: string
+          description: The group in which the Form Template belongs to
+        restrictToCreatedBy:
+          type: boolean
+          description: Is the Form Template restricted to the user represented by createdBY
+        viewConfiguration:
           type: object
-          properties:
-            name:
-              type: string
-              description: The name of the Form Template
-            group:
-              type: string
-              description: The group in which the Form Template belongs to
-            restrictToCreatedBy:
-              type: boolean
-              description: Is the Form Template restricted to the user represented by createdBY
-            viewConfiguration:
-              type: object
-              description: Configuration object of the Form Template
-            components:
-              type: array
-              items:
-                type: object
-              nullable: true
-              description: List of components of the FormTemplate
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the Form Template
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the Form Template was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
+          description: Configuration object of the Form Template
+        components:
+          type: array
+          items:
+            type: object
+          nullable: true
+          description: List of components of the FormTemplate
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the Form Template
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the Form Template was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
 

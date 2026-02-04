@@ -20,41 +20,36 @@ paths:
       operationId: getMaterialSamples
       description: By passing in query string, user can get available material samples authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the material samples
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: material samples satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/MaterialSample'                
+                $ref: '#/components/schemas/MaterialSampleResponseList'                
+        '400':
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: material sample not found
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+        '410':
+          description: material sample deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleDeleted'
     post:
       tags:
         - Material Sample
@@ -64,8 +59,16 @@ paths:
       responses:
         '201':
           description: material sample created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -93,11 +96,25 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/MaterialSample'
+                $ref: '#/components/schemas/MaterialSampleResponse'               
         '400':
-          description: Not a valid uuid                
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: MaterialSample not found          
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+        '410':
+          description: material sample deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleDeleted'          
     patch:
       tags:
         - Material Sample
@@ -115,8 +132,28 @@ paths:
       responses:
         '200':
           description: material sample updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '404':
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+        '410':
+          description: material sample deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleDeleted' 
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,12 +175,21 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: material sample marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: material sample not found       
+          description: material sample not found    
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/MaterialSampleNotFound'   
+ 
 components:
   schemas:
     MaterialSample:
@@ -172,7 +218,130 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonMaterialSample'
+            - $ref: '#/components/schemas/CommonMaterialSampleResponse'
+
+    MaterialSampleResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSampleResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    MaterialSampleResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonMaterialSampleResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    MaterialSampleResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonMaterialSampleResponse'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              format: url
+              example: ${dina.apiPrefix}/material-sample/019c0600-b7dd-75db-8601-86c57232b36f"
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    MaterialSampleNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "MaterialSampleDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    MaterialSampleDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=material-sample/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "MaterialSampleDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
 
     CommonMaterialSample:
       type: object
@@ -184,563 +353,552 @@ components:
           enum: [material-sample]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            version:
-              type: number
-              readOnly: true
-              description: Provides optimistic locking to prevent update data from being overridden by another transaction.
-            dwcCatalogNumber:
-              type: string
-              nullable: true
-              description: An identifier (preferably unique) for the record within the data set or collection.
-              example: 18
-            materialSampleName: 
-              type: string
-              nullable: true
-              description: Name of the material sample that is used as global, human readable, primary identifier. The collection code is recommended as prefix.
-              example: XYZ-18
-            identifiers: 
-              type: object
-              description: Other identifiers map. Key/value pair where the key is the type of identifier. Patch Strategy is SET so the entire identifiers needs to be rebmit on PATCH/PUT.
-              additionalProperties:
-                type: string
-            materialSampleType:
-              type: string
-              enum: [WHOLE_ORGANISM, ORGANISM_PART, MIXED_ORGANISMS, MOLECULAR_SAMPLE]
-              description: Type of the material sample
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the material sample
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the material sample was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            barcode:
-              type: string
-              description: barcode for the material sample
-            group:
-              type: string
-              description: The group in which the material sample belongs to
-            managedAttributes:
-              type: object
-              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
-              additionalProperties:
-                type: string
-            preparationManagedAttributes:
-              type: object
-              description: Manage attributes about the preparation, map of key/value pair. Patch Strategy is SET so the entire preparationManagedAttributes needs to be resubmitted on PATCH/PUT.
-              additionalProperties:
-                type: string
-            dwcOtherCatalogNumbers:
-              type: array
-              nullable: true
-              description: Other catalog numbers
-              items:
-                type: string
-            preservationType:
-              type: string
-              nullable: true
-              description: Description of the preservation type of the material sample.
-              example: Freeze-Dry
-            preparationFixative:
-              type: string
-              nullable: true
-              description: Solution that was applied to or in which the material sample is preserved.
-              example: EtOH 95%
-            preparationMaterials:
-              type: string
-              nullable: true
-              description: Additional, typically inert physical environments or objects in which or on which the organism in a material sample is stored. It does not express the state of the organism nor the fixatives used but rather the materials that allow the organism to be presented.
-              example: glass vial
-            preparationSubstrate:
-              type: string
-              nullable: true
-              description: Material on which the organism in the material sample is presented or grows.
-              example: agar
-            preparationDate:
-              type: string
-              format: date
-              nullable: true
-              description: The date on which the material sample was prepared.
-            preparationRemarks:
-              type: string
-              nullable: true
-              description: Remarks on the preparation of the material sample
-              minLength: 0
-              maxLength: 1000
-            dwcDegreeOfEstablishment:
-              type: string
-              nullable: true
-              description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
-              minLength: 0
-              maxLength: 1000
-            materialSampleState:
-              type: string
-              nullable: true
-            stateChangedOn:
-              type: string
-              format: date
-              nullable: true
-            stateChangeRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            materialSampleRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            sourceSet:
-              type: string
-              description: "Used to group a set of records that were created together. From an import, migration or split."
-              nullable: true
-              minLength: 0
-              maxLength: 50
-            extensionValues:
-              type: object
-              description: "Values of material-sample related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire extensionValues needs to be resubmitted on PATCH/PUT."
-              additionalProperties:
-                type: object
-                additionalProperties:
-                    type: string
-            restrictionFieldsExtension:
-              type: object
-              description: "Values of restriction related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT."
-              additionalProperties:
-                type: object
-                additionalProperties:
-                    type: string
-            restrictionRemarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            isRestricted:
-              type: boolean
-              nullable: false
-              description: whether or not the material sample is considered restricted
-            isBaseForSplitByType:
-              type: boolean
-              nullable: true
-              description: Whether or not the material sample will be used as a basename for split of material-sample of the same type
-            materialSampleChildren:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                    description: materialSample's child id
-                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-                  materialSampleName: 
-                    type: string
-                    nullable: true
-                    description: Name of the material sample
-                  materialSampleType:
-                    type: string
-                  group:
-                    type: string
-                    description: The group in which the material sample belongs to
-                  createdBy:
-                    type: string      
-                    readOnly: true
-                    description: authenticated user who create the material sample
-                  createdOn:              
-                    type: string
-                    format: date-time                            
-                    readOnly: true
-                    description: date and time when the material sample was created in ISO format
-                    example: 1985-04-12T23:20:50.52Z
-                  dwcCatalogNumber:
-                    type: string
-                    nullable: true
-                    description: An identifier (preferably unique) for the record within the data set or collection.
-                  dwcOtherCatalogNumbers:
-                    type: array
-                    nullable: true
-                    description: Other catalog numbers
-                    items:
-                      type: string
-                  preparationDate:
-                    type: string
-                    format: date
-                    nullable: true
-                    description: The date on which the material sample was prepared.
-                  managedAttributes:
-                    type: object
-                    description: The manage attribute, with key and value pair
-                    additionalProperties:
-                      type: string
-                  preparationRemarks:
-                    type: string
-                    nullable: true
-                    description: Remarks on the preparation of the material sample
-                    minLength: 0
-                    maxLength: 1000
-                  dwcDegreeOfEstablishment:
-                    type: string
-                    nullable: true
-                    description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
-                    minLength: 0
-                    maxLength: 1000
-                  barcode:
-                    type: string
-                    description: barcode for the material sample
-                  ordinal:
-                    type: number
-                    readOnly: true
-                    description: The ordinal number of the entry in the list of materialSampleChildren based on order of creation.
-            associations:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  associatedSample:
-                    type: string
-                    format: uuid
-                    description: materialSample's associated id
-                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-                  remarks:
-                    type: string
-                    description: remarks of the association
-                    minLength: 0
-                    maxLength: 1000
-                  associationType:
-                    type: string
-                    nullable: true
-                    description: type of association
-            tags:
-              type: array
-              nullable: true
-              description: tags for the material sample
-              items:
-                type: string 
-            publiclyReleasable:
-              type: boolean
-              nullable: true
-              description: whether or not the material sample is publicly releasable
-            notPubliclyReleasableReason:
-              type: string
-              nullable: true
-              description: text description of reason why the material sample is not publicly releasable
-            hostOrganism:
-              type: object
-              nullable: true
-              properties:
-                name:
-                  type: string
-                  nullable: true
-                remarks:
-                  type: string
-                  nullable: true
-                  minLength: 0
-                  maxLength: 1000
-            scheduledActions:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  actionType:
-                    type: string
-                    nullable: true
-                  date:
-                    type: string
-                    format: date
-                    nullable: true
-                  actionStatus:
-                    type: string
-                    nullable: true
-                  remarks:
-                    type: string
-                    nullable: true
-                    minLength: 0
-                    maxLength: 1000
-                  assignedTo:
-                    type: object
-                    nullable: true
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        enum: [user]
-                      id:
-                        type: string
-                        format: uuid
-                        description: user's id which this scheduled action is assigned to
-                        example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            hierarchy:
-              type: array
-              nullable: true
-              readOnly: true
-              items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                    example: d290f1ee-6c54-4b01-90e6-d701748f0851
-                    description: Identifier of the hierarchical object as UUID
-                  name:
-                    type: string
-                    nullable: true
-                  rank:
-                    type: number
-                    nullable: true
-                  organismPrimaryDetermination:
-                    type: array
-                    description: summary of the primary determination of the target organism or all organisms if there is no target
-                    nullable: true
-            targetOrganismPrimaryClassification:
-              type: object
-              readOnly: true
-              nullable: true
-              description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
-            targetOrganismPrimaryScientificName:
-              type: string
-              readOnly: true
-              description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the primary determination of the target organism. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
-            effectiveScientificName:
-              type: string
-              readOnly: true
-              description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the first determination found in the hierachy. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
-            allowDuplicateName:
-              type: boolean
-              nullable: false
-              description: whether or not the material sample name constraint is enforced
+          $ref: '#/components/schemas/CommonMaterialSampleAttributes'
         relationships:
+          $ref: '#/components/schemas/CommonMaterialSampleRelationships'
+
+    CommonMaterialSampleResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [material-sample]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonMaterialSampleAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/CommonMaterialSampleRelationships'
+
+    CommonMaterialSampleAttributes:
+      type: object
+      properties:
+        version:
+          type: number
+          readOnly: true
+          description: Provides optimistic locking to prevent update data from being overridden by another transaction.
+        group:
+          type: string
+          description: The group in which the material sample belongs to
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the material sample was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the material sample
+        dwcCatalogNumber:
+          type: string
+          nullable: true
+          description: An identifier (preferably unique) for the record within the data set or collection.
+          example: 18
+        dwcOtherCatalogNumbers:
+          type: array
+          nullable: true
+          description: Other catalog numbers
+          items:
+            type: string
+        materialSampleName: 
+          type: string
+          nullable: true
+          description: Name of the material sample that is used as global, human readable, primary identifier. The collection code is recommended as prefix.
+          example: XYZ-18
+        identifiers: 
+          type: object
+          description: Other identifiers map. Key/value pair where the key is the type of identifier. Patch Strategy is SET so the entire identifiers needs to be rebmit on PATCH/PUT.
+          additionalProperties:
+            type: string
+        materialSampleType:
+          type: string
+          enum: [WHOLE_ORGANISM, ORGANISM_PART, MIXED_ORGANISMS, MOLECULAR_SAMPLE]
+          description: Type of the material sample
+        preparationDate:
+          type: string
+          format: date
+          nullable: true
+          description: The date on which the material sample was prepared.
+        preservationType:
+          type: string
+          nullable: true
+          description: Description of the preservation type of the material sample.
+          example: Freeze-Dry
+        preparationFixative:
+          type: string
+          nullable: true
+          description: Solution that was applied to or in which the material sample is preserved.
+          example: EtOH 95%
+        preparationMaterials:
+          type: string
+          nullable: true
+          description: Additional, typically inert physical environments or objects in which or on which the organism in a material sample is stored. It does not express the state of the organism nor the fixatives used but rather the materials that allow the organism to be presented.
+          example: glass vial
+        preparationSubstrate:
+          type: string
+          nullable: true
+          description: Material on which the organism in the material sample is presented or grows.
+          example: agar
+        managedAttributes:
+          type: object
+          description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
+          additionalProperties:
+            type: string
+        preparationManagedAttributes:
+          type: object
+          description: Manage attributes about the preparation, map of key/value pair. Patch Strategy is SET so the entire preparationManagedAttributes needs to be resubmitted on PATCH/PUT.
+          additionalProperties:
+            type: string
+        extensionValues:
+          type: object
+          description: "Values of material-sample related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire extensionValues needs to be resubmitted on PATCH/PUT."
+          additionalProperties:
+            type: object
+            additionalProperties:
+                type: string
+        preparationRemarks:
+          type: string
+          nullable: true
+          description: Remarks on the preparation of the material sample
+          minLength: 0
+          maxLength: 1000
+        dwcDegreeOfEstablishment:
+          type: string
+          nullable: true
+          description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
+          minLength: 0
+          maxLength: 1000
+        hierarchy:
+          type: array
+          nullable: true
+          readOnly: true
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the hierarchical object as UUID
+              name:
+                type: string
+                nullable: true
+              rank:
+                type: number
+                nullable: true
+              organismPrimaryDetermination:
+                type: array
+                description: summary of the primary determination of the target organism or all organisms if there is no target
+                nullable: true
+        materialSampleChildren:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: materialSample's child id
+                example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+              materialSampleName: 
+                type: string
+                nullable: true
+                description: Name of the material sample
+              materialSampleType:
+                type: string
+              group:
+                type: string
+                description: The group in which the material sample belongs to
+              createdBy:
+                type: string      
+                readOnly: true
+                description: authenticated user who create the material sample
+              createdOn:              
+                type: string
+                format: date-time                            
+                readOnly: true
+                description: date and time when the material sample was created in ISO format
+                example: 1985-04-12T23:20:50.52Z
+              dwcCatalogNumber:
+                type: string
+                nullable: true
+                description: An identifier (preferably unique) for the record within the data set or collection.
+              dwcOtherCatalogNumbers:
+                type: array
+                nullable: true
+                description: Other catalog numbers
+                items:
+                  type: string
+              preparationDate:
+                type: string
+                format: date
+                nullable: true
+                description: The date on which the material sample was prepared.
+              managedAttributes:
+                type: object
+                description: The manage attribute, with key and value pair
+                additionalProperties:
+                  type: string
+              preparationRemarks:
+                type: string
+                nullable: true
+                description: Remarks on the preparation of the material sample
+                minLength: 0
+                maxLength: 1000
+              dwcDegreeOfEstablishment:
+                type: string
+                nullable: true
+                description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
+                minLength: 0
+                maxLength: 1000
+              barcode:
+                type: string
+                description: barcode for the material sample
+              ordinal:
+                type: number
+                readOnly: true
+                description: The ordinal number of the entry in the list of materialSampleChildren based on order of creation.
+        targetOrganismPrimaryScientificName:
+          type: string
+          readOnly: true
+          description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the primary determination of the target organism. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
+        targetOrganismPrimaryClassification:
+          type: object
+          readOnly: true
+          nullable: true
+          description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
+        effectiveScientificName:
+          type: string
+          readOnly: true
+          description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the first determination found in the hierachy. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
+        barcode:
+          type: string
+          description: barcode for the material sample
+        publiclyReleasable:
+          type: boolean
+          nullable: true
+          description: whether or not the material sample is publicly releasable
+        notPubliclyReleasableReason:
+          type: string
+          nullable: true
+          description: text description of reason why the material sample is not publicly releasable
+        tags:
+          type: array
+          nullable: true
+          description: tags for the material sample
+          items:
+            type: string 
+        materialSampleState:
+          type: string
+          nullable: true
+        materialSampleRemarks:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 1000
+        stateChangedOn:
+          type: string
+          format: date
+          nullable: true
+        stateChangeRemarks:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 1000
+        hostOrganism:
           type: object
           nullable: true
           properties:
-            collectingEvent:
+            name:
+              type: string
+              nullable: true
+            remarks:
+              type: string
+              nullable: true
+              minLength: 0
+              maxLength: 1000
+        scheduledActions:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              actionType:
+                type: string
+                nullable: true
+              date:
+                type: string
+                format: date
+                nullable: true
+              actionStatus:
+                type: string
+                nullable: true
+              remarks:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 1000
+              assignedTo:
+                type: object
+                nullable: true
+                required:
+                  - type
+                  - id
+                properties:
+                  type:
+                    enum: [user]
+                  id:
+                    type: string
+                    format: uuid
+                    description: user's id which this scheduled action is assigned to
+                    example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        allowDuplicateName:
+          type: boolean
+          nullable: false
+          description: whether or not the material sample name constraint is enforced
+        restrictionFieldsExtension:
+          type: object
+          description: "Values of restriction related field extension. Format is {\"extensionKey\": {\"fieldKey\":\"fieldValue\"}}. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT."
+          additionalProperties:
+            type: object
+            additionalProperties:
+                type: string
+        isRestricted:
+          type: boolean
+          nullable: false
+          description: whether or not the material sample is considered restricted
+        restrictionRemarks:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 1000
+        sourceSet:
+          type: string
+          description: "Used to group a set of records that were created together. From an import, migration or split."
+          nullable: true
+          minLength: 0
+          maxLength: 50
+        isBaseForSplitByType:
+          type: boolean
+          nullable: true
+          description: Whether or not the material sample will be used as a basename for split of material-sample of the same type
+        associations:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              associatedSample:
+                type: string
+                format: uuid
+                description: materialSample's associated id
+                example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+              remarks:
+                type: string
+                description: remarks of the association
+                minLength: 0
+                maxLength: 1000
+              associationType:
+                type: string
+                nullable: true
+                description: type of association     
+
+    CommonMaterialSampleRelationships:
+      type: object
+      nullable: true
+      properties:
+        collectingEvent:
+          type: object
+          required:
+            - data
+          properties:
+            data:
               type: object
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [collecting-event]
-                    id:
-                      type: string
-                      format: uuid
-                      description: materialSample's collectingEvent id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            collection:
+                type:
+                  enum: [collecting-event]
+                id:
+                  type: string
+                  format: uuid
+                  description: materialSample's collectingEvent id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        collection:
+          type: object
+          required:
+            - data
+          properties:
+            data:
               type: object
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [collection]
-                    id:
-                      type: string
-                      format: uuid
-                      description: materialSample's collection id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c            
-            preparationType:
+                type:
+                  enum: [collection]
+                id:
+                  type: string
+                  format: uuid
+                  description: materialSample's collection id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c            
+        preparationType:
+          type: object
+          nullable: true
+          required:
+            - data
+          properties:
+            data:
               type: object
-              nullable: true
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [preparation-type]
-                    id:
-                      type: string
-                      format: uuid
-                      description: materialSample's preparationType id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            preparationMethod:
+                type:
+                  enum: [preparation-type]
+                id:
+                  type: string
+                  format: uuid
+                  description: materialSample's preparationType id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        preparationMethod:
+          type: object
+          nullable: true
+          required:
+            - data
+          properties:
+            data:
               type: object
-              nullable: true
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [preparation-method]
-                    id:
-                      type: string
-                      format: uuid
-                      description: materialSample's preparationMethod id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            parentMaterialSample:
+                type:
+                  enum: [preparation-method]
+                id:
+                  type: string
+                  format: uuid
+                  description: materialSample's preparationMethod id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        parentMaterialSample:
+          type: object
+          nullable: true
+          required:
+            - data
+          properties:
+            data:
               type: object
-              nullable: true
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [material-sample]
-                    id:
-                      type: string
-                      format: uuid
-                      description: materialSample's parent id
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            preparedBy:
+                type:
+                  enum: [material-sample]
+                id:
+                  type: string
+                  format: uuid
+                  description: materialSample's parent id
+                  example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        preparedBy:
+          type: object
+          nullable: true
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                properties:
+                  type:
+                    enum: [person]
+                  id:
+                    type: string
+                    format: uuid
+                    description: person who prepared the material sample
+                    example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        attachment:
+          $ref: '../components/common-parameters.yml#/Attachment'
+        preparationProtocol:
+          $ref: '../components/common-parameters.yml#/Protocol'
+        projects:
+          type: object
+          nullable: true
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                properties:
+                  type: 
+                    enum: [project]
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier a the project
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+        assemblages:
+          type: object
+          nullable: true
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                properties:
+                  type: 
+                    enum: [assemblage]
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of an assemblage for the resource
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+        organism:
+          type: object
+          nullable: true
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                properties:
+                  type: 
+                    enum: [organism]
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier organism for the resource
+                    example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
+        storageUnitUsage:
+          type: object
+          nullable: true
+          properties:
+            data:
               type: object
-              nullable: true
+              required:
+                - type
+                - id
               properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        enum: [person]
-                      id:
-                        type: string
-                        format: uuid
-                        description: person who prepared the material sample
-                        example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
-            attachment:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        type: string
-                        example: metadata
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier metadata for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            preparationProtocol:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type: 
-                      enum: [protocol]
-                    id:
-                      type: string
-                      format: uuid
-                      description: Unique identifier of the protocol
-                      example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            projects:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [project]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier a the project
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            assemblages:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [assemblage]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of an assemblage for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            organism:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [organism]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier organism for the resource
-                        example: 4d5b4f2a-f925-49b4-b290-6f6699706c3e
-            storageUnitUsage:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [ storage-unit-usage ]
-                    id:
-                      type: string
-                      format: uuid
-                      description: Unique identifier of the storage-unit-usage
-                      example: c0915662-0bfb-4d17-96a8-39c8bd3f0731
+                type:
+                  enum: [ storage-unit-usage ]
+                id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the storage-unit-usage
+                  example: c0915662-0bfb-4d17-96a8-39c8bd3f0731

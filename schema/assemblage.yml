@@ -20,52 +20,37 @@ paths:
       operationId: getAssemblages
       description: By passing in query string, user can get available assemblages authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the assemblages
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: assemblages satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/Assemblage'                
-        '404':
-          description: assemblage not found
+                $ref: '#/components/schemas/AssemblageResponseList'                
     post:
       tags:
         - Assemblage
       summary: Add assemblage
       operationId: addAssemblage
-      description: Adds a assemblage
+      description: Adds an assemblage
       responses:
         '201':
           description: Assemblage created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssemblageResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: Unprocessable entity  
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'       
       requestBody:
         content:
           application/vnd.api+json:
@@ -89,21 +74,35 @@ paths:
             format: uuid            
       responses:
         '200':
-          description: successful operation
+          description: Successful operation
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/Assemblage'
+                $ref: '#/components/schemas/AssemblageResponse'
         '400':
-          description: Not a valid uuid                
+          description: Bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: Assemblage not found          
+          description: Assemblage not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssemblageNotFound'
+        '410':
+          description: Assemblage deleted       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssemblageDeleted'          
     patch:
       tags:
         - Assemblage
       summary: Update assemblage
       operationId: updateAssemblage
-      description: update a assemblage
+      description: Update an assemblage
       parameters:
         - name: Id
           in: path
@@ -115,8 +114,28 @@ paths:
       responses:
         '200':
           description: Assemblage updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssemblageResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: Assemblage deleted       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssemblageDeleted'
+        '422':
+          description: unprocessable entity  
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,12 +157,22 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: Assemblage marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: Assemblage not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssemblageNotFound'
+
+
 components:
   schemas:
     Assemblage:
@@ -174,6 +203,142 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonAssemblage'
 
+    AssemblageResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonAssemblageResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    AssemblageResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonAssemblageResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    AssemblageResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonAssemblageResponse'
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: ${dina.apiPrefix}/assemblage/019c0600-b7dd-75db-8601-86c57232b36f"
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    AssemblageNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "404"
+              title:
+                type: string
+                example: "Not Found"
+              detail:
+                type: string
+                example: "AssemblageDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    AssemblageDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=assemblage/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "AssemblageDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
+    CommonAssemblageResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [assemblage]      
+          description: The type of data being returned.
+        attritbutes:
+          $ref: '#/components/schemas/AssemblageAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+        relationships:
+          $ref: '#/components/schemas/AssemblageRelationships'
+
     CommonAssemblage:
       type: object
       required:
@@ -183,83 +348,71 @@ components:
         type:
           enum: [assemblage]      
           description: The type of data being returned.
-        attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the assemblage
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the assemblage
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the assemblage was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the assemblage belongs to
-            managedAttributes:
-              type: object
-              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
-              additionalProperties:
-                type: string
-            multilingualTitle:
-              type: object
-              nullable: true
-              properties:
-                titles:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      title:
-                        type: string
-                        description: the description
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
+        attritbutes:
+          $ref: '#/components/schemas/AssemblageAttributes'
         relationships:
+          $ref: '#/components/schemas/AssemblageRelationships'
+
+    AssemblageAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the assemblage
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the assemblage
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the assemblage was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group: 
+          type: string
+          description: The group in which the assemblage belongs to
+        managedAttributes:
+          type: object
+          description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT.
+          additionalProperties:
+            type: string
+        multilingualTitle:
+          type: object
+          nullable: true
+          properties:
+            titles:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  lang:
+                    type: string
+                    description: language of the description
+                  title:
+                    type: string
+                    description: the description
+        multilingualDescription:
+          type: object
+          nullable: true
+          properties:
+            descriptions:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  lang:
+                    type: string
+                    description: language of the description
+                  desc:
+                    type: string
+                    description: the description
+    
+    AssemblageRelationships:
           type: object
           nullable: true
           properties:
             attachment:
-              type: object
-              nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        type: string
-                        example: metadata
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier metadata for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+              $ref: '../components/common-parameters.yml#/Attachment'

@@ -1,0 +1,109 @@
+BadRequest:
+  type: object
+  required:
+    - errors
+  properties:
+    errors:
+      type: array
+      items:
+        type: object
+        properties:
+          status:
+            type: string
+            example: "400 BAD_REQUEST"
+          code:
+            type: string
+            example: "400"
+          title:
+            type: string
+            example: "Bad Request"
+          detail:
+            type: string
+            example: "Invalid UUID string: 019c0576-3ba6-7b64-b45"
+
+UnprocessableEntity:
+  type: object
+  required:
+    - errors
+  properties:
+    errors:
+      type: array
+      items:      
+        type: object
+        properties:
+          status:
+            type: string
+            example: "422 UNPROCESSABLE_ENTITY"
+          code:
+            type: string
+            example: "422"
+          title:
+            type: string
+            example: "Constraint violation"
+          detail:
+            type: string
+            example: "name must not be blank"
+          source:
+            type: object
+            properties:
+              pointer:
+                type: string
+                example: "name"
+
+ResponseMeta:
+  type: object
+  properties:
+    moduleVersion:
+      type: string
+      readOnly: true
+      description: API module version number.
+
+ResponseMetaWithResourceCount:
+  type: object
+  properties:
+    moduleVersion:
+      type: string
+      readOnly: true
+      description: API module version number.
+    totalResourceCount:
+      type: integer
+      readOnly: true
+      description: Total number of resources available for the given query (ignoring pagination).
+
+PermissionsMeta:
+      type: object
+      description: |
+        Metadata containing authorization and permissions information.
+        
+        The `permissions` array indicates which operations the authenticated user 
+        is authorized to perform on this resource. Only enabled permissions are 
+        included in the array. An empty array means no permissions are granted.
+        
+        Examples:
+        - `["create", "update", "delete"]` - Full access
+        - `["update"]` - Can only update
+        - `[]` - Read-only access
+      properties:
+        permissionsProvider:
+          type: string
+          readOnly: true
+          example: GroupAuthorizationService
+          description: The authorization service that determined these permissions
+        permissions:
+          type: array
+          readOnly: true
+          minItems: 0
+          maxItems: 3
+          items:
+            type: string
+            enum: [create, update, delete]
+          example: ["create", "update", "delete"]
+          uniqueItems: true
+          description: |
+            Array of enabled permission operations. Possible values:
+            - `create` - Authorization to create new resources
+            - `update` - Authorization to modify this resource
+            - `delete` - Authorization to delete this resource
+            
+            If a permission is present in the array, it is enabled.
+            If a permission is absent from the array, it is disabled.

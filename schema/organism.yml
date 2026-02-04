@@ -20,41 +20,36 @@ paths:
       operationId: getOrganisms
       description: By passing in query string, user can get available organisms authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the organisms
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: organisms satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/Organism'                
+                $ref: '#/components/schemas/OrganismResponseList'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: organism not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismNotFound'
+        '410':
+          description: organism deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismDeleted'
     post:
       tags:
         - Organism
@@ -64,8 +59,16 @@ paths:
       responses:
         '201':
           description: Organism created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -92,12 +95,26 @@ paths:
           description: successful operation
           content:
             application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/Organism'
+              schema:
+                $ref: '#/components/schemas/OrganismResponse'
         '400':
-          description: Not a valid uuid                
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: Organism not found          
+          description: organism not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismNotFound'
+        '410':
+          description: organism deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismDeleted'          
     patch:
       tags:
         - Organism
@@ -115,8 +132,28 @@ paths:
       responses:
         '200':
           description: organism updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: organism deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismDeleted'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,14 +175,144 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: organism marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: organism not found       
+          description: organism not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/OrganismNotFound'    
 components:
   schemas:
+    OrganismResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonOrganismResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    OrganismResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonOrganismResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    OrganismResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonOrganismResponse'
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: ${dina.apiPrefix}/organism/019c0600-b7dd-75db-8601-86c57232b36f
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    OrganismNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "OrganismDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    OrganismDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=organism/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "OrganismDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
     Organism:
       type: object
       required:
@@ -184,152 +351,169 @@ components:
           enum: [organism]      
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonOrganismAttributes'
+
+    CommonOrganismResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [organism]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonOrganismAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+
+    CommonOrganismAttributes:
+      type: object
+      properties:
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who created the organism
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the organism was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group:
+          type: string
+          minLength: 0
+          maxLength: 50
+        isTarget:
+          type: boolean
+          nullable: true
+          description: Optionally, there can be 0 or 1 target organism for each material-sample. The check is applied when the relationship between the material-sample and the organism is established.
+        managedAttributes:
           type: object
-          properties:
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the organism
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the organism was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              minLength: 0
-              maxLength: 50
-            isTarget:
-              type: boolean
-              nullable: true
-              description: Optionally, there can be 0 or 1 target organism for each material-sample. The check is applied when the relationship between the material-sample and the organism is established.
-            managedAttributes:
-              type: object
-              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
-              additionalProperties:
+          description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
+          additionalProperties:
+            type: string
+        lifeStage:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 50
+        sex:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 25
+        remarks:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 1000
+        dwcVernacularName:
+          type: string
+          nullable: true
+          minLength: 0
+          maxLength: 100
+          description: A common or vernacular name. https://dwc.tdwg.org/list/#dwc_vernacularName
+        determination:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              verbatimScientificName:
                 type: string
-            lifeStage:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 50
-            sex:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 25
-            remarks:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 1000
-            dwcVernacularName:
-              type: string
-              nullable: true
-              minLength: 0
-              maxLength: 100
-              description: A common or vernacular name. https://dwc.tdwg.org/list/#dwc_vernacularName
-            determination:
-              type: array
-              nullable: true
-              items:
+                nullable: true
+              verbatimDeterminer:
+                type: string
+                nullable: true
+              verbatimDate:
+                type: string
+                nullable: true
+              scientificName:
+                type: string
+                nullable: true
+              transcriberRemarks:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 1000
+              verbatimRemarks:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 1000
+              determinationRemarks:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 1000
+              typeStatus:
+                type: string
+                nullable: true
+              typeStatusEvidence:
+                type: string
+                nullable: true
+              determiner:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                  format: uuid
+              determinedOn:
+                type: string
+                format: date
+                nullable: true
+              qualifier:
+                type: string
+                nullable: true
+              scientificNameSource:
+                type: string
+                nullable: true
+                enum: [null, CUSTOM, COLPLUS, GNA]
+              scientificNameDetails:
                 type: object
+                nullable: true
                 properties:
-                  verbatimScientificName:
-                    type: string
-                    nullable: true
-                  verbatimDeterminer:
-                    type: string
-                    nullable: true
-                  verbatimDate:
-                    type: string
-                    nullable: true
-                  scientificName:
-                    type: string
-                    nullable: true
-                  transcriberRemarks:
+                  classificationPath:
                     type: string
                     nullable: true
                     minLength: 0
                     maxLength: 1000
-                  verbatimRemarks:
+                  classificationRanks:
                     type: string
                     nullable: true
                     minLength: 0
                     maxLength: 1000
-                  determinationRemarks:
+                  sourceUrl:
+                    type: string
+                    format: uri
+                    nullable: true
+                  labelHtml:
                     type: string
                     nullable: true
-                    minLength: 0
-                    maxLength: 1000
-                  typeStatus:
-                    type: string
-                    nullable: true
-                  typeStatusEvidence:
-                    type: string
-                    nullable: true
-                  determiner:
-                    type: array
-                    nullable: true
-                    items:
-                      type: string
-                      format: uuid
-                  determinedOn:
+                  recordedOn:
                     type: string
                     format: date
                     nullable: true
-                  qualifier:
+                  currentName:
                     type: string
                     nullable: true
-                  scientificNameSource:
-                    type: string
-                    nullable: true
-                    enum: [null, CUSTOM, COLPLUS, GNA]
-                  scientificNameDetails:
-                    type: object
-                    nullable: true
-                    properties:
-                      classificationPath:
-                        type: string
-                        nullable: true
-                        minLength: 0
-                        maxLength: 1000
-                      classificationRanks:
-                        type: string
-                        nullable: true
-                        minLength: 0
-                        maxLength: 1000
-                      sourceUrl:
-                        type: string
-                        format: uri
-                        nullable: true
-                      labelHtml:
-                        type: string
-                        nullable: true
-                      recordedOn:
-                        type: string
-                        format: date
-                        nullable: true
-                      currentName:
-                        type: string
-                        nullable: true
-                        minLength: 0
-                        maxLength: 250
-                      isSynonym:
-                        type: boolean
-                        nullable: true
-                  isPrimary:
+                    minLength: 0
+                    maxLength: 250
+                  isSynonym:
                     type: boolean
                     nullable: true
-                    description: whether or not it the primary determination
-                  isFiledAs:
-                    type: boolean
-                    nullable: true
-                    description: whether or not it the determination is filed as
-                  managedAttributes:
-                    type: object
-                    nullable: true
-                    description: The manage attribute, with key and value pair
-                    additionalProperties:
-                      type: string
+              isPrimary:
+                type: boolean
+                nullable: true
+                description: whether or not it the primary determination
+              isFiledAs:
+                type: boolean
+                nullable: true
+                description: whether or not it the determination is filed as
+              managedAttributes:
+                type: object
+                nullable: true
+                description: The manage attribute, with key and value pair
+                additionalProperties:
+                  type: string
