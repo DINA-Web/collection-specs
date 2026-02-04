@@ -191,13 +191,31 @@ components:
               description: The title of the site
               minLength: 1
               maxLength: 255
-            descriptions:
-              type: object
-              description: Description of the site in multiple languages. Key is the language code (e.g., en, fr, es), value is the description text.
+            group:
+              type: string
+              description: The group in which this site belongs to
+            code:
+              type: string
+              minLength: 1
+              maxLength: 50
               nullable: true
-              additionalProperties:
-                type: string
-                maxLength: 2000
+              description: Shorthand code for the site
+            multilingualDescription:
+              type: object
+              nullable: true
+              properties:
+                descriptions:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      desc:
+                        type: string
+                        description: the description
             createdBy:
               type: string
               readOnly: true
@@ -208,163 +226,10 @@ components:
               readOnly: true
               description: date and time when the site was created in ISO format
               example: 1985-04-12T23:20:50.52Z
-            code:
-              type: string
-              minLength: 1
-              maxLength: 50
-              nullable: true
-              description: Shorthand code for the site
-            shape:
-              type: object
-              nullable: true
-              description: The geometry of the site (point, circle, line, or polygon) in GeoJSON format
-              properties:
-                type:
-                  type: string
-                  enum: [Point, LineString, Polygon, Circle]
-                  description: The type of geometry
-                coordinates:
-                  oneOf:
-                    - type: array
-                      description: For Point - [longitude, latitude]
-                      minItems: 2
-                      maxItems: 2
-                      items:
-                        type: number
-                    - type: array
-                      description: For LineString - array of [longitude, latitude] pairs
-                      items:
-                        type: array
-                        minItems: 2
-                        maxItems: 2
-                        items:
-                          type: number
-                    - type: array
-                      description: For Polygon - array of linear rings
-                      items:
-                        type: array
-                        items:
-                          type: array
-                          minItems: 2
-                          maxItems: 2
-                          items:
-                            type: number
-                radius:
-                  type: number
-                  nullable: true
-                  description: Radius in meters for Circle geometry type
-                  minimum: 0
-            establishedOn:
-              type: string
-              format: date-time
-              nullable: true
-              description: The date when the site was established, in ISO 8601 format
-            decommissionedOn:
-              type: string
-              format: date-time
-              nullable: true
-              description: The date when the site ended or was decommissioned, in ISO 8601 format. Must be after establishedOn if both are provided.
-            managedAttributes:
-              type: object
-              description: The managed attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT.
-              nullable: true
-              additionalProperties:
-                type: string
-            siteHierarchyType:
-              type: string
-              nullable: true
-              description: The type of hierarchy this site belongs to (e.g., "Plot", "SubPlot", "Section"). Used to describe child site types in hierarchical structures.
-              maxLength: 100
-            remarks:
-              type: string
-              nullable: true
-              description: remarks on the site
-              minLength: 0
-              maxLength: 1000
         relationships:
           type: object
           nullable: true
           properties:
-            parentSite:
-              type: object
-              nullable: true
-              description: Parent site in a hierarchical structure
-              properties:
-                data:
-                  type: object
-                  nullable: true
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [site]
-                    id:
-                      type: string
-                      format: uuid
-                      description: Unique identifier of the parent site
-                      example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            projects:
-              type: object
-              nullable: true
-              description: Projects associated with this site
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        type: string
-                        example: project
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the project
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            expeditions:
-              type: object
-              nullable: true
-              description: Expeditions associated with this site
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        enum: [expedition]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the expedition
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            collectingEvents:
-              type: object
-              nullable: true
-              description: Collecting events that occurred at this site
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        enum: [collecting-event]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the collecting event
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
             attachment:
               type: object
               nullable: true
