@@ -48,6 +48,8 @@ FiqlFilter:
     
     <details>
     <summary><strong>Wildcards</strong></summary>
+
+    Use wildcards within string values for pattern matching:
     
     - `*` - Matches zero or more characters
     
@@ -55,6 +57,8 @@ FiqlFilter:
     - `name==John*` - Starts with "John"
     - `name==*Smith` - Ends with "Smith"
     - `name==*John*` - Contains "John"
+
+    Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match "John;Doe".
     
     </details>
     
@@ -113,7 +117,17 @@ FiqlFilter:
     (scientificName==*Quercus*,commonName==*oak*);collectionYear=gt=2020
     (status==active,status==pending);preparationType!=digital;collectionYear=ge=2023
     ```
+
+    ### URL-Encoded Example
     
+    ```
+    # Before encoding:
+    fiql=key==test%%%%
+    
+    # After encoding:
+    fiql=key%3D%3D*test%25%25%25%25
+    ```
+  
     </details>
     
     <details><summary><strong>Important Notes</strong></summary>
@@ -130,6 +144,10 @@ FiqlFilter:
     3. **Performance**: Leading wildcards (`*term`) may impact query performance
     
     4. **Field Support**: Not all fields support all operators. See endpoint-specific documentation.
+
+    5. **Nested Fields**: FIQL cannot be applied to nested/related fields. Use the `filter` parameter for those cases.
+
+    6. Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match "John;Doe". 
     
     </details>
     
@@ -168,11 +186,31 @@ SimpleSearchFilter:
     | `IN` | In list (comma-separated) | `filter[status][IN]=active,pending` |
     | `LIKE` | Pattern match (use % or _ for wildcard) | `filter[name][LIKE]=%oak%` |
     | `ILIKE` | Case-insensitive pattern match (use % or _ for wildcard) | `filter[locality][ILIKE]=%canada%` |
-    | `_` | Wildcard for exactly one character (use with LIKE or ILIKE) | `filter[name][LIKE]=o_k` |
-    | `%` | Wildcard for zero or more characters (use with LIKE or ILIKE) | `filter[name][LIKE]=%oak%` |
     
     </details>
+
+    <details>
+    <summary><strong>Wildcards</strong></summary>
+
+    Use wildcards within string values along with the LIKE or ILIKE operators for pattern matching:
     
+    - `%` - Matches zero or more characters
+    - `_` - Matches exactly one character
+    
+    **Examples:**
+    ```
+    filter[scientificName][LIKE]=%Quercus // matches any name ending with "Quercus"
+    filter[scientificName][LIKE]=Quercus% // matches any name starting with "Quercus"
+    filter[scientificName][LIKE]=Quercus% // matches any name containing "Quercus"
+
+    filter[scientificName][LIKE]=_uercus // matches any name with any single character followed by "uercus"
+    filter[scientificName][LIKE]=Querc_s // matches any name starting with "Querc" followed by any single character and "s"
+    ```
+
+    Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match "John;Doe".
+    
+    </details>
+
     <details>
     <summary><strong>Examples</strong></summary>
     
@@ -201,16 +239,6 @@ SimpleSearchFilter:
     filter[status][IN]=active,pending,review
     filter[collectionCode][IN]=BOTANY,ZOOLOGY
     ```
-
-    ### Pattern Matching with Wildcards
-    ```
-    filter[scientificName][LIKE]=%Quercus // matches any name ending with "Quercus"
-    filter[scientificName][LIKE]=Quercus% // matches any name starting with "Quercus"
-    filter[scientificName][LIKE]=Quercus% // matches any name containing "Quercus"
-
-    filter[scientificName][LIKE]=_uercus // matches any name with any single character followed by "uercus"
-    filter[scientificName][LIKE]=Querc_s // matches any name starting with "Querc" followed by any single character and "s"
-    ```
     
     ### Multiple Filters (AND logic)
     ```
@@ -222,6 +250,16 @@ SimpleSearchFilter:
     ```
     filter[status][IN]=active,pending
     filter[scientificName][LIKE]=%Quercus%,%Pinus%
+    ```
+
+    ### URL-Encoded Example
+    
+    ```
+    # Before encoding:
+    filter[scientificName][LIKE]=%Quercus%
+    
+    # After encoding:
+    filter%5BscientificName%5D%5BLIKE%5D%3D%25Quercus%25
     ```
 
     </details>
@@ -251,35 +289,10 @@ SimpleSearchFilter:
     3. **Case Sensitivity**: Field names are case-sensitive
     4. **Operator Format**: Operators must be in UPPERCASE
     5. **Wildcards**: Use `%`and `_` for wildcards in LIKE/ILIKE patterns
+    6. Use `\` to escape special characters within string values, e.g., `name==John\;Doe` to match "John;Doe". 
     
     </details>
-    
-    <details>
-    <summary><strong>URL-Encoded Examples</strong></summary>
-    
-    ```
-    # Before encoding:
-    filter[storageUnitType.uuid][EQ]=0193bc05-5d49-7b99-89ea-7c97d2dcd7bd
-    
-    # After encoding:
-    filter%5BstorageUnitType.uuid%5D%5BEQ%5D=0193bc05-5d49-7b99-89ea-7c97d2dcd7bd
-    ```
-    
-    ```
-    # Before encoding:
-    filter[scientificName][LIKE]=%Quercus%
-    
-    # After encoding:
-    filter%5BscientificName%5D%5BLIKE%5D=%25Quercus%25
-    ```
-    </details>
-    
-  schema:
-    type: object
-    additionalProperties:
-      type: object
-      additionalProperties:
-        type: string
+  
 
 Sort:
   in: query
@@ -327,6 +340,22 @@ Attachment:
             description: Unique identifier metadata for the resource
             example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
 
-
+Protocol:
+  type: object
+  nullable: true
+  properties:
+    data:
+      type: object
+      required:
+        - type
+        - id
+      properties:
+        type: 
+          enum: [protocol]
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the protocol
+          example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
 
   
