@@ -669,25 +669,26 @@ components:
       nullable: true
       properties:
         protocol:
+          $ref: '../components/common-parameters.yml#/Protocol'
+        expedition:
           type: object
           nullable: true
           properties:
             data:
               type: object
-              items:
-                type: object
-                required:
-                  - type
-                  - id
-                properties:
-                  type: 
-                    enum: [protocol]
-                  id:
-                    type: string
-                    format: uuid
-                    description: Unique identifier of the protocol
-                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-        attachment:
+              required:
+                - type
+                - id
+              properties:
+                type: 
+                  type: string
+                  example: expedition
+                id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the expedition
+                  example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+        attachment: 
           $ref: '../components/common-parameters.yml#/Attachment'
         collectors:
           type: object

@@ -188,13 +188,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/CollectionManagedAttributeNotFound'
-        '410':
-          description: collection managed attribute deleted
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/CollectionManagedAttributeDeleted'       
+                $ref: '#/components/schemas/CollectionManagedAttributeNotFound'                     
 components:
   schemas:
     CollectionManagedAttributeResponse:
