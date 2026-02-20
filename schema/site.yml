@@ -10,7 +10,7 @@ info:
     email: you@your-company.com
   license:
     name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 paths:
   /v1/site:
     get:
@@ -20,58 +20,61 @@ paths:
       operationId: getSites
       description: By passing in query string, user can get available sites authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up sites
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: sites satisfying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Site'
+                $ref: '#/components/schemas/SiteResponseList'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: site not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteNotFound'
+        '410':
+          description: site deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteDeleted'
     post:
       tags:
         - Site
       summary: Add site
       operationId: addSite
       description: Adds a site
-      responses:
-        '201':
-          description: site created
-        '422':
-          description: Data integrity violation
       requestBody:
         content:
           application/vnd.api+json:
             schema:
               $ref: '#/components/schemas/NewSite'
         description: Site to add
+      responses:
+        '201':
+          description: site created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteResponseWithLink'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
   /v1/site/{Id}:
     get:
       tags:
@@ -93,17 +96,31 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Site'
+                $ref: '#/components/schemas/SiteResponse'
         '400':
-          description: Not a valid uuid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: Site not found
+          description: site not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteNotFound'
+        '410':
+          description: site deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteDeleted'
     patch:
       tags:
         - Site
       summary: Update site
       operationId: updateSite
-      description: update a site
+      description: update an site
       parameters:
         - name: Id
           in: path
@@ -115,14 +132,34 @@ paths:
       responses:
         '200':
           description: site updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: site deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteDeleted'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
             schema:
               $ref: '#/components/schemas/Site'
-        description: site to update
+        description: site to add
     delete:
       tags:
         - Site
@@ -138,14 +175,144 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        '204':
           description: site marked as deleted
         '400':
-          description: Not a valid uuid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: site not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SiteNotFound'
 components:
   schemas:
+    SiteResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonSiteResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    SiteResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonSiteResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    SiteResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonSiteResponse'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              format: url
+              example: ${dina.apiPrefix}/collection-method/019c0600-b7dd-75db-8601-86c57232b36f
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    SiteNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "SiteDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    SiteDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=site/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "SiteDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
     Site:
       type: object
       required:
@@ -174,6 +341,22 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonSite'
 
+    CommonSiteResponse:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [site]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/SiteAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/SiteRelationships'
+
     CommonSite:
       type: object
       required:
@@ -184,70 +367,87 @@ components:
           enum: [site]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the site
-              minLength: 1
-              maxLength: 255
-            group:
-              type: string
-              description: The group in which this site belongs to
-            code:
-              type: string
-              minLength: 1
-              maxLength: 50
-              nullable: true
-              description: Shorthand code for the site
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
-            createdBy:
-              type: string
-              readOnly: true
-              description: authenticated user who created the site
-            createdOn:
-              type: string
-              format: date-time
-              readOnly: true
-              description: date and time when the site was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
+          $ref: '#/components/schemas/SiteAttributes'
         relationships:
+          $ref: '#/components/schemas/SiteRelationships'
+
+    SiteAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the site
+        createdBy:
+          type: string
+          readOnly: true
+          description: authenticated user who create the site
+        createdOn:
+          type: string
+          format: date-time
+          readOnly: true
+          description: date and time when the site was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group:
+          type: string
+          description: The group in which the site belongs to
+        code:
+          type: string
+          description: The code of the site
+        siteGeom:
+          type: object
+          nullable: true
+          description: GeoJSON representation of the site's geometry (2D).
+          properties:
+            type:
+              type: string
+              enum:
+                - Point
+                - MultiPoint
+                - LineString
+                - MultiLineString
+                - Polygon
+                - MultiPolygon
+            coordinates:
+              description: GeoJSON coordinates array
+        multilingualDescription:
           type: object
           nullable: true
           properties:
-            attachment:
-              type: object
+            descriptions:
+              type: array
               nullable: true
-              description: Multimedia attachments (images, documents, etc.)
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        type: string
-                        example: metadata
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the metadata/attachment
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+              items:
+                type: object
+                properties:
+                  lang:
+                    type: string
+                    description: language of the description
+                  desc:
+                    type: string
+                    description: the description
+
+    SiteRelationships:
+      type: object
+      nullable: true
+      properties:
+        attachment:
+          type: object
+          nullable: true
+          description: Multimedia attachments (images, documents, etc.)
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                properties:
+                  type:
+                    type: string
+                    example: metadata
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the metadata/attachment
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
