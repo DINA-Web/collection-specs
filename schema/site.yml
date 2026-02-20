@@ -396,7 +396,14 @@ components:
         siteGeom:
           type: object
           nullable: true
-          description: GeoJSON representation of the site's geometry (2D).
+          description: >
+            GeoJSON representation of the site's geometry (2D).
+            Coordinates follow the GeoJSON standard and are in [longitude, latitude] order.
+            For Polygon geometries:
+              - Coordinates consist of an array of linear rings.
+              - The first linear ring represents the exterior boundary.
+              - The first and last coordinate in the exterior ring must be identical to close the polygon.
+              - This Polygon has no holes or interior rings; only the exterior ring is defined.
           properties:
             type:
               type: string
@@ -408,7 +415,20 @@ components:
                 - Polygon
                 - MultiPolygon
             coordinates:
-              description: GeoJSON coordinates array
+              description: >
+                GeoJSON coordinates array.
+                For Polygon: array of linear rings, each containing an array of
+                [longitude, latitude] coordinate pairs.
+                In this case, only one exterior ring exists (no holes).
+          example:
+            type: Polygon
+            coordinates:
+              -
+                - [100.0, 0.0]
+                - [101.0, 0.0]
+                - [101.0, 1.0]
+                - [100.0, 1.0]
+                - [100.0, 0.0]
         multilingualDescription:
           type: object
           nullable: true
