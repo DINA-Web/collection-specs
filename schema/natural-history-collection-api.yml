@@ -71,6 +71,10 @@ paths:
     $ref: 'protocol.yml#/paths/~1v1~1protocol'
   /v1/protocol/{Id}:
     $ref: 'protocol.yml#/paths/~1v1~1protocol~1{Id}'
+  /v1/site:
+    $ref: 'site.yml#/paths/~1v1~1site'
+  /v1/site/{Id}:
+    $ref: 'site.yml#/paths/~1v1~1site~1{Id}'
   /v1/storage-unit:
     $ref: 'storageUnit.yml#/paths/~1v1~1storage-unit'
   /v1/storage-unit/{Id}:
