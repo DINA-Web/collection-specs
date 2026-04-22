@@ -434,6 +434,20 @@ components:
                     name:
                       type: string
                       example: "EPSG:4326"
+            crs:
+              type: object
+              nullable: true
+              description: Coordinate Reference System object (optional in GeoJSON)
+              properties:
+                type:
+                  type: string
+                  example: "name"
+                properties:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: "EPSG:4326"
           example:
             type: Polygon
             coordinates:
@@ -514,6 +528,12 @@ components:
               format: date-time
               nullable: true
               description: The date and time the geographic place name source detail record was recorded on.
+        managedAttributes:
+          type: object
+          nullable: true
+          description: Map of managed attribute key/value pairs
+          additionalProperties:
+            type: string  
     SiteRelationships:
       type: object
       nullable: true
@@ -552,3 +572,5 @@ components:
           type: string
         name:
           type: string
+
+    
