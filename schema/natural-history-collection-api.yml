@@ -13,6 +13,10 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 
 paths:
+  /v1/association:
+    $ref: 'association.yml#/paths/~1v1~1association'
+  /v1/association/{Id}:
+    $ref: 'association.yml#/paths/~1v1~1association~1{Id}'
   /v1/collecting-event:
     $ref: 'collectingEvent.yml#/paths/~1v1~1collecting-event'
   /v1/collecting-event/{Id}:
