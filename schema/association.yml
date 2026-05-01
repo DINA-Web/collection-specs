@@ -1,0 +1,416 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Used to manage associations between entities or resources.
+  version: "1.0.0"
+  title: Association schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/association:
+    get:
+      tags:
+        - Association
+      summary: Get associations
+      operationId: getAssociations
+      description: By passing in query string, user can get available associations authorised
+      parameters:
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
+      responses:
+        '200':
+          description: associations satisfying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/AssociationResponseList'                
+    post:
+      tags:
+        - Association
+      summary: Add association
+      operationId: addAssociation
+      description: Adds an association
+      responses:
+        '201':
+          description: Association created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssociationResponseWithLink'
+        '422':
+          description: Unprocessable entity  
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewAssociation'
+        description: Association to add
+  /v1/association/{Id}:
+    get:
+      tags:
+        - Association
+      summary: Find association by ID
+      description: Returns a single association
+      operationId: getAssociationById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of association to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssociationResponse'
+        '400':
+          description: Bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '404':
+          description: Association not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssociationNotFound'
+        '410':
+          description: Association deleted       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssociationDeleted'          
+    patch:
+      tags:
+        - Association
+      summary: Update association
+      operationId: updateAssociation
+      description: Update an association
+      parameters:
+        - name: Id
+          in: path
+          description: Association id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Association updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssociationResponse'
+        '400':
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: Association deleted       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssociationDeleted'
+        '422':
+          description: unprocessable entity  
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/Association'
+        description: Association to update
+    delete:
+      tags:
+        - Association
+      summary: Delete association
+      operationId: deleteAssociation
+      description: delete an association
+      parameters:
+        - name: Id
+          in: path
+          description: Association id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '204':
+          description: Association marked as deleted
+        '400':
+          description: bad request         
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '404':
+          description: Association not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/AssociationNotFound'
+
+
+components:
+  schemas:
+    Association:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonAssociation'
+
+    NewAssociation:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonAssociation'
+
+    AssociationResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonAssociationResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    AssociationResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonAssociationResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    AssociationResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonAssociationResponse'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              format: url
+              example: "${dina.apiPrefix}/association/019c0600-b7dd-75db-8601-86c57232b36f"
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    AssociationNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "404"
+              title:
+                type: string
+                example: "Not Found"
+              detail:
+                type: string
+                example: "AssociationDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    AssociationDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=association/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "AssociationDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
+    CommonAssociationResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [association]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/AssociationAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+        relationships:
+          $ref: '#/components/schemas/AssociationRelationships'
+
+    CommonAssociation:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [association]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/AssociationAttributes'
+        relationships:
+          $ref: '#/components/schemas/AssociationRelationships'
+
+    AssociationAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the association
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who created the association
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the association was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        associationType: 
+          type: string
+          description: Must match a key in crontrolled vocabulary
+        remarks:
+          type: string
+          description: remarks of the association
+          minLength: 0
+          maxLength: 1000
+
+    AssociationRelationships:
+      type: object
+      nullable: true
+      properties:
+        sample:
+          type: object
+          properties:
+            data:
+              type: object
+              required:
+                - type
+                - id
+              properties:
+                type:
+                  type: string
+                  enum: [material-sample]
+                id:
+                  type: string
+                  format: uuid
+        associatedSample:
+          type: object
+          properties:
+            data:
+              type: object
+              required:
+                - type
+                - id
+              properties:
+                type:
+                  type: string
+                  enum: [material-sample]
+                id:
+                  type: string
+                  format: uuid
+        attachment:
+          $ref: '../components/common-parameters.yml#/Attachment'
