@@ -356,9 +356,6 @@ components:
     AssociationAttributes:
       type: object
       properties:
-        name:
-          type: string
-          description: The name of the association
         createdBy:
           type: string      
           readOnly: true
@@ -412,5 +409,3 @@ components:
                 id:
                   type: string
                   format: uuid
-        attachment:
-          $ref: '../components/common-parameters.yml#/Attachment'
