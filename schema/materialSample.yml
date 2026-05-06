@@ -353,7 +353,6 @@ components:
           enum: [material-sample]
           description: The type of data being returned.
         attributes:
-          type: object
           $ref: '#/components/schemas/CommonMaterialSampleAttributes'
         relationships:
           $ref: '#/components/schemas/CommonMaterialSampleRelationships'
