@@ -498,10 +498,10 @@ components:
                     description: The year of publication of the resource.
                     example: 2016
                   doi:
-                    type: string
+                    type: uri
                     nullable: true
-                    description: The doi of the publication. This should not be a full URL, only the actual doi in the format {prefix}/{suffix}
-                    example: 10.1016/j.ympev.2010.05.004
+                    description: The doi of the publication. This should be a full URL.
+                    example: https://doi.org/10.1016/j.ympev.2010.05.004
                     minLength: 0
                     maxLength: 200
                   authors:
