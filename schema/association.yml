@@ -3,22 +3,22 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
 info:
-  description: Used to organize material samples according to some organizational theme.
+  description: Used to manage associations between entities or resources.
   version: "1.0.0"
-  title: Assemblage schema
+  title: Association schema
   contact:
     email: you@your-company.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 paths:
-  /v1/assemblage:
+  /v1/association:
     get:
       tags:
-        - Assemblage
-      summary: Get assemblage
-      operationId: getAssemblages
-      description: By passing in query string, user can get available assemblages authorised
+        - Association
+      summary: Get associations
+      operationId: getAssociations
+      description: By passing in query string, user can get available associations authorised
       parameters:
         - $ref: '../components/common-parameters.yml#/FiqlFilter'
         - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
@@ -27,47 +27,47 @@ paths:
         - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
-          description: assemblages satifying the query restrictions
+          description: associations satisfying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/AssemblageResponseList'                
+                $ref: '#/components/schemas/AssociationResponseList'                
     post:
       tags:
-        - Assemblage
-      summary: Add assemblage
-      operationId: addAssemblage
-      description: Adds an assemblage
+        - Association
+      summary: Add association
+      operationId: addAssociation
+      description: Adds an association
       responses:
         '201':
-          description: Assemblage created
+          description: Association created
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/AssemblageResponseWithLink'
+                $ref: '#/components/schemas/AssociationResponseWithLink'
         '422':
           description: Unprocessable entity  
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '../components/common-responses.yml#/UnprocessableEntity'       
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/NewAssemblage'
-        description: Assemblage to add
-  /v1/assemblage/{Id}:
+              $ref: '#/components/schemas/NewAssociation'
+        description: Association to add
+  /v1/association/{Id}:
     get:
       tags:
-        - Assemblage
-      summary: Find assemblage by ID
-      description: Returns a single assemblage
-      operationId: getAssemblageById
+        - Association
+      summary: Find association by ID
+      description: Returns a single association
+      operationId: getAssociationById
       parameters:
         - name: Id
           in: path
-          description: ID of assemblage to return
+          description: ID of association to return
           required: true
           schema:
             type: string
@@ -78,7 +78,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/AssemblageResponse'
+                $ref: '#/components/schemas/AssociationResponse'
         '400':
           description: Bad request         
           content:
@@ -86,38 +86,38 @@ paths:
               schema:          
                 $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: Assemblage not found       
+          description: Association not found       
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/AssemblageNotFound'
+                $ref: '#/components/schemas/AssociationNotFound'
         '410':
-          description: Assemblage deleted       
+          description: Association deleted       
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/AssemblageDeleted'          
+                $ref: '#/components/schemas/AssociationDeleted'          
     patch:
       tags:
-        - Assemblage
-      summary: Update assemblage
-      operationId: updateAssemblage
-      description: Update an assemblage
+        - Association
+      summary: Update association
+      operationId: updateAssociation
+      description: Update an association
       parameters:
         - name: Id
           in: path
-          description: Assemblage id to patch
+          description: Association id to patch
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: Assemblage updated
+          description: Association updated
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/AssemblageResponse'
+                $ref: '#/components/schemas/AssociationResponse'
         '400':
           description: bad request         
           content:
@@ -125,11 +125,11 @@ paths:
               schema:          
                 $ref: '../components/common-responses.yml#/BadRequest'
         '410':
-          description: Assemblage deleted       
+          description: Association deleted       
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/AssemblageDeleted'
+                $ref: '#/components/schemas/AssociationDeleted'
         '422':
           description: unprocessable entity  
           content:
@@ -140,25 +140,25 @@ paths:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Assemblage'
-        description: Assemblage to add
+              $ref: '#/components/schemas/Association'
+        description: Association to update
     delete:
       tags:
-        - Assemblage
-      summary: Delete assemblage
-      operationId: deleteAssemblage
-      description: delete an assemblage
+        - Association
+      summary: Delete association
+      operationId: deleteAssociation
+      description: delete an association
       parameters:
         - name: Id
           in: path
-          description: Assemblage id to delete
+          description: Association id to delete
           required: true
           schema:
             type: string
             format: uuid            
       responses:
         '204':
-          description: Assemblage marked as deleted
+          description: Association marked as deleted
         '400':
           description: bad request         
           content:
@@ -166,16 +166,16 @@ paths:
               schema:          
                 $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: Assemblage not found       
+          description: Association not found       
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/AssemblageNotFound'
+                $ref: '#/components/schemas/AssociationNotFound'
 
 
 components:
   schemas:
-    Assemblage:
+    Association:
       type: object
       required:
         - data
@@ -191,9 +191,9 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonAssemblage'
+            - $ref: '#/components/schemas/CommonAssociation'
 
-    NewAssemblage:
+    NewAssociation:
       type: object
       required:
         - data
@@ -201,9 +201,9 @@ components:
         data:
           type: object
           allOf:
-            - $ref: '#/components/schemas/CommonAssemblage'
+            - $ref: '#/components/schemas/CommonAssociation'
 
-    AssemblageResponse:
+    AssociationResponse:
       type: object
       required:
         - data
@@ -219,11 +219,11 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonAssemblageResponse'
+            - $ref: '#/components/schemas/CommonAssociationResponse'
         meta:
           $ref: '../components/common-responses.yml#/ResponseMeta'
 
-    AssemblageResponseList:
+    AssociationResponseList:
       type: object
       required:
         - data
@@ -241,11 +241,11 @@ components:
                 example: d290f1ee-6c54-4b01-90e6-d701748f0851
                 description: Identifier of the object as UUID
             allOf:
-              - $ref: '#/components/schemas/CommonAssemblageResponse'
+              - $ref: '#/components/schemas/CommonAssociationResponse'
         meta:
           $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
 
-    AssemblageResponseWithLink:
+    AssociationResponseWithLink:
       type: object
       required:
         - data
@@ -261,24 +261,24 @@ components:
               example: d290f1ee-6c54-4b01-90e6-d701748f0851
               description: Identifier of the object as UUID
           allOf:
-            - $ref: '#/components/schemas/CommonAssemblageResponse'
+            - $ref: '#/components/schemas/CommonAssociationResponse'
         links:
-            type: object
-            properties:
-              self:
-                type: string
-                format: url
-                example: ${dina.apiPrefix}/assemblage/019c0600-b7dd-75db-8601-86c57232b36f"
-              meta:
-                type: object
-                properties:
-                  isTemplated:
-                    type: boolean
-                    example: true
+          type: object
+          properties:
+            self:
+              type: string
+              format: url
+              example: "${dina.apiPrefix}/association/019c0600-b7dd-75db-8601-86c57232b36f"
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
         meta:
           $ref: '../components/common-responses.yml#/ResponseMeta'
 
-    AssemblageNotFound:
+    AssociationNotFound:
       type: object
       properties:
         errors:
@@ -294,9 +294,9 @@ components:
                 example: "Not Found"
               detail:
                 type: string
-                example: "AssemblageDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+                example: "AssociationDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
 
-    AssemblageDeleted:
+    AssociationDeleted:
       type: object
       properties:
         errors:
@@ -310,7 +310,7 @@ components:
                   about:
                     type: string
                     format: url
-                    example: "/audit-snapshot?filter[instanceId]=assemblage/019c0570-214e-7a7b-a22e-60225dc69fee"
+                    example: "/audit-snapshot?filter[instanceId]=association/019c0570-214e-7a7b-a22e-60225dc69fee"
               status:
                 type: string
                 enum: ["410 GONE"]
@@ -321,98 +321,91 @@ components:
                 example: "Gone"
               detail:
                 type: string
-                example: "AssemblageDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section"
+                example: "AssociationDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
 
-    CommonAssemblageResponse:
+    CommonAssociationResponse:
       type: object
       required:
         - type
         - attributes       
       properties:            
         type:
-          enum: [assemblage]      
+          enum: [association]      
           description: The type of data being returned.
-        attritbutes:
-          $ref: '#/components/schemas/AssemblageAttributes'
+        attributes:
+          $ref: '#/components/schemas/AssociationAttributes'
         meta:
           $ref: '../components/common-responses.yml#/ResponseMeta'
         relationships:
-          $ref: '#/components/schemas/AssemblageRelationships'
+          $ref: '#/components/schemas/AssociationRelationships'
 
-    CommonAssemblage:
+    CommonAssociation:
       type: object
       required:
         - type
         - attributes       
       properties:            
         type:
-          enum: [assemblage]      
+          enum: [association]      
           description: The type of data being returned.
-        attritbutes:
-          $ref: '#/components/schemas/AssemblageAttributes'
+        attributes:
+          $ref: '#/components/schemas/AssociationAttributes'
         relationships:
-          $ref: '#/components/schemas/AssemblageRelationships'
+          $ref: '#/components/schemas/AssociationRelationships'
 
-    AssemblageAttributes:
+    AssociationAttributes:
       type: object
       properties:
-        name:
-          type: string
-          description: The name of the assemblage
         createdBy:
           type: string      
           readOnly: true
-          description: authenticated user who create the assemblage
+          description: authenticated user who created the association
         createdOn:              
           type: string
           format: date-time                            
           readOnly: true
-          description: date and time when the assemblage was created in ISO format
+          description: date and time when the association was created in ISO format
           example: 1985-04-12T23:20:50.52Z
-        group: 
+        associationType: 
           type: string
-          description: The group in which the assemblage belongs to
-        managedAttributes:
+          description: Must match a key in crontrolled vocabulary
+        remarks:
+          type: string
+          description: remarks of the association
+          minLength: 0
+          maxLength: 1000
+
+    AssociationRelationships:
+      type: object
+      nullable: true
+      properties:
+        sample:
           type: object
-          description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be resubmitted on PATCH/PUT.
-          additionalProperties:
-            type: string
-        multilingualTitle:
-          type: object
-          nullable: true
           properties:
-            titles:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  lang:
-                    type: string
-                    description: language of the description
-                  title:
-                    type: string
-                    description: the description
-        multilingualDescription:
+            data:
+              type: object
+              required:
+                - type
+                - id
+              properties:
+                type:
+                  type: string
+                  enum: [material-sample]
+                id:
+                  type: string
+                  format: uuid
+        associatedSample:
           type: object
-          nullable: true
           properties:
-            descriptions:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  lang:
-                    type: string
-                    description: language of the description
-                  desc:
-                    type: string
-                    description: the description
-    
-    AssemblageRelationships:
-          type: object
-          nullable: true
-          properties:
-            attachment:
-              $ref: '../components/common-parameters.yml#/Attachment'
+            data:
+              type: object
+              required:
+                - type
+                - id
+              properties:
+                type:
+                  type: string
+                  enum: [material-sample]
+                id:
+                  type: string
+                  format: uuid

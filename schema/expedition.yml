@@ -20,58 +20,62 @@ paths:
       operationId: getExpeditions
       description: By passing in query string, user can get available expeditions authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the expeditions
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: expeditions satisfying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Expedition'
+                $ref: '#/components/schemas/ExpeditionResponseList'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: expedition not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionNotFound'
+        '410':
+          description: expedition deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionDeleted'
     post:
       tags:
         - Expedition
       summary: Add expedition
       operationId: addExpedition
       description: Adds a expedition
-      responses:
-        '201':
-          description: expedition created
-        '422':
-          description: Data integrity violation
       requestBody:
         content:
           application/vnd.api+json:
             schema:
               $ref: '#/components/schemas/NewExpedition'
         description: Expedition to add
+      responses:
+        '201':
+          description: expedition created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionResponseWithLink'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
+      
   /v1/expedition/{Id}:
     get:
       tags:
@@ -93,17 +97,31 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Expedition'
+                $ref: '#/components/schemas/ExpeditionResponse'
         '400':
-          description: Not a valid uuid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: Expedition not found
+          description: expedition not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionNotFound'
+        '410':
+          description: expedition deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionDeleted'
     patch:
       tags:
         - Expedition
       summary: Update expedition
       operationId: updateExpedition
-      description: update a expedition
+      description: update an expedition
       parameters:
         - name: Id
           in: path
@@ -115,8 +133,28 @@ paths:
       responses:
         '200':
           description: expedition updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: expedition deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionDeleted'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,14 +176,144 @@ paths:
             type: string
             format: uuid
       responses:
-        '200':
+        '204':
           description: expedition marked as deleted
         '400':
-          description: Not a valid uuid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: expedition not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ExpeditionNotFound'
 components:
   schemas:
+    ExpeditionResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonExpeditionResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    ExpeditionResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonExpeditionResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    ExpeditionResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonExpeditionResponse'
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: ${dina.apiPrefix}/collection-method/019c0600-b7dd-75db-8601-86c57232b36f
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    ExpeditionNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "ExpeditionDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    ExpeditionDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=expedition/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "ExpeditionDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
     Expedition:
       type: object
       required:
@@ -174,6 +342,22 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonExpedition'
 
+    CommonExpeditionResponse:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [expedition]
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/ExpeditionAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+        relationships:
+          $ref: '#/components/schemas/ExpeditionRelationships'
+      
     CommonExpedition:
       type: object
       required:
@@ -184,76 +368,81 @@ components:
           enum: [expedition]
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            name:
-              type: string
-              description: The name of the expedition
-            createdBy:
-              type: string
-              readOnly: true
-              description: authenticated user who create the expedition
-            createdOn:
-              type: string
-              format: date-time
-              readOnly: true
-              description: date and time when the expedition was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the expedition belongs to
-            startDate:
-              type: string
-              format: date
-              nullable: true
-              description: The start date of the expedition
-            endDate:
-              type: string
-              format: date
-              nullable: true
-              description: The end date of the expedition
-            geographicContext:
-              type: string
-              nullable: true
-              description: Geographic context of the expedition, e.g., which country or region where crossed during the expedition.
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
+          $ref: '#/components/schemas/ExpeditionAttributes'
         relationships:
+          $ref: '#/components/schemas/ExpeditionRelationships'
+
+    ExpeditionAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the expedition
+        createdBy:
+          type: string
+          readOnly: true
+          description: authenticated user who create the expedition
+        createdOn:
+          type: string
+          format: date-time
+          readOnly: true
+          description: date and time when the expedition was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group:
+          type: string
+          description: The group in which the expedition belongs to
+        startDate:
+          type: string
+          format: date
+          nullable: true
+          description: The start date of the expedition
+        endDate:
+          type: string
+          format: date
+          nullable: true
+          description: The end date of the expedition
+        geographicContext:
+          type: string
+          nullable: true
+          description: Geographic context of the expedition, e.g., which country or region where crossed during the expedition.
+        multilingualDescription:
           type: object
           nullable: true
           properties:
-            participants:
-              type: object
+            descriptions:
+              type: array
               nullable: true
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type:
-                        type: string
-                        example: person
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique agent identifier for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+              items:
+                type: object
+                properties:
+                  lang:
+                    type: string
+                    description: language of the description
+                  desc:
+                    type: string
+                    description: the description
 
+    ExpeditionRelationships:
+        type: object
+        nullable: true
+        properties:
+          participants:
+            type: object
+            nullable: true
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - type
+                    - id
+                  properties:
+                    type:
+                      type: string
+                      example: person
+                    id:
+                      type: string
+                      format: uuid
+                      description: Unique agent identifier for the resource
+                      example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f

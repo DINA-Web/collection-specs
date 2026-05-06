@@ -20,41 +20,36 @@ paths:
       operationId: getCollectingEvents
       description: By passing in query string, user can get available collecting events authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the collecting events
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: collecting events satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/CollectingEvent'                
+                $ref: '#/components/schemas/CollectingEventResponseList'                
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: collecting event not found
+          description: collecting event not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventNotFound'
+        '410':
+          description: collecting event deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventDeleted'
     post:
       tags:
         - Collecting Event
@@ -64,8 +59,17 @@ paths:
       responses:
         '201':
           description: collecting event created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity  
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'       
+          
       requestBody:
         content:
           application/vnd.api+json:
@@ -93,11 +97,25 @@ paths:
           content:
             application/vnd.api+json:
               schema:          
-                $ref: '#/components/schemas/CollectingEvent'
+                $ref: '#/components/schemas/CollectingEventResponse'
         '400':
-          description: Not a valid uuid                
+          description: bad request        
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'        
         '404':
           description: CollectingEvent not found          
+          content:
+              application/vnd.api+json:
+                schema:          
+                  $ref: '#/components/schemas/CollectingEventNotFound'
+        '410':
+          description: collecting event deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventDeleted'
     patch:
       tags:
         - Collecting Event
@@ -115,8 +133,22 @@ paths:
       responses:
         '200':
           description: collecting event updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: collecting event deleted
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventDeleted'
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,14 +170,96 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: collecting event marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: collecting event not found       
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/CollectingEventNotFound'
+
 components:
   schemas:
+    CollectingEventResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonCollectingEventResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    CollectingEventResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonCollectingEventResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    CollectingEventResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonCollectingEventResponse'
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: ${dina.apiPrefix}/collecting-event/019c0600-b7dd-75db-8601-86c57232b36f
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+    
     CollectingEvent:
       type: object
       required:
@@ -174,7 +288,54 @@ components:
           allOf:
             - $ref: '#/components/schemas/CommonCollectingEvent'
 
-    CommonCollectingEvent:
+    CollectingEventNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "CollectingEventDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    CollectingEventDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=collecting-event/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "CollectingEventDto with ID 019c055d-a4b7-73a9-912d-03c682715484  Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
+    CommonCollectingEventResponse:
       type: object
       required:
         - type
@@ -184,382 +345,371 @@ components:
           enum: [collecting-event]      
           description: The type of data being returned.
         attributes:
-          type: object
-          properties:
-            version:
-              type: number
-              readOnly: true
-              description: Provides optimistic locking to prevent update data from being overridden by another transaction.
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the collecting event
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the collecting event was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            group:
-              type: string
-              description: The group in which the collecting event belongs to
-            dwcVerbatimCoordinates:
-              type: string
-              nullable: true
-              description: The verbatim original spatial coordinates of the Location. The coordinate ellipsoid, geodeticDatum, or full Spatial Reference System (SRS) for these coordinates should be stored in verbatimSRS and the coordinate system should be stored in verbatimCoordinateSystem.
-            dwcRecordedBy: 
-              type: string
-              nullable: true
-              description: Name of person, group or organization responsible for recording the original Occurrence.
-            dwcVerbatimLatitude:
-              type: string
-              nullable: true
-              description: The verbatim original longitude of the Latitude.
-            dwcVerbatimLongitude:
-              type: string
-              nullable: true
-              description: The verbatim original longitude of the Location.
-            dwcVerbatimCoordinateSystem:
-              type: string
-              nullable: true
-              description: The spatial coordinate system for the verbatimLatitude and verbatimLongitude or the verbatimCoordinates of the Location. https://dwc.tdwg.org/list/#dwc_verbatimCoordinateSystem
-            dwcVerbatimSRS:
-              type: string
-              nullable: true
-              description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
-            dwcVerbatimElevation:
-              type: string
-              nullable: true
-              description: The original description of the elevation (altitude, usually above sea level) of the Location.
-            dwcVerbatimDepth:
-              type: string
-              nullable: true
-              description: The original description of the depth below the local surface.
-            dwcFieldNumber:
-              type: string
-              nullable: true
-              description: An identifier given to the event in the field at the time of collecting one or more samples. Often serves as a link between field notes and the Event.
-            dwcRecordNumber:
-              type: string
-              nullable: true
-              description: An identifier given to the Occurrence, by the collector, at the time it was recorded. Often serves as a link between field notes and an Occurrence record, such as a specimen collector’s number.
-            otherRecordNumbers:
-              type: array
-              nullable: true
-              items:
-                type: string
-                description: Additional dwcRecordNumber
-            dwcCountry:
-              type: string 
-              nullable: true
-              description: name of the country
-            dwcCountryCode:
-              type: string
-              nullable: true
-              description: Alphabetic geographical codes to represent the country
-            dwcStateProvince:
-              type: string
-              nullable: true
-              description: state or province name
-            dwcMinimumElevationInMeters:
-              type: number
-              minimum: -15000
-              maximum: 15000
-              multipleOf: 0.01
-              nullable: true
-              description: Minimum elevation in meters. With a precision of 7 digits and a scale of 2 decimals. Elevation is considered as measured relative to mean sea level (MSL) using the local or national vertical datum.
-            dwcMinimumDepthInMeters:
-              type: number
-              minimum: 0
-              maximum: 15000
-              multipleOf: 0.01
-              nullable: true
-              description: Minimum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
-            dwcMaximumElevationInMeters:
-              type: number
-              minimum: -15000
-              maximum: 15000
-              multipleOf: 0.01
-              nullable: true
-              description: Maximum elevation in meters. With a precision of 7 digits and a scale of 2 decimals. Elevation is considered as measured relative to mean sea level (MSL) using the local or national vertical datum.
-            dwcMaximumDepthInMeters:
-              type: number
-              minimum: 0
-              maximum: 15000
-              multipleOf: 0.01
-              nullable: true
-              description: Maximum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
-            habitat:
-              type: string
-              nullable: true
-              description: habitat name
-            substrate:
-              type: string
-              nullable: true
-              minimum: 0
-              maximum: 255
-              description: surface on which an organism lives
-            remarks:
-              type: string
-              nullable: true
-              description: remarks on the collecting event
-              minLength: 0
-              maxLength: 1000
-            verbatimEventDateTime:  
-              type: string 
-              nullable: true
-              description: original textual description of date and time the collecting event occurred             
-            startEventDateTime:
-              type: string
-              nullable: true
-              description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
-            endEventDateTime:
-              type: string
-              nullable: true
-              description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Ending date and time must be after startEventDateTime and before current date
-            dwcVerbatimLocality:
-              type: string
-              nullable: true
-              description: The original textual description of the place.
-            managedAttributes:
-              type: object
-              description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
-              additionalProperties:
-                type: string
-            publiclyReleasable:
-              type: boolean
-              nullable: true
-              description: whether or not the collecting event is publicly releasable
-            notPubliclyReleasableReason:
-              type: string
-              nullable: true
-              description: text description of reason why the collecting event is not publicly releasable
-            geographicPlaceNameSource:
-              type: string
-              nullable: true
-              enum: [OSM]
-            geographicPlaceNameSourceDetail:
-              type: object
-              nullable: true
-              properties:
-                sourceUrl:
-                  type: string
-                  nullable: true
-                  format: url
-                  description: the source's url
-                customGeographicPlace:
-                  type: string
-                  nullable: true
-                  description: input a customGeographicPlace OR a selectedGeographicPlace but not both
-                selectedGeographicPlace:
-                  $ref: '#/components/schemas/SourceAdministrativeLevel'
-                higherGeographicPlaces:
-                  nullable: true
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/SourceAdministrativeLevel'
-                stateProvince:
-                  $ref: '#/components/schemas/SourceAdministrativeLevel'
-                country:
-                  type: object
-                  properties:
-                    code:
-                      nullable: true
-                      type: string
-                      minLength: 2
-                      maxLength: 2
-                      description: 2 character country code
-                    name:
-                      nullable: true
-                      type: string
-                recordedOn:
-                  type: string
-                  format: date-time
-                  nullable: true
-                  description: The date and time the geographic place name source detail record was recorded on.
-            geographicThesaurus:
-              type: object
-              description: Pointer to an external geographic thesaurus where concepts are geographically organized in a hierarchichy. As opposed to geographicPlaceNameSourceDetail, levels are in free-form and not attached to concepts.
-              nullable: true
-              properties:
-                source:
-                  enum: [TGN]
-                  description: Source of the geographic thesaurus
-                subjectId:
-                  type: string
-                preferredTerm:
-                  type: string
-                preferredParent:
-                  type: string
-                  nullable: true
-                additionalParents:
-                  type: array
-                  nullable: true
-                  items:
-                    type: string
-            tags:
-              type: array
-              nullable: true
-              description: tags for the collecting event
-              items:
-                type: string 
-            host:
-              type: string
-              nullable: true
-            geoReferenceAssertions:
-              type: array
-              nullable: true
-              items:
-                type: object
-                properties:
-                  dwcDecimalLatitude:
-                    type: number
-                    nullable: true
-                    description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
-                  dwcDecimalLongitude:
-                    type: number
-                    nullable: true
-                    description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
-                  dwcCoordinateUncertaintyInMeters:
-                    type: number
-                    nullable: true
-                    description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
-                  dwcGeoreferencedDate:
-                    type: string
-                    format: date
-                    nullable: true
-                    description: The date on which the Location was georeferenced.
-                  georeferencedBy:
-                    type: array
-                    nullable: true
-                    description: A list of uuid who determined the georeference for the location.
-                    items:
-                      type: string
-                      format: uuid
-                  literalGeoreferencedBy:
-                    type: string
-                    nullable: true
-                    description: A name of a person, group or organization who determined the georeference for the location.
-                  dwcGeoreferenceProtocol:
-                    type: string
-                    nullable: true
-                    description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
-                  dwcGeoreferenceSources:
-                    type: string
-                    nullable: true
-                    description: A map, gazetteer, or other resource used to georeference the Location.
-                  dwcGeoreferenceRemarks:
-                    type: string
-                    nullable: true
-                    description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
-                    minLength: 0
-                    maxLength: 1000
-                  dwcGeodeticDatum:
-                    type: string
-                    nullable: true
-                    description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
-                  isPrimary:
-                    type: boolean
-                    description: specify whether or not the georeference assertion is the primary of the colecting-event
-                  dwcGeoreferenceVerificationStatus:
-                    type: string
-                    nullable: true
-                    enum: [null, GEOREFERENCING_NOT_POSSIBLE]
-                  createdOn:
-                    type: string
-                    format: date-time
-                    readOnly: true
-            eventGeom:
-              type: object
-              nullable: true
-              readOnly: true
-              description: Coordinates expressed as geojson (read-only, calculated from lat/long on primary geoReferenceAssertion)
-            extensionValues:
-              type: object
-              additionalProperties:
-                type: object
-                additionalProperties:
-                    type: string
+          $ref: '#/components/schemas/CollectingEventAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
         relationships:
+          $ref: '#/components/schemas/CollectingEventRelationships'
+        
+    CommonCollectingEvent:
+      type: object
+      required:
+        - type      
+      properties:            
+        type:
+          enum: [collecting-event]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CollectingEventAttributes'
+        relationships:
+            $ref: '#/components/schemas/CollectingEventRelationships'
+          
+
+    CollectingEventAttributes:
+      type: object
+      properties:
+        version:
+          type: number
+          readOnly: true
+          description: Provides optimistic locking to prevent update data from being overridden by another transaction.
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the collecting event
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the collecting event was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        group:
+          type: string
+          description: The group in which the collecting event belongs to
+        dwcVerbatimCoordinates:
+          type: string
+          nullable: true
+          description: The verbatim original spatial coordinates of the Location. The coordinate ellipsoid, geodeticDatum, or full Spatial Reference System (SRS) for these coordinates should be stored in verbatimSRS and the coordinate system should be stored in verbatimCoordinateSystem.
+        dwcRecordedBy: 
+          type: string
+          nullable: true
+          description: Name of person, group or organization responsible for recording the original Occurrence.
+        dwcVerbatimLatitude:
+          type: string
+          nullable: true
+          description: The verbatim original longitude of the Latitude.
+        dwcVerbatimLongitude:
+          type: string
+          nullable: true
+          description: The verbatim original longitude of the Location.
+        dwcVerbatimCoordinateSystem:
+          type: string
+          nullable: true
+          description: The spatial coordinate system for the verbatimLatitude and verbatimLongitude or the verbatimCoordinates of the Location. https://dwc.tdwg.org/list/#dwc_verbatimCoordinateSystem
+        dwcVerbatimSRS:
+          type: string
+          nullable: true
+          description: spatial reference system (SRS) upon which coordinates given in verbatimLatitude and verbatimLongitude, or verbatimCoordinates are based. https://dwc.tdwg.org/terms/#dwc:verbatimSRS
+        dwcVerbatimElevation:
+          type: string
+          nullable: true
+          description: The original description of the elevation (altitude, usually above sea level) of the Location.
+        dwcVerbatimDepth:
+          type: string
+          nullable: true
+          description: The original description of the depth below the local surface.
+        dwcFieldNumber:
+          type: string
+          nullable: true
+          description: An identifier given to the event in the field at the time of collecting one or more samples. Often serves as a link between field notes and the Event.
+        dwcRecordNumber:
+          type: string
+          nullable: true
+          description: An identifier given to the Occurrence, by the collector, at the time it was recorded. Often serves as a link between field notes and an Occurrence record, such as a specimen collector’s number.
+        otherRecordNumbers:
+          type: array
+          nullable: true
+          items:
+            type: string
+            description: Additional dwcRecordNumber
+        dwcCountry:
+          type: string 
+          nullable: true
+          description: name of the country
+        dwcCountryCode:
+          type: string
+          nullable: true
+          description: Alphabetic geographical codes to represent the country
+        dwcStateProvince:
+          type: string
+          nullable: true
+          description: state or province name
+        dwcMinimumElevationInMeters:
+          type: number
+          minimum: -15000
+          maximum: 15000
+          multipleOf: 0.01
+          nullable: true
+          description: Minimum elevation in meters. With a precision of 7 digits and a scale of 2 decimals. Elevation is considered as measured relative to mean sea level (MSL) using the local or national vertical datum.
+        dwcMinimumDepthInMeters:
+          type: number
+          minimum: 0
+          maximum: 15000
+          multipleOf: 0.01
+          nullable: true
+          description: Minimum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
+        dwcMaximumElevationInMeters:
+          type: number
+          minimum: -15000
+          maximum: 15000
+          multipleOf: 0.01
+          nullable: true
+          description: Maximum elevation in meters. With a precision of 7 digits and a scale of 2 decimals. Elevation is considered as measured relative to mean sea level (MSL) using the local or national vertical datum.
+        dwcMaximumDepthInMeters:
+          type: number
+          minimum: 0
+          maximum: 15000
+          multipleOf: 0.01
+          nullable: true
+          description: Maximum depth below the local surface in meters. With a precision of 7 digits and a scale of 2 decimals.
+        habitat:
+          type: string
+          nullable: true
+          description: habitat name
+        substrate:
+          type: string
+          nullable: true
+          minimum: 0
+          maximum: 255
+          description: surface on which an organism lives
+        remarks:
+          type: string
+          nullable: true
+          description: remarks on the collecting event
+          minLength: 0
+          maxLength: 1000
+        verbatimEventDateTime:  
+          type: string 
+          nullable: true
+          description: original textual description of date and time the collecting event occurred             
+        startEventDateTime:
+          type: string
+          nullable: true
+          description: Beginning date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Beginning date and time must be before current date and endEventDateTime.
+        endEventDateTime:
+          type: string
+          nullable: true
+          description: Ending date and time of the collecting event which occurred, in ISO 8601 format including partial date/time and ranges, https://www.iso.org/iso-8601-date-and-time-format.html. Ending date and time must be after startEventDateTime and before current date
+        dwcVerbatimLocality:
+          type: string
+          nullable: true
+          description: The original textual description of the place.
+        managedAttributes:
+          type: object
+          nullable: true
+          description: The manage attributes, map of key/value pair. Patch Strategy is SET so the entire managedAttributes needs to be rebmit on PATCH/PUT.
+          additionalProperties:
+            type: string
+        publiclyReleasable:
+          type: boolean
+          nullable: true
+          description: whether or not the collecting event is publicly releasable
+        notPubliclyReleasableReason:
+          type: string
+          nullable: true
+          description: text description of reason why the collecting event is not publicly releasable
+        geographicPlaceNameSource:
+          type: string
+          nullable: true
+          enum: [OSM]
+        geographicPlaceNameSourceDetail:
           type: object
           nullable: true
           properties:
-            protocol:
-              type: object
+            sourceUrl:
+              type: string
               nullable: true
-              properties:
-                data:
-                  type: object
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        enum: [protocol]
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the protocol
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            collectors:
-              type: object
-              properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        type: string
-                        example: person
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier of the collector
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            attachment:
-              type: object
+              format: url
+              description: the source's url
+            customGeographicPlace:
+              type: string
               nullable: true
+              description: input a customGeographicPlace OR a selectedGeographicPlace but not both
+            selectedGeographicPlace:
+              $ref: '#/components/schemas/SourceAdministrativeLevel'
+            higherGeographicPlaces:
+              nullable: true
+              type: array
+              items:
+                $ref: '#/components/schemas/SourceAdministrativeLevel'
+            stateProvince:
+              $ref: '#/components/schemas/SourceAdministrativeLevel'
+            country:
+              type: object
               properties:
-                data:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                      - type
-                      - id
-                    properties:
-                      type: 
-                        type: string
-                        example: metadata
-                      id:
-                        type: string
-                        format: uuid
-                        description: Unique identifier metadata for the resource
-                        example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
-            expedition:
+                code:
+                  nullable: true
+                  type: string
+                  minLength: 2
+                  maxLength: 2
+                  description: 2 character country code
+                name:
+                  nullable: true
+                  type: string
+            recordedOn:
+              type: string
+              format: date-time
+              nullable: true
+              description: The date and time the geographic place name source detail record was recorded on.
+        geographicThesaurus:
+          type: object
+          description: Pointer to an external geographic thesaurus where concepts are geographically organized in a hierarchichy. As opposed to geographicPlaceNameSourceDetail, levels are in free-form and not attached to concepts.
+          nullable: true
+          properties:
+            source:
+              enum: [TGN]
+              description: Source of the geographic thesaurus
+            subjectId:
+              type: string
+            preferredTerm:
+              type: string
+            preferredParent:
+              type: string
+              nullable: true
+            additionalParents:
+              type: array
+              nullable: true
+              items:
+                type: string
+        tags:
+          type: array
+          nullable: true
+          description: tags for the collecting event
+          items:
+            type: string 
+        host:
+          type: string
+          nullable: true
+        geoReferenceAssertions:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              dwcDecimalLatitude:
+                type: number
+                nullable: true
+                description: geographic location's latitude, https://dwc.tdwg.org/list/#dwc_decimalLatitude
+              dwcDecimalLongitude:
+                type: number
+                nullable: true
+                description: geographic location's longitude, http://rs.tdwg.org/dwc/terms/decimalLongitude
+              dwcCoordinateUncertaintyInMeters:
+                type: number
+                nullable: true
+                description: horizontal distance (in meters) from the given decimalLatitude and decimalLongitude describing the smallest circle containing the whole of the Location, https://dwc.tdwg.org/terms/#dwc:coordinateUncertaintyInMeters
+              dwcGeoreferencedDate:
+                type: string
+                format: date
+                nullable: true
+                description: The date on which the Location was georeferenced.
+              georeferencedBy:
+                type: array
+                nullable: true
+                description: A list of uuid who determined the georeference for the location.
+                items:
+                  type: string
+                  format: uuid
+              literalGeoreferencedBy:
+                type: string
+                nullable: true
+                description: A name of a person, group or organization who determined the georeference for the location.
+              dwcGeoreferenceProtocol:
+                type: string
+                nullable: true
+                description: A description or reference to the methods used to determine the spatial footprint, coordinates, and uncertainties.
+              dwcGeoreferenceSources:
+                type: string
+                nullable: true
+                description: A map, gazetteer, or other resource used to georeference the Location.
+              dwcGeoreferenceRemarks:
+                type: string
+                nullable: true
+                description: Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol.
+                minLength: 0
+                maxLength: 1000
+              dwcGeodeticDatum:
+                type: string
+                nullable: true
+                description: The ellipsoid, geodetic datum, or spatial reference system (SRS) upon which the geographic coordinates given in decimalLatitude and decimalLongitude as based.
+              isPrimary:
+                type: boolean
+                description: specify whether or not the georeference assertion is the primary of the colecting-event
+              dwcGeoreferenceVerificationStatus:
+                type: string
+                nullable: true
+                enum: [null, GEOREFERENCING_NOT_POSSIBLE]
+              createdOn:
+                type: string
+                format: date-time
+                readOnly: true
+        eventGeom:
+          type: object
+          nullable: true
+          readOnly: true
+          description: Coordinates expressed as geojson (read-only, calculated from lat/long on primary geoReferenceAssertion)
+        extensionValues:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+                type: string
+
+    CollectingEventRelationships:
+      type: object
+      nullable: true
+      properties:
+        protocol:
+          $ref: '../components/common-parameters.yml#/Protocol'
+        expedition:
+          type: object
+          nullable: true
+          properties:
+            data:
               type: object
               required:
-                - data
+                - type
+                - id
               properties:
-                data:
-                  type: object
-                  required:
-                    - type
-                    - id
-                  properties:
-                    type:
-                      enum: [expedition]
-                    id:
-                      type: string
-                      format: uuid
-                      description: the expedition this event is part of
-                      example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+                type: 
+                  type: string
+                  example: expedition
+                id:
+                  type: string
+                  format: uuid
+                  description: Unique identifier of the expedition
+                  example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
+        attachment: 
+          $ref: '../components/common-parameters.yml#/Attachment'
+        collectors:
+          type: object
+          nullable: true
+          properties:
+            data:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                properties:
+                  type: 
+                    type: string
+                    example: person
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique identifier of the collector
+                    example: 8f68a05f-937d-4d40-88b4-ed92720d9c3f
     SourceAdministrativeLevel:
       type: object
       nullable: true
@@ -574,4 +724,4 @@ components:
             type: string
             description:  "on OSM it's usually the place_type (https://wiki.openstreetmap.org/wiki/Key:place) with a fallback on class:type"
           name:
-            type: string    
+            type: string   

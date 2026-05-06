@@ -20,41 +20,36 @@ paths:
       operationId: getInstitutions
       description: By passing in query string, user can get available institutions authorised
       parameters:
-        - in: query
-          name: filter[rsql]
-          description: pass an optional search string for looking up the institutions
-          schema:
-            type: string
-        - in: query
-          name: sort
-          description: optional sort order string, such as descending, denoted by "-"
-          schema:
-            type: string
-        - in: query
-          name: page[offset]
-          description: number of records to skip when paging
-          schema:
-            type: integer
-            format: int32
-        - in: query
-          name: page[limit]
-          description: maximum number of records to return when paging
-          schema:
-            type: integer
-            format: int32
-            minimum: 0
-            maximum: 50
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
       responses:
         '200':
           description: institutions satifying the query restrictions
           content:
             application/vnd.api+json:
               schema:
-                type: array
-                items: 
-                  $ref: '#/components/schemas/Institution'                
+                $ref: '#/components/schemas/InstitutionResponseList'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
           description: institution not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionNotFound'
+        '410':
+          description: institution deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionDeleted'
     post:
       tags:
         - Institution
@@ -64,8 +59,16 @@ paths:
       responses:
         '201':
           description: institution created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionResponseWithLink'
         '422':
-          description: Data integrity violation          
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'          
       requestBody:
         content:
           application/vnd.api+json:
@@ -92,12 +95,26 @@ paths:
           description: successful operation
           content:
             application/vnd.api+json:
-              schema:          
-                $ref: '#/components/schemas/Institution'
+              schema:
+                $ref: '#/components/schemas/InstitutionResponse'
         '400':
-          description: Not a valid uuid                
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: Institution not found          
+          description: institution not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionNotFound'
+        '410':
+          description: institution deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionDeleted'          
     patch:
       tags:
         - Institution
@@ -115,8 +132,28 @@ paths:
       responses:
         '200':
           description: institution updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionResponse'
         '400':
-          description: invalid input, object invalid
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: institution deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionDeleted'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -138,14 +175,145 @@ paths:
             type: string
             format: uuid            
       responses:
-        '200':
+        '204':
           description: institution marked as deleted
         '400':
-          description: Not a valid uuid          
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '404':
-          description: institution not found       
+          description: institution not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/InstitutionNotFound'
+                       
 components:
   schemas:
+    InstitutionResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonInstitutionResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    InstitutionResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonInstitutionResponse'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    InstitutionResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonInstitutionResponse'
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: ${dina.apiPrefix}/institution/019c0600-b7dd-75db-8601-86c57232b36f
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    InstitutionNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "InstitutionDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Not Found"
+
+    InstitutionDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=institution/019c0570-214e-7a7b-a22e-60225dc69fee"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "InstitutionDto with ID 019c055d-a4b7-73a9-912d-03c682715484 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
     Institution:
       type: object
       required:
@@ -184,61 +352,78 @@ components:
           enum: [institution]      
           description: The type of data being returned.
         attributes:
+          $ref: '#/components/schemas/CommonInstitutionAttributes'
+
+    CommonInstitutionResponse:
+      type: object
+      required:
+        - type
+        - attributes       
+      properties:            
+        type:
+          enum: [institution]      
+          description: The type of data being returned.
+        attributes:
+          $ref: '#/components/schemas/CommonInstitutionAttributes'
+        meta:
+          $ref: '../components/common-responses.yml#/PermissionsMeta'
+
+    CommonInstitutionAttributes:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the institution
+        createdBy:
+          type: string      
+          readOnly: true
+          description: authenticated user who create the institution
+        createdOn:              
+          type: string
+          format: date-time                            
+          readOnly: true
+          description: date and time when the institution was created in ISO format
+          example: 1985-04-12T23:20:50.52Z
+        multilingualDescription:
           type: object
+          nullable: true
           properties:
-            name:
-              type: string
-              description: The name of the institution
-            createdBy:
-              type: string      
-              readOnly: true
-              description: authenticated user who create the institution
-            createdOn:              
-              type: string
-              format: date-time                            
-              readOnly: true
-              description: date and time when the institution was created in ISO format
-              example: 1985-04-12T23:20:50.52Z
-            multilingualDescription:
-              type: object
-              nullable: true
-              properties:
-                descriptions:
-                  type: array
-                  nullable: true
-                  items:
-                    type: object
-                    properties:
-                      lang:
-                        type: string
-                        description: language of the description
-                      desc:
-                        type: string
-                        description: the description
-            webpage:
-              type: string
-              format: uri
-              nullable: true
-              description: The webpage of the institution
-            address:
-              type: string   
-              nullable: true   
-              description: The physical address of the institution
-            remarks:              
-              type: string
-              nullable: true
-              description: remarks regarding the institution
-              minLength: 0
-              maxLength: 1000
-            identifiers:
+            descriptions:
               type: array
               nullable: true
               items:
                 type: object
                 properties:
-                  type:
-                    enum: [GRSCICOLL]
-                  uri:
+                  lang:
                     type: string
-                    format: uri
+                    description: language of the description
+                  desc:
+                    type: string
+                    description: the description
+        webpage:
+          type: string
+          format: uri
+          nullable: true
+          description: The webpage of the institution
+        address:
+          type: string   
+          nullable: true   
+          description: The physical address of the institution
+        remarks:              
+          type: string
+          nullable: true
+          description: remarks regarding the institution
+          minLength: 0
+          maxLength: 1000
+        identifiers:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              type:
+                enum: [GRSCICOLL]
+              uri:
+                type: string
+                format: uri
 

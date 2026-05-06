@@ -26,10 +26,18 @@ paths:
             application/vnd.api+json:
               schema:          
                 $ref: '#/components/schemas/CollectionGeneratorResponse'
-        '404':
-          description: Collection or Collection Sequence could not be found.
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
         '422':
-          description: Data integrity violation
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
       requestBody:
         content:
           application/vnd.api+json:
@@ -66,6 +74,7 @@ components:
                   minimum: 1
                   default: 1
                   description: The amount of the ids to reserve from the collection.
+
     CollectionGeneratorResponse:
       type: object
       required:
@@ -109,3 +118,19 @@ components:
                     highReservedID:
                       type: number
                       description: Highest number reserved in the sequence. Comparing this number to the lowReservedID will indicate all the ids reserved for this request.
+        links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: url
+                example: ${dina.apiPrefix}/collection-sequence-generator/981a9bf3-70ef-44a4-ad3e-fb1907d4d4e9
+              meta:
+                type: object
+                properties:
+                  isTemplated:
+                    type: boolean
+                    example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
