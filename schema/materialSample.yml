@@ -472,6 +472,89 @@ components:
           description: The degree to which an Organism survives, reproduces, and expands its range at the given place and time. https://dwc.tdwg.org/list/#dwc_degreeOfEstablishment
           minLength: 0
           maxLength: 1000
+        citations:
+          type: array
+          nullable: true
+          description: A list of bibliographic resources which have cited this material sample.
+          items:
+            type: object
+            description: A bibliographic resource (usually a scientific publication) which have cited this material sample.
+            properties:
+              title:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 400
+                description: The title of the resource/ scientific publication.
+              year:
+                type: number
+                nullable: true
+                description: The year of publication of the resource.
+                example: 2016
+              doi:
+                type: uri
+                nullable: true
+                description: The doi of the publication. This should be a full URL.
+                example: https://doi.org/10.1016/j.ympev.2010.05.004
+                minLength: 0
+                maxLength: 200
+              authors:
+                type: array
+                nullable: true
+                description: A list of names of the primary authors of the resource.
+                example: '["Heinrichs, J.","Hentschel, J."] or ["Heinrichs, J., et al."]'
+                items:
+                  type: object
+                  properties:
+                    given_names:
+                      type: string
+                      nullable: true                          
+                      description: Given names of the author
+                      example: Jochen
+                    family_names:
+                      type: string                          
+                      nullable: true
+                      description: Surname of the author
+                      example: Heinrichs
+                      minLength: 0
+                      maxLength: 200
+                    id:
+                      type: string
+                      format: uri
+                      nullable: true
+                      description: identifier of the author if available
+                      example: https://orcid.org/0000-0001-8836-2759
+                      minLength: 0
+                      maxLength: 200
+                  nullable: false
+              journal:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 200
+                description: Name of the journal or series of which the publication is part of.
+                example: Molecular Phylogenetics and Evolution
+              volume:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 50
+                description: Volume of the journal or series in which this resource was published. Optionally add the issues in brackets
+                example: 56(3)
+              pages:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 50
+                description: A range of pages within publication where the material sample is referenced.
+                example: 1105-1114
+              citationRemarks:
+                type: string
+                nullable: true
+                minLength: 0
+                maxLength: 1000
+                description: Any additional remarks about the citation..
+                example: Material sample used as voucher specimen.
         hierarchy:
           type: array
           nullable: true
