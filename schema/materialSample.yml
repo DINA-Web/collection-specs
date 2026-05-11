@@ -284,8 +284,8 @@ components:
           properties:
             self:
               type: string
-              format: url
-              example: ${dina.apiPrefix}/material-sample/019c0600-b7dd-75db-8601-86c57232b36f"
+              format: uri
+              example: ${dina.apiPrefix}/material-sample/019c0600-b7dd-75db-8601-86c57232b36f
             meta:
               type: object
               properties:
@@ -328,7 +328,7 @@ components:
                 properties:
                   about:
                     type: string
-                    format: url
+                    format: uri
                     example: "/audit-snapshot?filter[instanceId]=material-sample/019c0570-214e-7a7b-a22e-60225dc69fee"
               status:
                 type: string
@@ -492,7 +492,8 @@ components:
                 description: The year of publication of the resource.
                 example: 2016
               doi:
-                type: uri
+                type: string
+                format: uri
                 nullable: true
                 description: The doi of the publication. This should be a full URL.
                 example: https://doi.org/10.1016/j.ympev.2010.05.004
