@@ -87,3 +87,7 @@ paths:
     $ref: 'storageUnitUsage.yml#/paths/~1v1~1storage-unit-usage'
   /v1/storage-unit-usage/{Id}:
     $ref: 'storageUnitUsage.yml#/paths/~1v1~1storage-unit-usage~1{Id}'
+  /v1/controlled-vocabulary:
+    $ref: 'controlledVocabulary.yml#/paths/~1v1~1controlled-vocabulary'
+  /v1/controlled-vocabulary/{Id}:
+    $ref: 'controlledVocabulary.yml#/paths/~1v1~1controlled-vocabulary~1{Id}'
