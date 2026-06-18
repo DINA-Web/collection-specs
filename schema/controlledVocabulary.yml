@@ -1,0 +1,430 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/AAFC/test/1.0.0
+info:
+  description: Controlled Vocabulary schema
+  version: "1.0.0"
+  title: Controlled Vocabulary schema
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /v1/controlled-vocabulary:
+    get:
+      tags:
+        - Controlled Vocabulary
+      summary: Get controlled vocabularies
+      operationId: getControlledVocabularies
+      description: By passing in query string, user can get available controlled vocabularies authorised
+      parameters:
+        - $ref: '../components/common-parameters.yml#/FiqlFilter'
+        - $ref: '../components/common-parameters.yml#/SimpleSearchFilter'
+        - $ref: '../components/common-parameters.yml#/Sort'
+        - $ref: '../components/common-parameters.yml#/PageOffset'
+        - $ref: '../components/common-parameters.yml#/PageLimit'
+      responses:
+        '200':
+          description: controlled vocabularies satisfying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyResponseList'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '404':
+          description: controlled vocabulary not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyNotFound'
+        '410':
+          description: controlled vocabulary deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyDeleted'
+    post:
+      tags:
+        - Controlled Vocabulary
+      summary: Add controlled vocabulary
+      operationId: addControlledVocabulary
+      description: Adds a controlled vocabulary
+      responses:
+        '201':
+          description: controlled vocabulary created
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyResponseWithLink'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewControlledVocabulary'
+        description: ControlledVocabulary to add
+  /v1/controlled-vocabulary/{Id}:
+    get:
+      tags:
+        - Controlled Vocabulary
+      summary: Find controlled vocabulary by ID
+      description: Returns a single controlled vocabulary
+      operationId: getControlledVocabularyById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of controlled vocabulary to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyResponse'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '404':
+          description: controlled vocabulary not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyNotFound'
+        '410':
+          description: controlled vocabulary deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyDeleted'
+    patch:
+      tags:
+        - Controlled Vocabulary
+      summary: Update controlled vocabulary
+      operationId: updateControlledVocabulary
+      description: update a controlled vocabulary
+      parameters:
+        - name: Id
+          in: path
+          description: controlled vocabulary id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: controlled vocabulary updated
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyResponse'
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '410':
+          description: controlled vocabulary deleted
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyDeleted'
+        '422':
+          description: unprocessable entity
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/UnprocessableEntity'
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/ControlledVocabulary'
+        description: controlled vocabulary to update
+    delete:
+      tags:
+        - Controlled Vocabulary
+      summary: Delete controlled vocabulary
+      operationId: deleteControlledVocabulary
+      description: delete a controlled vocabulary
+      parameters:
+        - name: Id
+          in: path
+          description: controlled vocabulary id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: controlled vocabulary marked as deleted
+        '400':
+          description: bad request
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '../components/common-responses.yml#/BadRequest'
+        '404':
+          description: controlled vocabulary not found
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ControlledVocabularyNotFound'
+components:
+  schemas:
+    ControlledVocabularyResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonControlledVocabulary'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    ControlledVocabularyResponseList:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+            properties:
+              id:
+                type: string
+                format: uuid
+                example: d290f1ee-6c54-4b01-90e6-d701748f0851
+                description: Identifier of the object as UUID
+            allOf:
+              - $ref: '#/components/schemas/CommonControlledVocabulary'
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMetaWithResourceCount'
+
+    ControlledVocabularyResponseWithLink:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonControlledVocabulary'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              format: url
+              example: ${dina.apiPrefix}/controlled-vocabulary/d290f1ee-6c54-4b01-90e6-d701748f0851
+            meta:
+              type: object
+              properties:
+                isTemplated:
+                  type: boolean
+                  example: true
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
+
+    ControlledVocabularyNotFound:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                enum: ["404"]
+                example: "404"
+              title:
+                type: string
+                enum: ["Not Found"]
+                example: "Not Found"
+              detail:
+                type: string
+                example: "ControlledVocabularyDto with ID d290f1ee-6c54-4b01-90e6-d701748f0851 Not Found"
+
+    ControlledVocabularyDeleted:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              links:
+                type: object
+                properties:
+                  about:
+                    type: string
+                    format: url
+                    example: "/audit-snapshot?filter[instanceId]=controlled-vocabulary/d290f1ee-6c54-4b01-90e6-d701748f0851"
+              status:
+                type: string
+                enum: ["410 GONE"]
+                example: "410 GONE"
+              title:
+                type: string
+                enum: ["Gone"]
+                example: "Gone"
+              detail:
+                type: string
+                example: "ControlledVocabularyDto with ID d290f1ee-6c54-4b01-90e6-d701748f0851 Gone. The Resource has been deleted but audit records remain, see the links.about section"
+
+    ControlledVocabulary:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonControlledVocabulary'
+
+    NewControlledVocabulary:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonControlledVocabulary'
+
+    CommonControlledVocabulary:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [controlled-vocabulary]
+        attributes:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              description: name of the controlled vocabulary
+              example: bodyColor
+            key:
+              type: string
+              description: key of the controlled vocabulary
+              example: body_color
+            type:
+              type: string
+              description: type of the controlled vocabulary
+              enum: [
+                MANAGED_ATTRIBUTE,
+                SYSTEM
+              ]
+            vocabClass:
+              type: string
+              description: class of the controlled vocabulary
+              enum: [
+                QUALIFIED_VALUE,
+                CONTROLLED_TERM
+              ]
+            term:
+              type: string
+              description: term associated with the controlled vocabulary
+              example: "http://example.com/term/bodyColor"
+            version:
+              type: string
+              description: version of the controlled vocabulary
+              example: "1.0.0"
+            multilingualTitle:
+              type: object
+              nullable: true
+              properties:
+                titles:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the title
+                      title:
+                        type: string
+                        description: the title
+            multilingualDescription:
+              type: object
+              nullable: true
+              properties:
+                descriptions:
+                  type: array
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      lang:
+                        type: string
+                        description: language of the description
+                      desc:
+                        type: string
+                        description: the description
+            createdBy:
+              type: string
+              readOnly: true
+              description: authenticated user who created the controlled vocabulary
+            createdOn:
+              type: string
+              format: date-time
+              readOnly: true
+              description: date and time when the controlled vocabulary was created in ISO format
+              example: 1985-04-12T23:20:50.52Z
+        meta:
+          $ref: '../components/common-responses.yml#/ResponseMeta'
