@@ -396,8 +396,8 @@ components:
               example: cm
             uriTemplate:
               type: string
-              description: URI template associated with the controlled vocabulary item
-              example: "http://example.com/term/{value}"
+              description: A URI template where "$1" can be automatically replaced with the value assigned to the key.
+              example: "http://example.com/term/$1"
             dinaComponent:
               type: string
               description: the DINA component associated with the controlled vocabulary item
@@ -438,6 +438,12 @@ components:
               type: string
               readOnly: true
               description: authenticated user who created the controlled vocabulary item
+            lastUpdatedOn:
+              type: string
+              format: date-time
+              readOnly: true
+              description: date and time when the controlled vocabulary item was last updated in ISO format
+              example: 1985-04-12T23:20:50.52Z
             createdOn:
               type: string
               format: date-time
