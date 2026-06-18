@@ -376,10 +376,10 @@ components:
     CommonMaterialSampleAttributes:
       type: object
       properties:
-        version:
+        resourceVersion:
           type: number
           readOnly: true
-          description: Provides optimistic locking to prevent update data from being overridden by another transaction.
+          description: Used to prevent update data from being overridden by another transaction. Resend this field on update to allow the API to ensure you are not working with stale data.
         group:
           type: string
           description: The group in which the material sample belongs to
