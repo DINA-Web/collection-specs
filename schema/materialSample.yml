@@ -651,11 +651,26 @@ components:
           type: string
           readOnly: true
           description: Calculated field representing the scientificName (or verbatimScientificName if empty) of the primary determination of the target organism. If there is no target organism and there is more than one organism, the scientificNames are contactenated (using | as separator).
-        targetOrganismPrimaryClassification:
+        targetIdentifiableEntitySummary:
           type: object
-          readOnly: true
           nullable: true
-          description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
+          properties:
+            dwcVernacularName:
+              type: string
+              nullable: true
+            primaryDetermination:
+              type: object
+              nullable: true
+              properties:
+                classification:
+                  type: string
+                  readOnly: true
+                  nullable: true
+                  description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
+                typeStatus:
+                  type: string
+                  readOnly: true
+                  nullable: true
         effectiveScientificName:
           type: string
           readOnly: true
