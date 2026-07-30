@@ -657,16 +657,29 @@ components:
           properties:
             dwcVernacularName:
               type: string
+              readOnly: true
+              nullable: true
+            managedAttributes:
+              type: object
+              readOnly: true
+              nullable: true
+            lifeStage:
+              type: string
+              readOnly: true
+              nullable: true
+            sex:
+              type: string
+              readOnly: true
               nullable: true
             primaryDetermination:
               type: object
               nullable: true
               properties:
                 classification:
-                  type: string
+                  type: object
                   readOnly: true
                   nullable: true
-                  description: Calculated field representing classification (only including know ranks) of the target organism. If there is no target organism this field is not calculated.
+                  description: Calculated field representing classification (only including known ranks) of the target organism. If there is no target organism this field is not calculated.
                 typeStatus:
                   type: string
                   readOnly: true
