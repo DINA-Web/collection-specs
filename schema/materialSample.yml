@@ -684,6 +684,10 @@ components:
                   type: string
                   readOnly: true
                   nullable: true
+                managedAttributes:
+                  type: object
+                  readOnly: true
+                  nullable: true
         effectiveScientificName:
           type: string
           readOnly: true
