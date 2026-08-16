@@ -393,11 +393,6 @@ components:
           type: string      
           readOnly: true
           description: authenticated user who create the material sample
-        dwcCatalogNumber:
-          type: string
-          nullable: true
-          description: An identifier (preferably unique) for the record within the data set or collection.
-          example: 18
         dwcOtherCatalogNumbers:
           type: array
           nullable: true
@@ -608,10 +603,6 @@ components:
                 readOnly: true
                 description: date and time when the material sample was created in ISO format
                 example: 1985-04-12T23:20:50.52Z
-              dwcCatalogNumber:
-                type: string
-                nullable: true
-                description: An identifier (preferably unique) for the record within the data set or collection.
               dwcOtherCatalogNumbers:
                 type: array
                 nullable: true
