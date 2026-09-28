@@ -1,1 +1,424 @@
+paths:
+  /v1/transaction:
+    get:
+      tags:
+        - Transaction
+      summary: List transactions
+      operationId: getTransactions
+      description: List all transactions
+      parameters:
+        - in: query
+          name: sort
+          description: optional sort order string, such as descending, denoted by "-"
+          schema:
+            type: string
+        - in: query
+          name: page[offset]
+          description: number of records to skip when paging
+          schema:
+            type: integer
+            format: int32
+        - in: query
+          name: page[limit]
+          description: maximum number of records to return when paging
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: Transactions satifying the query restrictions
+          content:
+            application/vnd.api+json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Transaction'                
+        '404':
+          description: Transaction not found
+    post:
+      tags:
+        - Transaction
+      summary: Add a Transaction
+      operationId: addTransaction
+      description: Add a Transaction
+      responses:
+        '201':
+          description: Transaction created
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/Transaction'
+        '422':
+          description: Data integrity violation          
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewTransaction'
+        description: Transaction to add
+  /v1/transaction/{Id}:
+    get:
+      tags:
+        - Transaction
+      summary: Get a Transaction
+      description: Return a single Transaction
+      operationId: getTransactionById
+      parameters:
+        - name: Id
+          in: path
+          description: ID of Transaction to return
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: Not a valid uuid                
+        '404':
+          description: Person not found          
+    patch:
+      tags:
+        - Transaction
+      summary: Update a Transaction
+      operationId: updateTransaction
+      description: Update a Transaction
+      parameters:
+        - name: Id
+          in: path
+          description: Transaction id to patch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Transaction updated
+          content:
+            application/vnd.api+json:
+              schema:          
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          description: invalid input, object invalid
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/NewTransaction'
+        description: Transaction to add
+    delete:
+      tags:
+        - Transaction
+      summary: Delete a Transaction
+      operationId: deleteTransaction
+      description: Delete a Transaction
+      parameters:
+        - name: Id
+          in: path
+          description: Transaction id to delete
+          required: true
+          schema:
+            type: string
+            format: uuid            
+      responses:
+        '200':
+          description: Transaction deleted
+        '400':
+          description: Not a valid uuid          
+        '404':
+          description: Transaction not found       
+components:
+  schemas:
+    Transaction:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: d290f1ee-6c54-4b01-90e6-d701748f0851
+              description: Identifier of the object as UUID
+          allOf:
+            - $ref: '#/components/schemas/CommonTransaction'
 
+    NewTransaction:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/CommonTransaction'
+
+    CommonTransaction:
+      type: object
+      required:
+        - type
+        - attributes
+      properties:
+        type:
+          enum: [transaction]      
+          description: The type of data being returned.
+        attributes:
+          type: object
+          required:
+            - group
+            - materialDirection
+          properties:
+            transactionNumber:
+              type: string
+              description: Numbner assigned to the transaction
+              example: L-2021-012
+            materialDirection:
+              enum: [IN, OUT]
+            materialToBeReturned:
+              type: boolean
+            group:
+              type: string
+              description: group owning the object
+            transactionType:
+              nullable: true
+              type: string
+              description: Type of transaction
+              example: Loan
+            otherIdentifiers:
+              type: array
+              description: Other identifiers used to identify the transaction
+              items:
+                type: string
+              example: ["P18-PJDHS","84784629058-129037"]
+            status:
+              nullable: true
+              type: string
+              description: Current Status of the transaction
+            purpose:
+              nullable: true
+              type: string
+              description: Purpose of the transaction. Why the transaciton is happening.
+            openedDate:
+              type: string
+              format: date
+              nullable: true
+              description: The date on which the transaction opened.
+            closedDate:
+              type: string
+              format: date
+              nullable: true
+              description: The date on which the transaction closed.
+            dueDate:
+              type: string
+              format: date
+              nullable: true
+              description: The date on which the transaction is due.
+            remarks:
+              type: string
+              nullable: true
+              description: Remarks about the transaction.
+            shipment:
+              nullable: true
+              allOf:
+                - $ref: '#/components/schemas/Shipment'
+            agentRoles:
+              type: array
+              description: "Agent role is used to store the roles a particular agent has performed in the transaction."
+              nullable: true
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/AgentRoles'
+            involvedAgents:
+              type: array
+              description: Agent UUIDs found in the agent roles attribute. To edit the agents involved in roles, use the agentRoles attribute.
+              readOnly: true
+              nullable: true
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/InvolvedAgents'
+            managedAttributes:
+              type: object
+              description: The manage attribute, with key and value pair. A managedAttributes' entry key is expected to be set as a managed attribute's key.
+              additionalProperties:
+                type: string
+            createdBy:
+              type: string
+              readOnly: true
+              description: authenticated user who create the transaction record
+              example: test user
+            createdOn:              
+              type: string
+              format: date-time                            
+              readOnly: true
+              description: "date and time when the transaction record was created in ISO format"
+              example:  "1985-04-12T23:20:50.52Z"
+        relationships:
+          type: object
+          nullable: true
+          properties:
+            materialSamples:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        enum: [material-sample]
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier for the material sample attached
+                        example: 11121721-21ba-4b90-bf17-f9d8ea67044d
+            attachment:
+              type: object
+              nullable: true
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - type
+                      - id
+                    properties:
+                      type: 
+                        enum: [metadata]
+                      id:
+                        type: string
+                        format: uuid
+                        description: Unique identifier metadata for the resource
+                        example: de30ad6a-64a0-4425-9d2f-50230c06a209
+
+    Shipment:
+      type: object
+      properties:
+        contentRemarks:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+          description: "Monetary value of the shipment. Must include the currency in the currency property"
+        currency:
+          type: string
+          nullable: true
+          description: "ISO 4217 currency code"
+          minLength: 3
+          maxLength: 3
+        itemCount:
+          type: number
+          nullable: true
+        shippedOn:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        packingMethod:
+          type: string
+          nullable: true
+        trackingNumber:
+          type: string
+          nullable: true
+        shipmentRemarks:
+          type: string
+          nullable: true
+        address:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Address'
+    Address:
+      type: object
+      properties:
+        receiverName:
+          type: string
+          nullable: true
+          maxLength: 150
+        companyName:
+          type: string
+          nullable: true
+          maxLength: 150
+        addressLine1:
+          type: string
+          nullable: true
+          maxLength: 150
+        addressLine2:
+          type: string
+          nullable: true
+          maxLength: 150
+        city:
+          type: string
+          nullable: true
+          maxLength: 150
+        provinceState:
+          type: string
+          nullable: true
+          maxLength: 150
+        zipCode:
+          type: string
+          nullable: true
+          maxLength: 25
+        country:
+          type: string
+          nullable: true
+          maxLength: 50
+    AgentRoles:
+      type: object
+      properties:
+        agent:
+          type: string
+          nullable: false
+          format: uuid
+          example: 3d89cfbb-a519-49d4-bc6b-9af8fb0f1fd2
+          description: Agent identifier.
+        roles:
+          type: array
+          nullable: false
+          items:
+            type: string
+            description: Roles associated to a particular agent.
+            example: ["Owner", "Borrower", "Prepared By"]
+        date:
+          type: string
+          format: date
+          nullable: true
+          description: Date associated with the agent role.
+        remarks:
+          type: string
+          nullable: true
+          description: Remarks regarding the agent role.
+          minLength: 0
+          maxLength: 1000
+    InvolvedAgents:
+      description: Agent UUIDs found in the agent roles attribute. To edit the agents involved in roles, use the agentRoles attribute.
+      type: object
+      readOnly: true
+      required:
+        - type
+        - id
+      properties:
+        type:
+          enum: [person]
+        id:
+          type: string
+          format: uuid
+          description: agent uuid found in a agentRole
+          example: 83a511da-3fc0-4fa3-8d9f-eda5757d3929
