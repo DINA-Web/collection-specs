@@ -95,3 +95,7 @@ paths:
     $ref: 'controlledVocabularyItem.yml#/paths/~1v1~1controlled-vocabulary-item'
   /v1/controlled-vocabulary-item/{Id}:
     $ref: 'controlledVocabularyItem.yml#/paths/~1v1~1controlled-vocabulary-item~1{Id}'
+  /v1/transaction:
+    $ref: 'transaction.yml#/paths/~1v1~1transaction'
+  /v1/transaction/{Id}:
+    $ref: 'transaction.yml#/paths/~1v1~1transaction~1{Id}'
