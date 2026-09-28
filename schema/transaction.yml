@@ -280,7 +280,7 @@ components:
                       - id
                     properties:
                       type: 
-                        enum: [material-sample]
+                        enum: [external-material-sample]
                       id:
                         type: string
                         format: uuid
