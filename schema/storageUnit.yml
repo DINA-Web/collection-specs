@@ -468,3 +468,5 @@ components:
                   format: uuid
                   description: storageUnit's type id
                   example: a600f9da-fcbe-4fef-9ae3-0f131ca05e0c
+        attachment:
+          $ref: '../components/common-parameters.yml#/Attachment'
