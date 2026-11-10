@@ -401,6 +401,11 @@ components:
         barcode:
           type: string
           description: Text representation originating from scanning with a barcode gun
+        managedAttributes:
+          type: object
+          description: The managed attributes, represented as key/value pairs. Patch Strategy is SET, so the entire managedAttributes map must be resubmitted on PATCH/PUT.
+          additionalProperties:
+            type: string
         storageUnitChildren:
           type: array
           nullable: true
