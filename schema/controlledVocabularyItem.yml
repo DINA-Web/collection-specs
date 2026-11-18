@@ -370,6 +370,9 @@ components:
               type: string
               description: term associated with the controlled vocabulary item
               example: http://example.com/term/bodyColor
+            systemDefined:
+              type: boolean
+              description: Is the item defined and controlled by the system.
             vocabularyElementType:
               description: type of the vocabulary element
               enum: [
